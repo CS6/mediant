@@ -43,22 +43,22 @@
             app:title="@string/proofmode_pgp_public_key" />
 
         <SwitchPreferenceCompat
-            android:title="@string/proofmode_auto_notarize"
+            android:title="@string/auto_notarize"
             app:icon="@drawable/ic_verified_user_black_24dp"
             app:key="@string/key_proofmode_auto_notarize" />
 
         <SwitchPreferenceCompat
-            android:title="@string/proofmode_track_location"
+            android:title="@string/track_location"
             app:icon="@drawable/ic_my_location_black_24dp"
             app:key="@string/key_proofmode_track_location" />
 
         <SwitchPreferenceCompat
-            android:title="@string/proofmode_track_device_id"
+            android:title="@string/track_device_id"
             app:icon="@drawable/ic_developer_board_black_24dp"
             app:key="@string/key_proofmode_track_device_id" />
 
         <SwitchPreferenceCompat
-            android:title="@string/proofmode_track_mobile_network"
+            android:title="@string/track_mobile_network"
             app:icon="@drawable/ic_network_cell_black_24dp"
             app:key="@string/key_proofmode_track_mobile_network" />
     </PreferenceCategory>

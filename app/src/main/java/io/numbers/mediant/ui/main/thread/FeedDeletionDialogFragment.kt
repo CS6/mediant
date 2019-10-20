@@ -14,11 +14,11 @@ class FeedDeletionDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = MaterialAlertDialogBuilder(it)
-            builder.setTitle(R.string.deletion_confirmation_title)
-                .setPositiveButton(R.string.deletion_confirmation_positive) { _, _ ->
+            builder.setTitle(R.string.title_deletion_confirmation)
+                .setPositiveButton(R.string.title_positive_deletion_confirmation) { _, _ ->
                     listener.onDialogPositiveClick(this)
                 }
-                .setNegativeButton(R.string.deletion_confirmation_negative) { _, _ ->
+                .setNegativeButton(R.string.title_negative_deletion_confirmation) { _, _ ->
                     listener.onDialogNegativeClick(this)
                 }
             builder.create()

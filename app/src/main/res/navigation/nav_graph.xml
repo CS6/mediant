@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/initializationFragment"
         android:name="io.numbers.mediant.ui.initialization.InitializationFragment"
-        android:label="@string/app_name"
+        android:label="@string/mediant"
         tools:layout="@layout/fragment_initialization">
         <action
             android:id="@+id/action_initializationFragment_to_mainFragment"
@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="io.numbers.mediant.ui.main.MainFragment"
-        android:label="@string/app_name"
+        android:label="@string/mediant"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_threadFragment"
@@ -88,7 +88,7 @@
     <fragment
         android:id="@+id/permissionRationaleFragment"
         android:name="io.numbers.mediant.ui.permission_rationale.PermissionRationaleFragment"
-        android:label="@string/permission_rationale_label"
+        android:label="@string/title_permission_rationale"
         tools:layout="@layout/fragment_permission_rationale">
         <argument
             android:name="rationale"

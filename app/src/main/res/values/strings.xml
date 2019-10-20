@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">MediAnt</string>
-    <string name="logo">Logo</string>
+    <string name="mediant">MediAnt</string>
     <string name="placeholder">Placeholder</string>
     <string name="connect_to_ipfs">Connecting to IPFS…</string>
     <string name="create_wallet">Creating Textile wallet…</string>
@@ -9,9 +8,9 @@
 
     <string name="feeds">Feeds</string>
     <string name="storage">Storage</string>
-    <string name="proof_generating_message">Generating proof and signatures…</string>
-    <string name="proof_generated_message">Successfully generated proof and signatures</string>
-    <string name="media_uploaded_message">Successfully uploaded media via Textile</string>
+    <string name="message_proof_generating">Generating proof and signatures…</string>
+    <string name="message_proof_generated">Successfully generated proof and signatures</string>
+    <string name="message_media_uploaded">Successfully uploaded media via Textile</string>
 
     <string name="create_thread">Create Thread</string>
     <string name="thread_name">Thread Name</string>
@@ -20,9 +19,9 @@
     <string name="info">Information</string>
     <string name="leave">Leave</string>
     <string name="publish">Publish</string>
-    <string name="deletion_confirmation_title">Delete?</string>
-    <string name="deletion_confirmation_positive">Just do it</string>
-    <string name="deletion_confirmation_negative">No</string>
+    <string name="title_deletion_confirmation">Delete?</string>
+    <string name="title_positive_deletion_confirmation">Just do it</string>
+    <string name="title_negative_deletion_confirmation">No</string>
 
     <string name="details">Details</string>
     <string name="source_user">Source User</string>
@@ -42,14 +41,14 @@
     <string name="cafes">Cafes</string>
     <string name="proofmode_pgp_password">ProofMode PGP Password</string>
     <string name="proofmode_pgp_public_key">ProofMode PGP Public Key</string>
-    <string name="proofmode_auto_notarize">Auto Notarization</string>
-    <string name="proofmode_track_location">Track Location</string>
-    <string name="proofmode_track_device_id">Track Device ID</string>
-    <string name="proofmode_track_mobile_network">Track Mobile Network</string>
+    <string name="auto_notarize">Auto Notarization</string>
+    <string name="track_location">Track Location</string>
+    <string name="track_device_id">Track Device ID</string>
+    <string name="track_mobile_network">Track Mobile Network</string>
     <string name="sign_with_zion">Sign with Zion</string>
-    <string name="summary_not_support_zion">Unsupported device</string>
+    <string name="unsupported_device">Unsupported Device</string>
     <string name="copied_to_clipboard">Copied to Clipboard</string>
 
-    <string name="permission_rationale_label">Permission Denied</string>
-    <string name="proofmode_permissions_rationale">MediAnt requires permissions to save the proof (including GPS info) and signature of the pictures you take into device\'s storage. Go to settings to turn on the permissions of this APP.</string>
+    <string name="title_permission_rationale">Permission Denied</string>
+    <string name="message_proofmode_permissions_rationale">MediAnt requires permissions to save the proof (including GPS info) and signature of the pictures you take into device\'s storage. Go to settings to turn on the permissions of this APP.</string>
 </resources>

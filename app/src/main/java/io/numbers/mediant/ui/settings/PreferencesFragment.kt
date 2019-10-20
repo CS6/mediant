@@ -92,7 +92,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 isEnabled = false
                 preferenceHelper.signWithZion = false
                 summary =
-                    "${resources.getString(R.string.summary_not_support_zion)}: ${zionService.deviceName}"
+                    "${resources.getString(R.string.unsupported_device)}: ${zionService.deviceName}"
             }
         }
     }

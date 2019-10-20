@@ -40,7 +40,7 @@ enum class PermissionRequestType(val value: PermissionRequest) {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ),
-            R.string.proofmode_permissions_rationale
+            R.string.message_proofmode_permissions_rationale
         )
     )
 }

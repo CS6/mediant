@@ -33,7 +33,7 @@ class MainViewModel @Inject constructor(
         generateProofBundleJson()?.also {
             textileService.addFile(currentPhotoPath, it, object : Handlers.BlockHandler {
                 override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
-                    Event(SnackbarArgs(application.resources.getString(R.string.media_uploaded_message)))
+                    Event(SnackbarArgs(application.resources.getString(R.string.message_media_uploaded)))
                 )
 
                 override fun onError(e: Exception) = showSnackbar.postValue(Event(SnackbarArgs(e)))
@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(
 
     private fun generateProofBundleJson(): String? {
         val snackbarArgs = SnackbarArgs(
-            application.resources.getString(R.string.proof_generating_message),
+            application.resources.getString(R.string.message_proof_generating),
             Snackbar.LENGTH_INDEFINITE
         )
         showSnackbar.postValue(Event(snackbarArgs))
@@ -51,7 +51,7 @@ class MainViewModel @Inject constructor(
             val proofSignatureBundle = proofModeService.generateProofAndSignatures(currentPhotoPath)
             val proofSignatureBundleJson = Gson().toJson(proofSignatureBundle)
             showSnackbar.postValue(
-                Event(SnackbarArgs(application.resources.getString(R.string.proof_generated_message)))
+                Event(SnackbarArgs(application.resources.getString(R.string.message_proof_generated)))
             )
             proofSignatureBundleJson
         } catch (e: Exception) {
