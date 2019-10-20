@@ -25,13 +25,6 @@
         android:label="@string/app_name"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_mainFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
             android:id="@+id/action_mainFragment_to_threadFragment"
             app:destination="@id/threadFragment"
             app:enterAnim="@anim/fast_fade_in"
@@ -59,36 +52,18 @@
             app:exitAnim="@anim/fast_fade_out"
             app:popEnterAnim="@anim/fast_fade_in"
             app:popExitAnim="@anim/fast_fade_out" />
-    </fragment>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="io.numbers.mediant.ui.settings.SettingsFragment"
-        android:label="@string/settings"
-        tools:layout="@layout/fragment_settings">
         <action
-            android:id="@+id/action_settingsFragment_to_textileSettingsFragment"
-            app:destination="@id/textileSettingsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_settingsFragment_to_sharedPreferencesFragment"
-            app:destination="@id/sharedPreferencesFragment"
+            android:id="@+id/action_mainFragment_to_preferencesFragment"
+            app:destination="@id/preferencesFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/textileSettingsFragment"
-        android:name="io.numbers.mediant.ui.settings.textile.TextileSettingsFragment"
-        android:label="@string/textile_settings"
-        tools:layout="@layout/fragment_textile_settings" />
-    <fragment
-        android:id="@+id/sharedPreferencesFragment"
-        android:name="io.numbers.mediant.ui.settings.preferences.SharedPreferencesFragment"
-        android:label="@string/general_settings" />
+        android:id="@+id/preferencesFragment"
+        android:name="io.numbers.mediant.ui.settings.PreferencesFragment"
+        android:label="@string/settings" />
     <fragment
         android:id="@+id/threadFragment"
         android:name="io.numbers.mediant.ui.main.thread.ThreadFragment"

@@ -41,8 +41,5 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideZionService(
-        application: Application,
-        preferenceHelper: PreferenceHelper
-    ) = ZionService(application, preferenceHelper)
+    fun provideZionService(application: Application) = ZionService(application)
 }

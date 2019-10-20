@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="key_user_name">userName</string>
     <string name="key_wallet_recovery_phrase">walletRecoveryPhrase</string>
     <string name="key_personal_thread_id">personalThreadId</string>
     <string name="key_proofmode_pgp_password">proofModePgpPassword</string>
     <string name="key_proofmode_pgp_public_key">proofModePgpPublicKey</string>
+
+    <!-- ProofMode Specified Preference Keys -->
+    <string name="key_proofmode_auto_notarize">autoNotarize</string>
+    <string name="key_proofmode_track_location">trackLocation</string>
+    <string name="key_proofmode_track_device_id">trackDeviceId</string>
+    <string name="key_proofmode_track_mobile_network">trackMobileNetwork</string>
+
     <string name="key_sign_with_zion">signWithZion</string>
 </resources>

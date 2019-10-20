@@ -8,8 +8,6 @@ import io.numbers.mediant.di.base.main.MainViewModelsModule
 import io.numbers.mediant.di.base.media_details.MediaDetailsViewModelsModule
 import io.numbers.mediant.di.base.permission_rationale.PermissionRationaleViewModelsModule
 import io.numbers.mediant.di.base.publishing.PublishingViewModelsModule
-import io.numbers.mediant.di.base.settings.SettingsViewModelsModule
-import io.numbers.mediant.di.base.textile_settings.TextileSettingsViewModelsModule
 import io.numbers.mediant.di.base.thread.ThreadViewModelsModule
 import io.numbers.mediant.di.base.thread_creation_dialog.ThreadCreationDialogViewModelsModule
 import io.numbers.mediant.di.base.thread_list.ThreadListViewModelsModule
@@ -21,8 +19,6 @@ import io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreat
 import io.numbers.mediant.ui.media_details.MediaDetailsFragment
 import io.numbers.mediant.ui.permission_rationale.PermissionRationaleFragment
 import io.numbers.mediant.ui.publishing.PublishingFragment
-import io.numbers.mediant.ui.settings.SettingsFragment
-import io.numbers.mediant.ui.settings.textile.TextileSettingsFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 // Provides all fragments extending from DaggerFragment in BaseActivity scope as Dagger client.
@@ -47,12 +43,6 @@ abstract class BaseFragmentBuildersModule {
 
     @ContributesAndroidInjector(modules = [ThreadListViewModelsModule::class])
     abstract fun contributeThreadListFragment(): ThreadListFragment
-
-    @ContributesAndroidInjector(modules = [SettingsViewModelsModule::class])
-    abstract fun contributeSettingsFragment(): SettingsFragment
-
-    @ContributesAndroidInjector(modules = [TextileSettingsViewModelsModule::class])
-    abstract fun contributeTextileSettingsFragment(): TextileSettingsFragment
 
     @ContributesAndroidInjector(modules = [ThreadCreationDialogViewModelsModule::class])
     abstract fun contributeThreadCreationDialogFragment(): ThreadCreationDialogFragment
