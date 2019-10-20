@@ -19,6 +19,7 @@ import io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreat
 import io.numbers.mediant.ui.media_details.MediaDetailsFragment
 import io.numbers.mediant.ui.permission_rationale.PermissionRationaleFragment
 import io.numbers.mediant.ui.publishing.PublishingFragment
+import io.numbers.mediant.ui.settings.PreferencesFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 // Provides all fragments extending from DaggerFragment in BaseActivity scope as Dagger client.
@@ -43,6 +44,9 @@ abstract class BaseFragmentBuildersModule {
 
     @ContributesAndroidInjector(modules = [ThreadListViewModelsModule::class])
     abstract fun contributeThreadListFragment(): ThreadListFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributePreferencesFragment(): PreferencesFragment
 
     @ContributesAndroidInjector(modules = [ThreadCreationDialogViewModelsModule::class])
     abstract fun contributeThreadCreationDialogFragment(): ThreadCreationDialogFragment

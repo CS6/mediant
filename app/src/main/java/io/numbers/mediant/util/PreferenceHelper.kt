@@ -10,28 +10,43 @@ class PreferenceHelper @Inject constructor(application: Application) {
 
     private val sharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
-    private val preferenceKeyPersonalId =
-        application.applicationContext.resources.getString(R.string.key_personal_thread_id)
-    private val preferenceKeyWalletRecoveryPhrase =
+    val preferenceKeyWalletRecoveryPhrase =
         application.applicationContext.resources.getString(R.string.key_wallet_recovery_phrase)
-    private val preferenceKeyProofModePgpPassword =
+    val preferenceKeyPersonalThreadId =
+        application.applicationContext.resources.getString(R.string.key_personal_thread_id)
+    val preferenceKeyProofModePgpPassword =
         application.applicationContext.resources.getString(R.string.key_proofmode_pgp_password)
-    private val preferenceKeyProofModePgpPublicKey =
+    val preferenceKeyProofModePgpPublicKey =
         application.applicationContext.resources.getString(R.string.key_proofmode_pgp_public_key)
-    private val preferenceKeySignWithZion =
+    val preferenceKeySignWithZion =
         application.applicationContext.resources.getString(R.string.key_sign_with_zion)
 
-    var personalThreadId: String?
-        get() = sharedPreferences.getString(preferenceKeyPersonalId, null)
-        set(value) = sharedPreferences.edit().putString(preferenceKeyPersonalId, value).apply()
     var walletRecoveryPhrase: String?
         get() = sharedPreferences.getString(preferenceKeyWalletRecoveryPhrase, null)
         set(value) = sharedPreferences.edit().putString(
             preferenceKeyWalletRecoveryPhrase, value
         ).apply()
-    var signWithZion: String?
-        get() = sharedPreferences.getString(preferenceKeySignWithZion, null)
-        set(value) = sharedPreferences.edit().putString(preferenceKeySignWithZion, value).apply()
+    var personalThreadId: String?
+        get() = sharedPreferences.getString(preferenceKeyPersonalThreadId, null)
+        set(value) = sharedPreferences.edit().putString(
+            preferenceKeyPersonalThreadId,
+            value
+        ).apply()
+    var proofModePgpPassword: String?
+        get() = sharedPreferences.getString(preferenceKeyProofModePgpPassword, null)
+        set(value) = sharedPreferences.edit().putString(
+            preferenceKeyProofModePgpPassword,
+            value
+        ).apply()
+    var proofModePgpPublicKey: String?
+        get() = sharedPreferences.getString(preferenceKeyProofModePgpPublicKey, null)
+        set(value) = sharedPreferences.edit().putString(
+            preferenceKeyProofModePgpPublicKey,
+            value
+        ).apply()
+    var signWithZion: Boolean
+        get() = sharedPreferences.getBoolean(preferenceKeySignWithZion, false)
+        set(value) = sharedPreferences.edit().putBoolean(preferenceKeySignWithZion, value).apply()
 
     init {
         sharedPreferences.edit().putString(

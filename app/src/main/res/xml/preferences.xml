@@ -5,6 +5,7 @@
     <PreferenceCategory android:title="@string/textile">
         <EditTextPreference
             android:title="@string/user_name"
+            app:enabled="false"
             app:icon="@drawable/ic_person_outline_black_24dp"
             app:key="@string/key_user_name"
             app:useSimpleSummaryProvider="true" />
@@ -23,6 +24,7 @@
 
         <Preference
             android:title="@string/cafes"
+            app:enabled="false"
             app:icon="@drawable/ic_local_cafe_black_24dp"
             app:persistent="false" />
     </PreferenceCategory>
@@ -40,22 +42,22 @@
             app:persistent="true"
             app:title="@string/proofmode_pgp_public_key" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:title="@string/proofmode_auto_notarize"
             app:icon="@drawable/ic_verified_user_black_24dp"
             app:key="@string/key_proofmode_auto_notarize" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:title="@string/proofmode_track_location"
             app:icon="@drawable/ic_my_location_black_24dp"
             app:key="@string/key_proofmode_track_location" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:title="@string/proofmode_track_device_id"
             app:icon="@drawable/ic_developer_board_black_24dp"
             app:key="@string/key_proofmode_track_device_id" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:title="@string/proofmode_track_mobile_network"
             app:icon="@drawable/ic_network_cell_black_24dp"
             app:key="@string/key_proofmode_track_mobile_network" />
@@ -63,6 +65,7 @@
 
     <PreferenceCategory android:title="@string/zion">
         <SwitchPreferenceCompat
+            app:enabled="false"
             app:icon="@drawable/ic_memory_black_24dp"
             app:key="@string/key_sign_with_zion"
             app:title="@string/sign_with_zion" />

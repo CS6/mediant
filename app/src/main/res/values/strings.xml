@@ -47,6 +47,8 @@
     <string name="proofmode_track_device_id">Track Device ID</string>
     <string name="proofmode_track_mobile_network">Track Mobile Network</string>
     <string name="sign_with_zion">Sign with Zion</string>
+    <string name="summary_not_support_zion">Unsupported device</string>
+    <string name="copied_to_clipboard">Copied to Clipboard</string>
 
     <string name="permission_rationale_label">Permission Denied</string>
     <string name="proofmode_permissions_rationale">MediAnt requires permissions to save the proof (including GPS info) and signature of the pictures you take into device\'s storage. Go to settings to turn on the permissions of this APP.</string>
