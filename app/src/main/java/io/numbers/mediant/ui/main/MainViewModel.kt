@@ -3,6 +3,7 @@ package io.numbers.mediant.ui.main
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import io.numbers.mediant.R
@@ -16,25 +17,25 @@ import io.numbers.mediant.util.getHashFromString
 import io.numbers.mediant.viewmodel.Event
 import io.textile.pb.Model
 import io.textile.textile.Handlers
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.witness.proofmode.crypto.HashUtils
 import java.io.File
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
 class MainViewModel @Inject constructor(
     private val application: Application,
     private val textileService: TextileService,
     private val proofModeService: ProofModeService,
     private val zionService: ZionService,
     private val preferenceHelper: PreferenceHelper
-) : ViewModel(), CoroutineScope by MainScope() {
+) : ViewModel() {
 
     val selectedOptionsItem = MutableLiveData<@androidx.annotation.IdRes Int>()
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     private lateinit var currentPhotoPath: String
 
-    fun uploadPhoto() = launch(Dispatchers.IO) {
+    fun uploadPhoto() = viewModelScope.launch(Dispatchers.IO) {
         generateProofBundleJson()?.also {
             textileService.addFile(currentPhotoPath, it, object : Handlers.BlockHandler {
                 override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
@@ -82,9 +83,4 @@ class MainViewModel @Inject constructor(
         File.createTempFile("JPEG_${System.currentTimeMillis()}", ".jpg", directory).apply {
             currentPhotoPath = absolutePath
         }
-
-    override fun onCleared() {
-        super.onCleared()
-        cancel()
-    }
 }
