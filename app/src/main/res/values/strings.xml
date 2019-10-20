@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="mediant">MediAnt</string>
     <string name="placeholder">Placeholder</string>
     <string name="connect_to_ipfs">Connecting to IPFS…</string>
@@ -15,7 +15,7 @@
     <string name="create_thread">Create Thread</string>
     <string name="thread_name">Thread Name</string>
     <string name="create">Create</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel" tools:ignore="PrivateResource">Cancel</string>
     <string name="info">Information</string>
     <string name="leave">Leave</string>
     <string name="publish">Publish</string>

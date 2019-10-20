@@ -1,6 +1,7 @@
 package io.numbers.mediant.di
 
 import android.app.Application
+import com.htc.htcwalletsdk.Export.HtcWalletSdkManager
 import dagger.Module
 import dagger.Provides
 import io.numbers.mediant.api.proofmode.ProofModeService
@@ -41,5 +42,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideZionService(application: Application) = ZionService(application)
+    fun provideZionService(application: Application) = ZionService(
+        HtcWalletSdkManager.getInstance(),
+        application
+    )
 }

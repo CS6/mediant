@@ -8,13 +8,16 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.snackbar.Snackbar
+import com.htc.htcwalletsdk.Export.RESULT
 import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.util.PreferenceHelper
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class PreferencesFragment : PreferenceFragmentCompat() {
+@ExperimentalCoroutinesApi
+class PreferencesFragment : PreferenceFragmentCompat(), CoroutineScope by MainScope() {
 
     @Inject
     lateinit var preferenceHelper: PreferenceHelper
@@ -90,9 +93,22 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             if (zionService.isHtcExodus1) isEnabled = true
             else {
                 isEnabled = false
-                preferenceHelper.signWithZion = false
+                isChecked = false
                 summary =
                     "${resources.getString(R.string.unsupported_device)}: ${zionService.deviceName}"
+            }
+
+            setOnPreferenceChangeListener { preference, newValue ->
+                if (preference == this && newValue == true) {
+                    launch(Dispatchers.IO) {
+                        val result = zionService.initZkma()
+                        if (result != RESULT.SUCCESS) {
+                            summary = "Error Code: $result"
+                            isChecked = false
+                        }
+                    }
+                }
+                true
             }
         }
     }

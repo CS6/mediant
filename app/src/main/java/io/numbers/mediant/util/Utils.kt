@@ -4,7 +4,9 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.protobuf.Timestamp
 import io.textile.textile.Util
+import org.witness.proofmode.crypto.HashUtils
 import java.io.File
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,4 +31,10 @@ fun File.deleteDirectory(): Boolean {
         }
         delete()
     } else false
+}
+
+fun getHashFromString(string: String): String {
+    val messageDigest = MessageDigest.getInstance("SHA-256")
+    val digest = messageDigest.digest(string.toByteArray())
+    return HashUtils.asHex(digest)
 }

@@ -7,13 +7,17 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import io.numbers.mediant.R
 import io.numbers.mediant.api.proofmode.ProofModeService
+import io.numbers.mediant.api.proofmode.ProofSignatureBundle
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
+import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.util.SnackbarArgs
+import io.numbers.mediant.util.getHashFromString
 import io.numbers.mediant.viewmodel.Event
 import io.textile.pb.Model
 import io.textile.textile.Handlers
 import kotlinx.coroutines.*
+import org.witness.proofmode.crypto.HashUtils
 import java.io.File
 import javax.inject.Inject
 
@@ -22,7 +26,8 @@ class MainViewModel @Inject constructor(
     private val application: Application,
     private val textileService: TextileService,
     private val proofModeService: ProofModeService,
-    private val zionService: ZionService
+    private val zionService: ZionService,
+    private val preferenceHelper: PreferenceHelper
 ) : ViewModel(), CoroutineScope by MainScope() {
 
     val selectedOptionsItem = MutableLiveData<@androidx.annotation.IdRes Int>()
@@ -48,7 +53,9 @@ class MainViewModel @Inject constructor(
         )
         showSnackbar.postValue(Event(snackbarArgs))
         return try {
-            val proofSignatureBundle = proofModeService.generateProofAndSignatures(currentPhotoPath)
+            val proofSignatureBundle = if (preferenceHelper.signWithZion) {
+                generateProofWithZion(currentPhotoPath)
+            } else proofModeService.generateProofAndSignatures(currentPhotoPath)
             val proofSignatureBundleJson = Gson().toJson(proofSignatureBundle)
             showSnackbar.postValue(
                 Event(SnackbarArgs(application.resources.getString(R.string.message_proof_generated)))
@@ -58,6 +65,17 @@ class MainViewModel @Inject constructor(
             showSnackbar.postValue(Event(SnackbarArgs(e)))
             null
         }
+    }
+
+    private fun generateProofWithZion(filePath: String): ProofSignatureBundle {
+        val proof = proofModeService.generateProofAndSignatures(filePath).proof
+        val mediaHash = HashUtils.getSHA256FromFileContent(File(filePath))
+        val proofHash = getHashFromString(proof)
+        return ProofSignatureBundle(
+            proof,
+            zionService.signMessage(proofHash),
+            zionService.signMessage(mediaHash)
+        )
     }
 
     fun createPhotoFile(directory: File): File =
