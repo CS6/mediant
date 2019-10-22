@@ -90,7 +90,6 @@ class MainFragment : DaggerFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        viewModel.selectedOptionsItem.value = item.itemId
         when (item.itemId) {
             R.id.menuItemNavToSettings -> findNavController().navigate(R.id.action_mainFragment_to_preferencesFragment)
             R.id.menuItemOpenCamera -> prepareCamera()

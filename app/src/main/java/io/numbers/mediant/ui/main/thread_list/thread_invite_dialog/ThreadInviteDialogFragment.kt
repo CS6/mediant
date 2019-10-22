@@ -10,7 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerDialogFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.DialogThreadInviteBinding
-import io.numbers.mediant.ui.listeners.DialogListener
+import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import javax.inject.Inject
 

@@ -1,21 +1,23 @@
-package io.numbers.mediant.ui.main.thread
+package io.numbers.mediant.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
+import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.numbers.mediant.R
-import io.numbers.mediant.ui.listeners.DialogListener
 
-class FeedDeletionDialogFragment : DialogFragment() {
+class ConfirmationDialogFragment : DialogFragment() {
 
+    @StringRes
+    var title: Int = R.string.title_deletion_confirmation
     lateinit var listener: DialogListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = MaterialAlertDialogBuilder(it)
-            builder.setTitle(R.string.title_deletion_confirmation)
-                .setPositiveButton(R.string.title_positive_deletion_confirmation) { _, _ ->
+            builder.setTitle(title)
+                .setPositiveButton(R.string.title_positive_confirmation) { _, _ ->
                     listener.onDialogPositiveClick(this)
                 }
                 .setNegativeButton(R.string.no) { _, _ ->

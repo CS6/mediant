@@ -14,16 +14,16 @@ class ThreadViewModel @Inject constructor(
     private val preferenceHelper: PreferenceHelper
 ) : ViewModel() {
 
-    private lateinit var threadId: String
+    var threadId = ""
+        set(value) {
+            field = value
+            initFeedListLiveData()
+        }
+
     val isPersonal: Boolean
         get() = preferenceHelper.personalThreadId == threadId
     val feedList = MutableLiveData<List<FeedItemData>>()
     val isLoading = MutableLiveData(false)
-
-    fun setThreadId(value: String) {
-        threadId = value
-        initFeedListLiveData()
-    }
 
     private fun initFeedListLiveData() {
         loadFeedList()

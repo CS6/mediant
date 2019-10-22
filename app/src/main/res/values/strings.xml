@@ -23,10 +23,14 @@
     <string name="message_accepting_thread_invite">Accepting thread invitation…</string>
     <string name="message_thread_invite_error">Error occurs when accepting invitation</string>
     <string name="info">Information</string>
+    <string name="invite_others">Invite Others</string>
     <string name="leave">Leave</string>
+    <string name="scroll_to_top">Scroll to Top</string>
+    <string name="refresh">Refresh</string>
     <string name="publish">Publish</string>
+    <string name="title_leave_thread_confirmation">Leave Thread?</string>
     <string name="title_deletion_confirmation">Delete?</string>
-    <string name="title_positive_deletion_confirmation">Just do it</string>
+    <string name="title_positive_confirmation">Just do it</string>
     <string name="no">No</string>
 
     <string name="details">Details</string>

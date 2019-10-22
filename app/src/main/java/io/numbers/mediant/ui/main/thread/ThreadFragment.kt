@@ -1,9 +1,7 @@
 package io.numbers.mediant.ui.main.thread
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -14,7 +12,8 @@ import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.databinding.FragmentThreadBinding
-import io.numbers.mediant.ui.listeners.DialogListener
+import io.numbers.mediant.ui.dialogs.ConfirmationDialogFragment
+import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.ui.listeners.FeedItemListener
 import io.numbers.mediant.ui.main.MainFragmentDirections
 import io.numbers.mediant.ui.tab.TabFragment
@@ -57,6 +56,7 @@ open class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
         binding.viewModel = viewModel
 
         setThreadIdToViewModel()
+        if (!viewModel.isPersonal) setHasOptionsMenu(true)
 
         adapter = ThreadRecyclerViewAdapter(textileService, this, viewModel.isPersonal)
         binding.recyclerView.adapter = adapter
@@ -66,12 +66,27 @@ open class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
     private fun setThreadIdToViewModel() {
         val threadId = arguments?.let { ThreadFragmentArgs.fromBundle(it).threadId }
             ?: preferenceHelper.personalThreadId
-        threadId?.also { viewModel.setThreadId(it) }
+        threadId?.also { viewModel.threadId = it }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.feedList.observe(viewLifecycleOwner, Observer { adapter.data = it })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.thread_actions, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.actionRefresh -> viewModel.loadFeedList()
+            R.id.actionScrollToTop -> smoothScrollToTop()
+            R.id.actionLeaveThread -> leaveThread()
+        }
+        return true
     }
 
     override fun onShowProof(feedItemData: FeedItemData) {
@@ -116,10 +131,26 @@ open class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
 
             override fun onDialogNegativeClick(dialog: DialogFragment) = dialog.dismiss()
         }
-        FeedDeletionDialogFragment().apply { listener = dialogCallback }.show(
+        ConfirmationDialogFragment().apply { listener = dialogCallback }.show(
             childFragmentManager,
-            FeedDeletionDialogFragment::javaClass.name
+            ConfirmationDialogFragment::javaClass.name
         )
+    }
+
+    private fun leaveThread() {
+        val dialogCallback = object : DialogListener {
+            override fun onDialogPositiveClick(dialog: DialogFragment) {
+                textileService.leaveThread(viewModel.threadId)
+                dialog.dismiss()
+                findNavController().popBackStack()
+            }
+
+            override fun onDialogNegativeClick(dialog: DialogFragment) = dialog.dismiss()
+        }
+        ConfirmationDialogFragment().apply {
+            title = R.string.title_leave_thread_confirmation
+            listener = dialogCallback
+        }.show(childFragmentManager, ConfirmationDialogFragment::javaClass.name)
     }
 
     override fun smoothScrollToTop() {

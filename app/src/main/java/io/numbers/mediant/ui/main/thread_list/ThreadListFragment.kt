@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentThreadListBinding
-import io.numbers.mediant.ui.listeners.DialogListener
+import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.ui.listeners.ItemClickListener
 import io.numbers.mediant.ui.listeners.ItemMenuClickListener
 import io.numbers.mediant.ui.main.MainFragmentDirections
@@ -139,9 +139,9 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, Ite
 
     override fun onItemMenuClick(position: Int, menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.action_thread_info -> {
+            R.id.actionThreadInfo -> {
             }
-            R.id.action_leave_thread -> viewModel.leaveThread(adapter.data[position])
+            R.id.actionLeaveThread -> viewModel.leaveThread(adapter.data[position])
         }
         return true
     }

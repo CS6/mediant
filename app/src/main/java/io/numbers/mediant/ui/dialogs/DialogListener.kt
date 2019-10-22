@@ -1,4 +1,4 @@
-package io.numbers.mediant.ui.listeners
+package io.numbers.mediant.ui.dialogs
 
 import androidx.fragment.app.DialogFragment
 

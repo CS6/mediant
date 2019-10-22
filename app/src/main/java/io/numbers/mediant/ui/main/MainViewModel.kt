@@ -31,7 +31,6 @@ class MainViewModel @Inject constructor(
     private val preferenceHelper: PreferenceHelper
 ) : ViewModel() {
 
-    val selectedOptionsItem = MutableLiveData<@androidx.annotation.IdRes Int>()
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     private lateinit var currentPhotoPath: String
 
