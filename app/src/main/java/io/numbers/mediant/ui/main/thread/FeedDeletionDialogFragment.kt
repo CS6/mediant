@@ -18,7 +18,7 @@ class FeedDeletionDialogFragment : DialogFragment() {
                 .setPositiveButton(R.string.title_positive_deletion_confirmation) { _, _ ->
                     listener.onDialogPositiveClick(this)
                 }
-                .setNegativeButton(R.string.title_negative_deletion_confirmation) { _, _ ->
+                .setNegativeButton(R.string.no) { _, _ ->
                     listener.onDialogNegativeClick(this)
                 }
             builder.create()

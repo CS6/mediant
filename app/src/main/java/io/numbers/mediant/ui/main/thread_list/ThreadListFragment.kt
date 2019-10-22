@@ -5,12 +5,16 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentThreadListBinding
@@ -18,7 +22,9 @@ import io.numbers.mediant.ui.listeners.DialogListener
 import io.numbers.mediant.ui.listeners.ItemClickListener
 import io.numbers.mediant.ui.listeners.ItemMenuClickListener
 import io.numbers.mediant.ui.main.MainFragmentDirections
+import io.numbers.mediant.ui.main.thread_list.thread_adding_dialog.ThreadAddingDialogFragment
 import io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreationDialogFragment
+import io.numbers.mediant.ui.main.thread_list.thread_invite_dialog.ThreadInviteDialogFragment
 import io.numbers.mediant.ui.tab.TabFragment
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
@@ -57,8 +63,25 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, Ite
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.threadList.observe(viewLifecycleOwner, Observer { adapter.data = it })
-        viewModel.openDialog.observe(
-            viewLifecycleOwner, EventObserver { showThreadCreationDialog() })
+        viewModel.openDialog.observe(viewLifecycleOwner, EventObserver { showThreadAddingDialog() })
+    }
+
+    private fun showThreadAddingDialog() {
+        val dialogCallback = object : ThreadAddingDialogFragment.ThreadAddingDialogListener {
+            override fun createThread(dialog: BottomSheetDialogFragment) {
+                showThreadCreationDialog()
+                dialog.dismiss()
+            }
+
+            override fun acceptInvite(dialog: BottomSheetDialogFragment) {
+                showThreadInviteDialog()
+                dialog.dismiss()
+            }
+        }
+        ThreadAddingDialogFragment().apply { listener = dialogCallback }.show(
+            childFragmentManager,
+            ThreadAddingDialogFragment::javaClass.name
+        )
     }
 
     private fun showThreadCreationDialog() {
@@ -76,6 +99,30 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, Ite
         ThreadCreationDialogFragment().apply { listener = dialogCallback }.show(
             childFragmentManager,
             ThreadCreationDialogFragment::javaClass.name
+        )
+    }
+
+    private fun showThreadInviteDialog() {
+        val dialogCallback = object : DialogListener {
+            override fun onDialogPositiveClick(dialog: DialogFragment) {
+                dialog as ThreadInviteDialogFragment
+                val inviteId = dialog.viewModel.inviteId.value ?: ""
+                val inviteKey =
+                    dialog.viewModel.inviteKey.value ?: ""
+                try {
+                    viewModel.acceptInvite(inviteId, inviteKey)
+                    showSnackBar(R.string.message_accepting_thread_invite)
+                } catch (e: Exception) {
+                    showSnackBar(R.string.message_thread_invite_error)
+                }
+                dialog.dismiss()
+            }
+
+            override fun onDialogNegativeClick(dialog: DialogFragment) = dialog.dismiss()
+        }
+        ThreadInviteDialogFragment().apply { listener = dialogCallback }.show(
+            childFragmentManager,
+            ThreadInviteDialogFragment::javaClass.name
         )
     }
 
@@ -101,4 +148,11 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, Ite
             override fun getVerticalSnapPreference() = SNAP_TO_START
         }.apply { targetPosition = 0 })
     }
+
+    private fun showSnackBar(@StringRes message: Int, @BaseTransientBottomBar.Duration duration: Int = Snackbar.LENGTH_LONG) =
+        view?.let {
+            val snackbar = Snackbar.make(it, message, duration)
+            snackbar.setAction(R.string.dismiss) { snackbar.dismiss() }
+            snackbar.show()
+        }
 }

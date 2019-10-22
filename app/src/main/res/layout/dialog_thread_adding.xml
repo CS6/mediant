@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="io.numbers.mediant.ui.main.thread_list.thread_adding_dialog.ThreadAddingDialogViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.createThread()}"
+            android:text="@string/create_thread"
+            android:textAlignment="textStart"
+            app:icon="@drawable/ic_view_day_black_24dp" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.acceptInvite()}"
+            android:text="@string/accept_invite"
+            android:textAlignment="textStart"
+            app:icon="@drawable/ic_input_black_24dp" />
+    </LinearLayout>
+</layout>

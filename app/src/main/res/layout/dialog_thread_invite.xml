@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreationDialogViewModel" />
+            type="io.numbers.mediant.ui.main.thread_list.thread_invite_dialog.ThreadInviteDialogViewModel" />
     </data>
 
     <LinearLayout
@@ -17,13 +17,26 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/thread_name">
+            android:hint="@string/invite_id">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="@={viewModel.threadName}" />
+                android:text="@={viewModel.inviteId}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:hint="@string/invite_key">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@={viewModel.inviteKey}" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </layout>

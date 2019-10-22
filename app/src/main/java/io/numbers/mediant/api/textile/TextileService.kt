@@ -250,7 +250,7 @@ class TextileService @Inject constructor(
         }
     }
 
-    private fun acceptExternalInvite(inviteId: String, key: String): String {
+    fun acceptExternalInvite(inviteId: String, key: String): String {
         Timber.i("Accepting external invitation: $inviteId with key $key")
         val blockHash = textile.invites.acceptExternal(inviteId, key)
         if (blockHash.isEmpty()) Timber.i("Already joined the thread.")
