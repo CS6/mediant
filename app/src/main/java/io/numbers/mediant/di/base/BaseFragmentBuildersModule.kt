@@ -46,6 +46,7 @@ abstract class BaseFragmentBuildersModule {
     @ContributesAndroidInjector(modules = [ThreadViewModelsModule::class])
     abstract fun contributeThreadFragment(): ThreadFragment
 
+    @ExperimentalCoroutinesApi
     @ContributesAndroidInjector(modules = [ThreadListViewModelsModule::class])
     abstract fun contributeThreadListFragment(): ThreadListFragment
 

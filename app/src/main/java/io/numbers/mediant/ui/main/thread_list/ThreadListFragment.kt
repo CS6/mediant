@@ -28,9 +28,12 @@ import io.numbers.mediant.ui.main.thread_list.thread_invite_dialog.ThreadInviteD
 import io.numbers.mediant.ui.tab.TabFragment
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, ItemMenuClickListener {
+@ExperimentalCoroutinesApi
+class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, ItemMenuClickListener,
+    CoroutineScope by MainScope() {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -107,13 +110,14 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, Ite
             override fun onDialogPositiveClick(dialog: DialogFragment) {
                 dialog as ThreadInviteDialogFragment
                 val inviteId = dialog.viewModel.inviteId.value ?: ""
-                val inviteKey =
-                    dialog.viewModel.inviteKey.value ?: ""
-                try {
-                    viewModel.acceptInvite(inviteId, inviteKey)
-                    showSnackBar(R.string.message_accepting_thread_invite)
-                } catch (e: Exception) {
-                    showSnackBar(R.string.message_thread_invite_error)
+                val inviteKey = dialog.viewModel.inviteKey.value ?: ""
+                launch(Dispatchers.IO) {
+                    try {
+                        viewModel.acceptInvite(inviteId, inviteKey)
+                        showSnackBar(R.string.message_accepting_thread_invite)
+                    } catch (e: Exception) {
+                        showErrorSnackBar(e.message)
+                    }
                 }
                 dialog.dismiss()
             }
@@ -155,4 +159,16 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, Ite
             snackbar.setAction(R.string.dismiss) { snackbar.dismiss() }
             snackbar.show()
         }
+
+    private fun showErrorSnackBar(errorMessage: String?) {
+        if (errorMessage.isNullOrEmpty()) {
+            showSnackBar(R.string.message_thread_invite_error)
+        } else {
+            view?.let {
+                val snackbar = Snackbar.make(it, errorMessage, Snackbar.LENGTH_INDEFINITE)
+                snackbar.setAction(R.string.dismiss) { snackbar.dismiss() }
+                snackbar.show()
+            }
+        }
+    }
 }

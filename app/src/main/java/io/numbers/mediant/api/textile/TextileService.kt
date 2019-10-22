@@ -245,7 +245,7 @@ class TextileService @Inject constructor(
             val inviteId = uriWithoutFragment.getQueryParameter("id")
             val inviteKey = uriWithoutFragment.getQueryParameter("key")
             if (inviteId.isNullOrEmpty() || inviteKey.isNullOrEmpty()) {
-                Timber.e("Cannot parse invite link. ID: $inviteId, Key: $inviteKey")
+                throw RuntimeException("Cannot parse invite link. ID: $inviteId, Key: $inviteKey")
             } else acceptExternalInvite(inviteId, inviteKey)
         }
     }

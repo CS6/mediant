@@ -2,12 +2,9 @@ package io.numbers.mediant.ui.main.thread_list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.viewmodel.Event
 import io.textile.pb.Model
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ThreadListViewModel @Inject constructor(private val textileService: TextileService) :
@@ -34,9 +31,8 @@ class ThreadListViewModel @Inject constructor(private val textileService: Textil
     fun addThread(name: String) =
         textileService.addThread(name, Model.Thread.Type.OPEN, Model.Thread.Sharing.SHARED)
 
-    fun acceptInvite(inviteId: String, inviteKey: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun acceptInvite(inviteId: String, inviteKey: String) =
         textileService.acceptExternalInvite(inviteId, inviteKey)
-    }
 
     fun leaveThread(thread: Model.Thread) = textileService.leaveThread(thread)
 }

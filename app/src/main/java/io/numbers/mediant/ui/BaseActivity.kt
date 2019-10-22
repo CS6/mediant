@@ -2,9 +2,11 @@ package io.numbers.mediant.ui
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.StringRes
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
 import io.numbers.mediant.api.textile.TextileService
@@ -41,9 +43,35 @@ class BaseActivity : DaggerAppCompatActivity(), CoroutineScope by MainScope() {
         if (intent.action == Intent.ACTION_VIEW) {
             intent.data?.also {
                 if (it.toString().startsWith("https://www.textile.photos/invites/new")) {
-                    launch(Dispatchers.IO) { textileService.acceptExternalInvite(it) }
+                    launch(Dispatchers.IO) {
+                        try {
+                            textileService.acceptExternalInvite(it)
+                            showSnackbar(R.string.message_accepting_thread_invite)
+                        } catch (e: Exception) {
+                            showErrorSnackbar(e.message)
+                        }
+                    }
                 } else Timber.e("Failed to parse invitation acceptance: $it")
             }
+        }
+    }
+
+    private fun showSnackbar(@StringRes message: Int) {
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+            .show()
+    }
+
+    private fun showErrorSnackbar(errorMessage: String?) {
+        if (errorMessage.isNullOrEmpty()) {
+            showSnackbar(R.string.message_thread_invite_error)
+        } else {
+            val snackbar = Snackbar.make(
+                findViewById(android.R.id.content),
+                errorMessage,
+                Snackbar.LENGTH_INDEFINITE
+            )
+            snackbar.setAction(R.string.dismiss) { snackbar.dismiss() }
+            snackbar.show()
         }
     }
 }
