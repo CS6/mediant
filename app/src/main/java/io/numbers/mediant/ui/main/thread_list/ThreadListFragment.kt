@@ -2,7 +2,6 @@ package io.numbers.mediant.ui.main.thread_list
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
@@ -20,7 +19,6 @@ import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentThreadListBinding
 import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.ui.listeners.ItemClickListener
-import io.numbers.mediant.ui.listeners.ItemMenuClickListener
 import io.numbers.mediant.ui.main.MainFragmentDirections
 import io.numbers.mediant.ui.main.thread_list.thread_adding_dialog.ThreadAddingDialogFragment
 import io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreationDialogFragment
@@ -32,7 +30,7 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, ItemMenuClickListener,
+class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
     CoroutineScope by MainScope() {
 
     @Inject
@@ -40,7 +38,7 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, Ite
 
     lateinit var viewModel: ThreadListViewModel
 
-    private val adapter = ThreadListRecyclerViewAdapter(this, this)
+    private val adapter = ThreadListRecyclerViewAdapter(this)
 
     private lateinit var binding: FragmentThreadListBinding
 
@@ -135,15 +133,6 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener, Ite
             adapter.data[position].id,
             adapter.data[position].name
         ).also { findNavController().navigate(it) }
-    }
-
-    override fun onItemMenuClick(position: Int, menuItem: MenuItem): Boolean {
-        when (menuItem.itemId) {
-            R.id.actionThreadInfo -> {
-            }
-            R.id.actionLeaveThread -> viewModel.leaveThread(adapter.data[position])
-        }
-        return true
     }
 
     override fun smoothScrollToTop() {

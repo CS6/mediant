@@ -3,19 +3,16 @@ package io.numbers.mediant.ui.main.thread_list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.numbers.mediant.R
 import io.numbers.mediant.ui.listeners.ItemClickListener
-import io.numbers.mediant.ui.listeners.ItemMenuClickListener
 import io.textile.pb.Model
 
 class ThreadListRecyclerViewAdapter(
-    private val itemClickListener: ItemClickListener,
-    private val itemMenuClickListener: ItemMenuClickListener
+    private val itemClickListener: ItemClickListener
 ) :
     RecyclerView.Adapter<ThreadListRecyclerViewAdapter.ViewHolder>() {
 
@@ -35,19 +32,17 @@ class ThreadListRecyclerViewAdapter(
     override fun getItemCount() = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder.from(parent, itemClickListener, itemMenuClickListener)
+        ViewHolder.from(parent, itemClickListener)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
     class ViewHolder(
         itemView: View,
-        private val itemClickListener: ItemClickListener,
-        private val itemMenuClickListener: ItemMenuClickListener
-    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
+        private val itemClickListener: ItemClickListener
+    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)
-            itemView.setOnLongClickListener(this)
         }
 
         private val threadNameTextView: TextView = itemView.findViewById(R.id.threadName)
@@ -60,26 +55,14 @@ class ThreadListRecyclerViewAdapter(
 
         override fun onClick(view: View) = itemClickListener.onItemClick(adapterPosition)
 
-        override fun onLongClick(view: View): Boolean {
-            PopupMenu(view.context, view).apply {
-                setOnMenuItemClickListener {
-                    itemMenuClickListener.onItemMenuClick(adapterPosition, it)
-                }
-                inflate(R.menu.thread_actions)
-                show()
-            }
-            return true
-        }
-
         companion object {
             fun from(
                 parent: ViewGroup,
-                itemClickListener: ItemClickListener,
-                itemMenuClickListener: ItemMenuClickListener
+                itemClickListener: ItemClickListener
             ): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val view = layoutInflater.inflate(R.layout.layout_thread_item, parent, false)
-                return ViewHolder(view, itemClickListener, itemMenuClickListener)
+                return ViewHolder(view, itemClickListener)
             }
         }
     }
