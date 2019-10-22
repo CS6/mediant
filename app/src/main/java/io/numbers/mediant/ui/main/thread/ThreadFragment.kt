@@ -1,5 +1,6 @@
 package io.numbers.mediant.ui.main.thread
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -82,11 +83,37 @@ open class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.actionInviteOthers -> inviteOthers()
             R.id.actionRefresh -> viewModel.loadFeedList()
             R.id.actionScrollToTop -> smoothScrollToTop()
             R.id.actionLeaveThread -> leaveThread()
         }
         return true
+    }
+
+    private fun inviteOthers() {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, textileService.addExternalInvite(viewModel.threadId))
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(sendIntent, resources.getString(R.string.invite_others)))
+    }
+
+    private fun leaveThread() {
+        val dialogCallback = object : DialogListener {
+            override fun onDialogPositiveClick(dialog: DialogFragment) {
+                textileService.leaveThread(viewModel.threadId)
+                dialog.dismiss()
+                findNavController().popBackStack()
+            }
+
+            override fun onDialogNegativeClick(dialog: DialogFragment) = dialog.dismiss()
+        }
+        ConfirmationDialogFragment().apply {
+            title = R.string.title_leave_thread_confirmation
+            listener = dialogCallback
+        }.show(childFragmentManager, ConfirmationDialogFragment::javaClass.name)
     }
 
     override fun onShowProof(feedItemData: FeedItemData) {
@@ -135,22 +162,6 @@ open class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
             childFragmentManager,
             ConfirmationDialogFragment::javaClass.name
         )
-    }
-
-    private fun leaveThread() {
-        val dialogCallback = object : DialogListener {
-            override fun onDialogPositiveClick(dialog: DialogFragment) {
-                textileService.leaveThread(viewModel.threadId)
-                dialog.dismiss()
-                findNavController().popBackStack()
-            }
-
-            override fun onDialogNegativeClick(dialog: DialogFragment) = dialog.dismiss()
-        }
-        ConfirmationDialogFragment().apply {
-            title = R.string.title_leave_thread_confirmation
-            listener = dialogCallback
-        }.show(childFragmentManager, ConfirmationDialogFragment::javaClass.name)
     }
 
     override fun smoothScrollToTop() {

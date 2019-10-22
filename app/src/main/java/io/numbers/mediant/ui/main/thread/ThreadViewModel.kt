@@ -33,9 +33,7 @@ class ThreadViewModel @Inject constructor(
                 if (threadId == this@ThreadViewModel.threadId
                     && textileService.isSupportedFeedItemType(feedItemData)
                 ) {
-                    feedList.postValue(textileService.listFeeds(threadId).filter {
-                        textileService.isSupportedFeedItemType(it)
-                    })
+                    feedList.postValue(textileService.listFeeds(threadId))
                 }
             }
         })
@@ -43,9 +41,7 @@ class ThreadViewModel @Inject constructor(
 
     fun loadFeedList() {
         isLoading.value = true
-        feedList.value = textileService.listFeeds(threadId).filter {
-            textileService.isSupportedFeedItemType(it)
-        }
+        feedList.value = textileService.listFeeds(threadId)
         isLoading.value = false
     }
 

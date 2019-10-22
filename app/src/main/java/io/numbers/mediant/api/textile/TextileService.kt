@@ -12,12 +12,14 @@ import io.textile.pb.View
 import io.textile.textile.*
 import timber.log.Timber
 import java.io.File
+import java.net.URLEncoder
 import java.util.*
 import javax.inject.Inject
 
 private const val TEXTILE_FOLDER_NAME = "textile"
 // TODO: implement infinite recycler view to reduce this limit
 private const val REQUEST_LIMIT = 999
+const val EXTERNAL_INVITE_LINK_HOST = "https://www.textile.photos/invites/new"
 
 // TODO: replace Timber.e with throw (handle exception by showing snackbar)
 class TextileService @Inject constructor(
@@ -35,7 +37,7 @@ class TextileService @Inject constructor(
     }
 
     private val feedItemSubtype: EnumSet<FeedItemType> =
-        EnumSet.of(FeedItemType.FILES, FeedItemType.JOIN, FeedItemType.IGNORE)
+        EnumSet.of(FeedItemType.FILES, FeedItemType.JOIN, FeedItemType.IGNORE, FeedItemType.LEAVE)
 
     init {
         initNodeStatusLiveDataListeners()
@@ -98,12 +100,11 @@ class TextileService @Inject constructor(
             }
         })
         safelyInvokeIfNodeOnline {
-            initPersonalThread()
             loadThreadList()
         }
     }
 
-    private fun initPersonalThread() {
+    fun initPersonalThread() {
         try {
             val personalThreadId = preferenceHelper.personalThreadId
             textile.threads.get(personalThreadId)
@@ -160,12 +161,14 @@ class TextileService @Inject constructor(
     fun isSupportedFeedItemType(feedItemData: FeedItemData) =
         feedItemSubtype.contains(feedItemData.type)
 
-    fun listFeeds(threadId: String): ArrayList<FeedItemData> {
+    fun listFeeds(threadId: String): List<FeedItemData> {
+        Timber.i("List feeds from thread: $threadId")
         return View.FeedRequest.newBuilder()
             .setThread(threadId)
             .setLimit(REQUEST_LIMIT)
             .build()
             .let { textile.feed.list(it) }
+            .filter { isSupportedFeedItemType(it) }
     }
 
     /**
@@ -240,6 +243,16 @@ class TextileService @Inject constructor(
     /**
      * Invites
      */
+
+    fun addExternalInvite(threadId: String): String =
+        addExternalInvite(textile.threads.get(threadId))
+
+    private fun addExternalInvite(thread: Model.Thread): String {
+        val invite = textile.invites.addExternal(thread.id)
+        val encodedInviter = URLEncoder.encode(invite.inviter, "utf-8")
+        val encodedThreadName = URLEncoder.encode(thread.name, "utf-8")
+        return "$EXTERNAL_INVITE_LINK_HOST#id=${invite.id}&key=${invite.key}&inviter=${encodedInviter}&name=${encodedThreadName}"
+    }
 
     fun acceptExternalInvite(uri: Uri) {
         val uriWithoutFragment = Uri.parse(uri.toString().replaceFirst('#', '?'))

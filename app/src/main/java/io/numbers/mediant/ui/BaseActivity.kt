@@ -9,10 +9,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
+import io.numbers.mediant.api.textile.EXTERNAL_INVITE_LINK_HOST
 import io.numbers.mediant.api.textile.TextileService
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.coroutines.*
-import timber.log.Timber
 import javax.inject.Inject
 
 // Extends from DaggerAppCompatActivity so we do NOT need to write `AndroidInjection.inject(this)`
@@ -42,7 +42,7 @@ class BaseActivity : DaggerAppCompatActivity(), CoroutineScope by MainScope() {
     private fun handleIntent(intent: Intent) {
         if (intent.action == Intent.ACTION_VIEW) {
             intent.data?.also {
-                if (it.toString().startsWith("https://www.textile.photos/invites/new")) {
+                if (it.toString().startsWith(EXTERNAL_INVITE_LINK_HOST)) {
                     launch(Dispatchers.IO) {
                         try {
                             textileService.acceptExternalInvite(it)
@@ -51,7 +51,7 @@ class BaseActivity : DaggerAppCompatActivity(), CoroutineScope by MainScope() {
                             showErrorSnackbar(e.message)
                         }
                     }
-                } else Timber.e("Failed to parse invitation acceptance: $it")
+                } else showErrorSnackbar("Failed to parse invitation acceptance: $it")
             }
         }
     }
