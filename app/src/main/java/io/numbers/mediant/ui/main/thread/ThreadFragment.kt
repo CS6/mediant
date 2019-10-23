@@ -24,7 +24,7 @@ import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import io.textile.textile.FeedItemData
 import javax.inject.Inject
 
-open class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
+class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -38,7 +38,7 @@ open class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
     lateinit var textileService: TextileService
 
     private lateinit var adapter: ThreadRecyclerViewAdapter
-    protected lateinit var binding: FragmentThreadBinding
+    private lateinit var binding: FragmentThreadBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

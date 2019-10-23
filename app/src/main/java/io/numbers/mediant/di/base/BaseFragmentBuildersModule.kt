@@ -11,11 +11,13 @@ import io.numbers.mediant.di.base.publishing.PublishingViewModelsModule
 import io.numbers.mediant.di.base.thread.ThreadViewModelsModule
 import io.numbers.mediant.di.base.thread_adding_dialog.ThreadAddingDialogViewModelsModule
 import io.numbers.mediant.di.base.thread_creation_dialog.ThreadCreationDialogViewModelsModule
+import io.numbers.mediant.di.base.thread_information.ThreadInformationViewModelsModule
 import io.numbers.mediant.di.base.thread_invite_dialog.ThreadInviteDialogViewModelsModule
 import io.numbers.mediant.di.base.thread_list.ThreadListViewModelsModule
 import io.numbers.mediant.ui.initialization.InitializationFragment
 import io.numbers.mediant.ui.main.MainFragment
 import io.numbers.mediant.ui.main.thread.ThreadFragment
+import io.numbers.mediant.ui.main.thread.thread_information.ThreadInformationFragment
 import io.numbers.mediant.ui.main.thread_list.ThreadListFragment
 import io.numbers.mediant.ui.main.thread_list.thread_adding_dialog.ThreadAddingDialogFragment
 import io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreationDialogFragment
@@ -62,6 +64,9 @@ abstract class BaseFragmentBuildersModule {
 
     @ContributesAndroidInjector(modules = [ThreadInviteDialogViewModelsModule::class])
     abstract fun contributeThreadInviteDialogFragment(): ThreadInviteDialogFragment
+
+    @ContributesAndroidInjector(modules = [ThreadInformationViewModelsModule::class])
+    abstract fun contributeThreadInformationFragment(): ThreadInformationFragment
 
     @ContributesAndroidInjector(modules = [PublishingViewModelsModule::class])
     abstract fun contributePublishingFragment(): PublishingFragment

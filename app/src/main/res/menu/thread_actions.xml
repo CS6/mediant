@@ -6,7 +6,7 @@
         android:id="@+id/actionThreadInfo"
         android:enabled="false"
         android:icon="@drawable/ic_info_black_24dp"
-        android:title="@string/info"
+        android:title="@string/information"
         app:showAsAction="always" />
     <item
         android:id="@+id/actionInviteOthers"
@@ -24,5 +24,5 @@
     <item
         android:id="@+id/actionLeaveThread"
         android:icon="@drawable/ic_delete_black_24dp"
-        android:title="@string/leave" />
+        android:title="@string/leave_thread" />
 </menu>

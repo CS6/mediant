@@ -22,9 +22,13 @@
     <string name="add">Add</string>
     <string name="message_accepting_thread_invite">Accepting thread invitation…</string>
     <string name="message_thread_invite_error">Error occurs when accepting invitation</string>
-    <string name="info">Information</string>
+    <string name="information">Information</string>
+    <string name="thread_id">Thread ID</string>
+    <string name="block_count">Block Count</string>
+    <string name="actions">Actions</string>
+    <string name="change_name">Change Name</string>
     <string name="invite_others">Invite Others</string>
-    <string name="leave">Leave</string>
+    <string name="leave_thread">Leave Thread</string>
     <string name="scroll_to_top">Scroll to Top</string>
     <string name="refresh">Refresh</string>
     <string name="publish">Publish</string>

@@ -59,6 +59,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_threadInformationFragment"
+            app:destination="@id/threadInformationFragment"
+            app:enterAnim="@anim/fast_fade_in"
+            app:exitAnim="@anim/fast_fade_out"
+            app:popEnterAnim="@anim/fast_fade_in"
+            app:popExitAnim="@anim/fast_fade_out" />
     </fragment>
     <fragment
         android:id="@+id/preferencesFragment"
@@ -80,6 +87,13 @@
         <action
             android:id="@+id/action_threadFragment_to_mediaDetailsFragment"
             app:destination="@id/mediaDetailsFragment"
+            app:enterAnim="@anim/fast_fade_in"
+            app:exitAnim="@anim/fast_fade_out"
+            app:popEnterAnim="@anim/fast_fade_in"
+            app:popExitAnim="@anim/fast_fade_out" />
+        <action
+            android:id="@+id/action_threadFragment_to_threadInformationFragment"
+            app:destination="@id/threadInformationFragment"
             app:enterAnim="@anim/fast_fade_in"
             app:exitAnim="@anim/fast_fade_out"
             app:popEnterAnim="@anim/fast_fade_in"
@@ -136,4 +150,9 @@
             android:name="blockHash"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/threadInformationFragment"
+        android:name="io.numbers.mediant.ui.main.thread.thread_information.ThreadInformationFragment"
+        android:label="ThreadInformationFragment"
+        tools:layout="@layout/fragment_thread_information" />
 </navigation>
