@@ -154,6 +154,8 @@ class TextileService @Inject constructor(
 
     fun leaveThread(threadId: String): String = textile.threads.remove(threadId)
 
+    fun getThread(threadId: String): Model.Thread = textile.threads.get(threadId)
+
     /**
      * Feeds
      */

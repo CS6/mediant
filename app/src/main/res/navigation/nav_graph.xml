@@ -153,6 +153,10 @@
     <fragment
         android:id="@+id/threadInformationFragment"
         android:name="io.numbers.mediant.ui.main.thread.thread_information.ThreadInformationFragment"
-        android:label="ThreadInformationFragment"
-        tools:layout="@layout/fragment_thread_information" />
+        android:label="@string/information"
+        tools:layout="@layout/fragment_thread_information">
+        <argument
+            android:name="threadId"
+            app:argType="string" />
+    </fragment>
 </navigation>
