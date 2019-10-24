@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="mediant">MediAnt</string>
     <string name="placeholder">Placeholder</string>
+    <string name="message_general_error">Oh no! Bad things happened!</string>
     <string name="connect_to_ipfs">Connecting to IPFS…</string>
     <string name="create_wallet">Creating Textile wallet…</string>
     <string name="camera">Camera</string>
@@ -9,8 +10,8 @@
     <string name="feeds">Feeds</string>
     <string name="storage">Storage</string>
     <string name="message_proof_generating">Generating proof and signatures…</string>
-    <string name="message_proof_generated">Successfully generated proof and signatures</string>
-    <string name="message_media_uploaded">Successfully uploaded media via Textile</string>
+    <string name="message_proof_generated">Successfully generated proof and signatures.</string>
+    <string name="message_media_uploaded">Successfully uploaded media via Textile.</string>
 
     <string name="create_thread">Create Thread</string>
     <string name="thread_name">Thread Name</string>
@@ -21,7 +22,7 @@
     <string name="invite_key">Invite Key</string>
     <string name="add">Add</string>
     <string name="message_accepting_thread_invite">Accepting thread invitation…</string>
-    <string name="message_thread_invite_error">Error occurs when accepting invitation</string>
+    <string name="message_invite_parsing_error">Failed to parse invitation acceptance.</string>
     <string name="information">Information</string>
     <string name="thread_id">Thread ID</string>
     <string name="block_count">Block Count</string>

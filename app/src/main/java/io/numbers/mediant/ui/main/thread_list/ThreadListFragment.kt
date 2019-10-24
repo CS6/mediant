@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -12,8 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentThreadListBinding
@@ -23,15 +20,15 @@ import io.numbers.mediant.ui.main.MainFragmentDirections
 import io.numbers.mediant.ui.main.thread_list.thread_adding_dialog.ThreadAddingDialogFragment
 import io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreationDialogFragment
 import io.numbers.mediant.ui.main.thread_list.thread_invite_dialog.ThreadInviteDialogFragment
+import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
+import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.ui.tab.TabFragment
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
-import kotlinx.coroutines.*
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
 class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
-    CoroutineScope by MainScope() {
+    ShowableSnackbar by DefaultShowableSnackbar() {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -65,6 +62,10 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
         super.onViewCreated(view, savedInstanceState)
         viewModel.threadList.observe(viewLifecycleOwner, Observer { adapter.data = it })
         viewModel.openDialog.observe(viewLifecycleOwner, EventObserver { showThreadAddingDialog() })
+        viewModel.showSnackbar.observe(viewLifecycleOwner, EventObserver { showSnackbar(view, it) })
+        viewModel.showErrorSnackbar.observe(
+            viewLifecycleOwner, EventObserver { showErrorSnackbar(view, it) }
+        )
     }
 
     private fun showThreadAddingDialog() {
@@ -109,14 +110,7 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
                 dialog as ThreadInviteDialogFragment
                 val inviteId = dialog.viewModel.inviteId.value ?: ""
                 val inviteKey = dialog.viewModel.inviteKey.value ?: ""
-                launch(Dispatchers.IO) {
-                    try {
-                        viewModel.acceptInvite(inviteId, inviteKey)
-                        showSnackBar(R.string.message_accepting_thread_invite)
-                    } catch (e: Exception) {
-                        showErrorSnackBar(e.message)
-                    }
-                }
+                viewModel.acceptInvite(inviteId, inviteKey)
                 dialog.dismiss()
             }
 
@@ -140,24 +134,5 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
             LinearSmoothScroller(context) {
             override fun getVerticalSnapPreference() = SNAP_TO_START
         }.apply { targetPosition = 0 })
-    }
-
-    private fun showSnackBar(@StringRes message: Int, @BaseTransientBottomBar.Duration duration: Int = Snackbar.LENGTH_LONG) =
-        view?.let {
-            val snackbar = Snackbar.make(it, message, duration)
-            snackbar.setAction(R.string.dismiss) { snackbar.dismiss() }
-            snackbar.show()
-        }
-
-    private fun showErrorSnackBar(errorMessage: String?) {
-        if (errorMessage.isNullOrEmpty()) {
-            showSnackBar(R.string.message_thread_invite_error)
-        } else {
-            view?.let {
-                val snackbar = Snackbar.make(it, errorMessage, Snackbar.LENGTH_INDEFINITE)
-                snackbar.setAction(R.string.dismiss) { snackbar.dismiss() }
-                snackbar.show()
-            }
-        }
     }
 }

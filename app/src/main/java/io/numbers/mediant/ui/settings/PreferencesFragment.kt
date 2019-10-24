@@ -4,20 +4,24 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.google.android.material.snackbar.Snackbar
 import com.htc.htcwalletsdk.Export.RESULT
 import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
 import io.numbers.mediant.api.zion.ZionService
+import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
+import io.numbers.mediant.ui.snackbar.ShowableSnackbar
+import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.util.PreferenceHelper
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-class PreferencesFragment : PreferenceFragmentCompat(), CoroutineScope by MainScope() {
+class PreferencesFragment : PreferenceFragmentCompat(),
+    ShowableSnackbar by DefaultShowableSnackbar() {
 
     @Inject
     lateinit var preferenceHelper: PreferenceHelper
@@ -100,13 +104,14 @@ class PreferencesFragment : PreferenceFragmentCompat(), CoroutineScope by MainSc
 
             setOnPreferenceChangeListener { preference, newValue ->
                 if (preference == this && newValue == true) {
-                    launch(Dispatchers.IO) {
+                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                         val result = zionService.initZkma()
                         if (result != RESULT.SUCCESS) {
                             summary = "Error Code: $result"
                             isChecked = false
                         }
                     }
+
                 }
                 true
             }
@@ -123,9 +128,6 @@ class PreferencesFragment : PreferenceFragmentCompat(), CoroutineScope by MainSc
 
     private fun copyToClipboard(label: String, text: String?) {
         ClipData.newPlainText(label, text).also { clipboard.setPrimaryClip(it) }
-        showCopyMessageSnackbar()
+        view?.let { showSnackbar(it, SnackbarArgs(R.string.copied_to_clipboard)) }
     }
-
-    private fun showCopyMessageSnackbar() =
-        view?.let { Snackbar.make(it, R.string.copied_to_clipboard, Snackbar.LENGTH_LONG).show() }
 }

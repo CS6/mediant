@@ -23,7 +23,7 @@ class ImageCardViewHolder(
     private val isPersonal: Boolean
 ) : ThreadRecyclerViewAdapter.ViewHolder(itemView) {
 
-    private var job = Job()
+    private var job: Job? = null
 
     private val imageView: ImageView = itemView.findViewById(R.id.image)
     private val userNameTextView: TextView = itemView.findViewById(R.id.userName)
@@ -33,7 +33,7 @@ class ImageCardViewHolder(
     private val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
 
     override fun bind(item: FeedItemData, type: FeedItemType) {
-        job.cancel()
+        job?.cancel()
 
         userNameTextView.text = item.files.user.name
         dateTextView.text = timestampToString(item.files.date)

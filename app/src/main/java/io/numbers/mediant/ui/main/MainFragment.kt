@@ -11,25 +11,23 @@ import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.BuildConfig.APPLICATION_ID
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentMainBinding
+import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
+import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.ui.tab.Tab
 import io.numbers.mediant.util.ActivityRequestCodes
 import io.numbers.mediant.util.PermissionManager
 import io.numbers.mediant.util.PermissionRequestType
-import io.numbers.mediant.util.SnackbarArgs
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-class MainFragment : DaggerFragment() {
+class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackbar() {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -67,7 +65,10 @@ class MainFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
-        viewModel.showSnackbar.observe(viewLifecycleOwner, EventObserver { showSnackBar(it) })
+        viewModel.showSnackbar.observe(viewLifecycleOwner, EventObserver { showSnackbar(view, it) })
+        viewModel.showErrorSnackbar.observe(
+            viewLifecycleOwner, EventObserver { showErrorSnackbar(view, it) }
+        )
     }
 
     private fun initViewPager() {
@@ -146,11 +147,5 @@ class MainFragment : DaggerFragment() {
     private fun navigateToPermissionRationaleFragment(@StringRes rationale: Int) {
         MainFragmentDirections.actionMainFragmentToPermissionRationaleFragment(rationale)
             .also { findNavController().navigate(it) }
-    }
-
-    private fun showSnackBar(snackbarArgs: SnackbarArgs) = view?.let {
-        val snackbar = Snackbar.make(it, snackbarArgs.message, snackbarArgs.duration)
-        snackbar.setAction(R.string.dismiss) { snackbar.dismiss() }
-        snackbar.show()
     }
 }

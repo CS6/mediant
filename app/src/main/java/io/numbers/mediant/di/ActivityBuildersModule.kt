@@ -5,7 +5,6 @@ import dagger.android.ContributesAndroidInjector
 import io.numbers.mediant.di.base.BaseFragmentBuildersModule
 import io.numbers.mediant.di.base.BaseModule
 import io.numbers.mediant.ui.BaseActivity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 // Provides all activities extending from DaggerAppCompatActivity as Dagger client.
 
@@ -17,7 +16,6 @@ abstract class ActivityBuildersModule {
     //    write `AndroidInjection.inject(this)` in BaseActivity.onCreate() method.
     // 2. Scope BaseFragmentBuildersModule only within BaseActivity instead of whole app.
     // 3. Dagger will generate BaseActivitySubcomponent under the hook with the following method.
-    @ExperimentalCoroutinesApi
     @ContributesAndroidInjector(modules = [BaseFragmentBuildersModule::class, BaseModule::class])
     abstract fun contributeBaseActivity(): BaseActivity
 
