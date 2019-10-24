@@ -4,8 +4,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.numbers.mediant.api.textile.TextileService
+import io.numbers.mediant.viewmodel.Event
 import io.textile.pb.Model
-import timber.log.Timber
 import javax.inject.Inject
 
 class ThreadInformationViewModel @Inject constructor(private val textileService: TextileService) :
@@ -20,6 +20,7 @@ class ThreadInformationViewModel @Inject constructor(private val textileService:
     val blockCount = MediatorLiveData<Int>()
     val headBlockCount = MediatorLiveData<Int>()
     val peerCount = MediatorLiveData<Int>()
+    val showNamingDialogEvent = MutableLiveData<Event<Unit>>()
 
     init {
         threadName.addSource(threadId) {
@@ -48,5 +49,14 @@ class ThreadInformationViewModel @Inject constructor(private val textileService:
         }
     }
 
-    fun changeName() = Timber.d("change name")
+    fun changeName() {
+        showNamingDialogEvent.value = Event(Unit)
+    }
+
+    fun setThreadName(name: String) {
+        threadId.value?.let {
+            textileService.setThreadName(it, name)
+            threadName.value = textileService.getThread(it).name
+        }
+    }
 }

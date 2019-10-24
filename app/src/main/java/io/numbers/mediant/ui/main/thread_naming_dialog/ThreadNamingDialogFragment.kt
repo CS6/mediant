@@ -43,8 +43,8 @@ class ThreadNamingDialogFragment : DaggerDialogFragment() {
             binding.viewModel = viewModel
             val builder = MaterialAlertDialogBuilder(it)
             builder.setView(binding.root)
-                .setTitle(R.string.create_thread)
-                .setPositiveButton(R.string.create) { _, _ -> listener.onDialogPositiveClick(this) }
+                .setTitle(R.string.new_thread_name)
+                .setPositiveButton(R.string.confirm) { _, _ -> listener.onDialogPositiveClick(this) }
                 .setNegativeButton(R.string.cancel) { _, _ -> listener.onDialogNegativeClick(this) }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")

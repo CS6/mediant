@@ -12,7 +12,6 @@ import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.ui.listeners.FeedItemListener
 import io.numbers.mediant.util.timestampToString
 import io.textile.textile.FeedItemData
-import io.textile.textile.FeedItemType
 import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
@@ -32,7 +31,7 @@ class ImageCardViewHolder(
     private val publishButton: Button = itemView.findViewById(R.id.publishButton)
     private val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
 
-    override fun bind(item: FeedItemData, type: FeedItemType) {
+    override fun bind(item: FeedItemData) {
         job?.cancel()
 
         userNameTextView.text = item.files.user.name

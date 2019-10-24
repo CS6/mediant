@@ -71,7 +71,7 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
     private fun showThreadAddingDialog() {
         val dialogCallback = object : ThreadAddingDialogFragment.ThreadAddingDialogListener {
             override fun createThread(dialog: BottomSheetDialogFragment) {
-                showThreadCreationDialog()
+                showThreadNamingDialog()
                 dialog.dismiss()
             }
 
@@ -86,7 +86,7 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
         )
     }
 
-    private fun showThreadCreationDialog() {
+    private fun showThreadNamingDialog() {
         val dialogCallback = object : DialogListener {
             override fun onDialogPositiveClick(dialog: DialogFragment) {
                 val threadName =

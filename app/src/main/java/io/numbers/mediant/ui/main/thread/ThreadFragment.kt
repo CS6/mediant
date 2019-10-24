@@ -3,6 +3,7 @@ package io.numbers.mediant.ui.main.thread
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -72,6 +73,9 @@ class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (!viewModel.isPersonal) viewModel.threadName.observe(viewLifecycleOwner, Observer {
+            (activity as AppCompatActivity).supportActionBar?.title = it
+        })
         viewModel.feedList.observe(viewLifecycleOwner, Observer { adapter.data = it })
     }
 

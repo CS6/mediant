@@ -104,7 +104,7 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
             setOnPreferenceChangeListener { preference, newValue ->
                 if (preference == this && newValue == true) {
-                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                    lifecycleScope.launch(Dispatchers.IO) {
                         val result = zionService.initZkma()
                         if (result != RESULT.SUCCESS) {
                             summary = "Error Code: $result"

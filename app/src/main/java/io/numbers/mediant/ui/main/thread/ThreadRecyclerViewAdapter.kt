@@ -47,10 +47,10 @@ class ThreadRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(data[position], data[position].type)
+        holder.bind(data[position])
 
     abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        abstract fun bind(item: FeedItemData, type: FeedItemType)
+        abstract fun bind(item: FeedItemData)
     }
 }

@@ -7,6 +7,7 @@ import io.numbers.mediant.util.PreferenceHelper
 import io.textile.pb.View
 import io.textile.textile.BaseTextileEventListener
 import io.textile.textile.FeedItemData
+import io.textile.textile.FeedItemType
 import javax.inject.Inject
 
 class ThreadViewModel @Inject constructor(
@@ -17,6 +18,7 @@ class ThreadViewModel @Inject constructor(
     var threadId = ""
         set(value) {
             field = value
+            initThreadNameLiveData()
             initFeedListLiveData()
         }
 
@@ -24,6 +26,19 @@ class ThreadViewModel @Inject constructor(
         get() = preferenceHelper.personalThreadId == threadId
     val feedList = MutableLiveData<List<FeedItemData>>()
     val isLoading = MutableLiveData(false)
+    val threadName = MutableLiveData("")
+
+    private fun initThreadNameLiveData() {
+        threadName.postValue(textileService.getThread(threadId).name)
+        textileService.addEventListener(object : BaseTextileEventListener() {
+            override fun threadUpdateReceived(threadId: String, feedItemData: FeedItemData) {
+                super.threadUpdateReceived(threadId, feedItemData)
+                if (this@ThreadViewModel.threadId == threadId && feedItemData.type == FeedItemType.ANNOUNCE) {
+                    threadName.postValue(textileService.getThread(threadId).name)
+                }
+            }
+        })
+    }
 
     private fun initFeedListLiveData() {
         loadFeedList()
@@ -31,7 +46,7 @@ class ThreadViewModel @Inject constructor(
             override fun threadUpdateReceived(threadId: String, feedItemData: FeedItemData) {
                 super.threadUpdateReceived(threadId, feedItemData)
                 if (threadId == this@ThreadViewModel.threadId
-                    && textileService.isSupportedFeedItemType(feedItemData)
+                    && textileService.isFeedItemUpdateEventType(feedItemData)
                 ) {
                     feedList.postValue(textileService.listFeeds(threadId))
                 }

@@ -36,8 +36,12 @@ class TextileService @Inject constructor(
         list.filter { it.id != preferenceHelper.personalThreadId }
     }
 
-    private val feedItemSubtype: EnumSet<FeedItemType> =
-        EnumSet.of(FeedItemType.FILES, FeedItemType.JOIN, FeedItemType.IGNORE, FeedItemType.LEAVE)
+    private val feedItemUpdateEventType: EnumSet<FeedItemType> =
+        EnumSet.of(
+            FeedItemType.FILES,
+            FeedItemType.JOIN,
+            FeedItemType.IGNORE
+        )
 
     init {
         initNodeStatusLiveDataListeners()
@@ -98,6 +102,12 @@ class TextileService @Inject constructor(
                 super.threadRemoved(threadId)
                 threadList.postValue(textile.threads.list().itemsList)
             }
+
+            override fun threadUpdateReceived(threadId: String, feedItemData: FeedItemData) {
+                super.threadUpdateReceived(threadId, feedItemData)
+                // on thread renamed
+                if (feedItemData.type == FeedItemType.ANNOUNCE) threadList.postValue(textile.threads.list().itemsList)
+            }
         })
         safelyInvokeIfNodeOnline {
             loadThreadList()
@@ -150,18 +160,19 @@ class TextileService @Inject constructor(
         return key
     }
 
-    fun leaveThread(thread: Model.Thread): String = textile.threads.remove(thread.id)
-
     fun leaveThread(threadId: String): String = textile.threads.remove(threadId)
 
     fun getThread(threadId: String): Model.Thread = textile.threads.get(threadId)
+
+    fun setThreadName(threadId: String, threadName: String) =
+        textile.threads.rename(threadId, threadName)
 
     /**
      * Feeds
      */
 
-    fun isSupportedFeedItemType(feedItemData: FeedItemData) =
-        feedItemSubtype.contains(feedItemData.type)
+    fun isFeedItemUpdateEventType(feedItemData: FeedItemData) =
+        feedItemUpdateEventType.contains(feedItemData.type)
 
     fun listFeeds(threadId: String): List<FeedItemData> {
         Timber.i("List feeds from thread: $threadId")
@@ -170,7 +181,6 @@ class TextileService @Inject constructor(
             .setLimit(REQUEST_LIMIT)
             .build()
             .let { textile.feed.list(it) }
-            .filter { isSupportedFeedItemType(it) }
     }
 
     /**

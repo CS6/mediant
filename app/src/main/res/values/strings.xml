@@ -34,6 +34,8 @@
     <string name="peer_count">Peer Count</string>
     <string name="actions">Actions</string>
     <string name="change_name">Change Name</string>
+    <string name="new_thread_name">New Thread Name</string>
+    <string name="confirm">Confirm</string>
     <string name="invite_others">Invite Others</string>
     <string name="leave_thread">Leave Thread</string>
     <string name="scroll_to_top">Scroll to Top</string>
