@@ -60,7 +60,7 @@ class ZionService @Inject constructor(
         val signature = ByteArrayHolder()
         uniqueId?.also {
             zkma.signMessage(it, ETHEREUM_TYPE, json.toString(), signature).also { result ->
-                Timber.i("Zion message-signing result: $result")
+                if (result != RESULT.SUCCESS) throw RuntimeException("Zion error code: $result")
             }
             return HashUtils.asHex(signature.byteArray)
         }
