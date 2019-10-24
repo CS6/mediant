@@ -8,10 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import io.numbers.mediant.R
 import io.numbers.mediant.ui.BaseActivity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
-class PermissionManager @ExperimentalCoroutinesApi @Inject constructor(
+class PermissionManager @Inject constructor(
     private val baseActivity: BaseActivity
 ) {
 
