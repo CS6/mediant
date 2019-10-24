@@ -23,6 +23,7 @@
     <string name="add">Add</string>
     <string name="message_accepting_thread_invite">Accepting thread invitation…</string>
     <string name="message_invite_parsing_error">Failed to parse invitation acceptance.</string>
+
     <string name="information">Information</string>
     <string name="thread_id">Thread ID</string>
     <string name="thread_key">Thread Key</string>
@@ -32,10 +33,12 @@
     <string name="block_count">Block Count</string>
     <string name="head_block_count">Head Block Count</string>
     <string name="peer_count">Peer Count</string>
+
     <string name="actions">Actions</string>
     <string name="change_name">Change Name</string>
     <string name="new_thread_name">New Thread Name</string>
     <string name="confirm">Confirm</string>
+    <string name="storage_information">Storage Information</string>
     <string name="invite_others">Invite Others</string>
     <string name="leave_thread">Leave Thread</string>
     <string name="scroll_to_top">Scroll to Top</string>

@@ -22,6 +22,7 @@ import io.numbers.mediant.ui.tab.Tab
 import io.numbers.mediant.util.ActivityRequestCodes
 import io.numbers.mediant.util.PermissionManager
 import io.numbers.mediant.util.PermissionRequestType
+import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -39,6 +40,9 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
 
     @Inject
     lateinit var permissionManager: PermissionManager
+
+    @Inject
+    lateinit var preferenceHelper: PreferenceHelper
 
     private lateinit var mainPagerAdapter: MainPagerAdapter
 
@@ -94,6 +98,11 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         when (item.itemId) {
             R.id.menuItemNavToSettings -> findNavController().navigate(R.id.action_mainFragment_to_preferencesFragment)
             R.id.menuItemOpenCamera -> prepareCamera()
+            R.id.menuItemPersonalThreadInformation -> preferenceHelper.personalThreadId?.let {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToThreadInformationFragment(it)
+                )
+            }
         }
         return true
     }

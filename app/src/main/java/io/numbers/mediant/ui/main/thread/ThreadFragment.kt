@@ -87,23 +87,18 @@ class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.actionThreadInformation -> showInformation()
-            R.id.actionInviteOthers -> inviteOthers()
-            R.id.actionRefresh -> viewModel.loadFeedList()
-            R.id.actionScrollToTop -> smoothScrollToTop()
-            R.id.actionLeaveThread -> leaveThread()
+            R.id.menuItemThreadInformation -> showInformation()
+            R.id.menuItemInviteOthers -> inviteOthers()
+            R.id.menuItemRefresh -> viewModel.loadFeedList()
+            R.id.menuItemScrollToTop -> smoothScrollToTop()
+            R.id.menuItemLeaveThread -> leaveThread()
         }
         return true
     }
 
     private fun showInformation() {
         findNavController().navigate(
-            if (viewModel.isPersonal) MainFragmentDirections.actionMainFragmentToThreadInformationFragment(
-                viewModel.threadId
-            )
-            else ThreadFragmentDirections.actionThreadFragmentToThreadInformationFragment(
-                viewModel.threadId
-            )
+            ThreadFragmentDirections.actionThreadFragmentToThreadInformationFragment(viewModel.threadId)
         )
     }
 
