@@ -9,100 +9,151 @@
             type="io.numbers.mediant.ui.main.thread.thread_information.ThreadInformationViewModel" />
     </data>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/medium_padding">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/medium_padding">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/thread_name_title"
+                    style="?attr/textAppearanceSubtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/thread_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:text="@{viewModel.threadName}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/thread_name_title" />
+
+                <Button
+                    style="@style/IconOnlyCardButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.changeName()}"
+                    app:icon="@drawable/ic_mode_edit_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/thread_name_title"
                 style="?attr/textAppearanceSubtitle1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/thread_name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/thread_id" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
-                android:text="@{viewModel.threadName}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/thread_name_title" />
+                android:text="@{viewModel.threadId}" />
 
-            <Button
-                style="@style/IconOnlyCardButton"
-                android:layout_width="wrap_content"
+            <TextView
+                style="?attr/textAppearanceSubtitle1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.changeName()}"
-                app:icon="@drawable/ic_mode_edit_black_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/thread_key" />
 
-        <TextView
-            style="?attr/textAppearanceSubtitle1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/medium_margin"
-            android:text="@string/thread_id" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@{viewModel.threadKey}" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:text="@{viewModel.threadId}" />
+            <TextView
+                style="?attr/textAppearanceSubtitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/schema" />
 
-        <TextView
-            style="?attr/textAppearanceSubtitle1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/medium_margin"
-            android:text="@string/block_count" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@{viewModel.schema}" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:text="@{viewModel.blockCount.toString()}" />
+            <TextView
+                style="?attr/textAppearanceSubtitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/type" />
 
-        <TextView
-            style="?attr/textAppearanceSubtitle1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/medium_margin"
-            android:text="@string/actions" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@{viewModel.type.toString()}" />
 
-        <Button
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.changeName()}"
-            android:text="@string/change_name"
-            app:icon="@drawable/ic_mode_edit_black_24dp" />
+            <TextView
+                style="?attr/textAppearanceSubtitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/sharing_mode" />
 
-        <Button
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.inviteOthers()}"
-            android:text="@string/invite_others"
-            app:icon="@drawable/ic_share_black_24dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@{viewModel.sharingMode.toString()}" />
 
-        <Button
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.leaveThread()}"
-            android:text="@string/leave_thread"
-            app:icon="@drawable/ic_delete_black_24dp" />
+            <TextView
+                style="?attr/textAppearanceSubtitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/block_count" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@{viewModel.blockCount.toString()}" />
+
+            <TextView
+                style="?attr/textAppearanceSubtitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/head_block_count" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@{viewModel.headBlockCount.toString()}" />
+
+            <TextView
+                style="?attr/textAppearanceSubtitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/peer_count" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@{viewModel.peerCount.toString()}" />
+        </LinearLayout>
+    </ScrollView>
 </layout>

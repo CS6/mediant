@@ -25,7 +25,13 @@
     <string name="message_invite_parsing_error">Failed to parse invitation acceptance.</string>
     <string name="information">Information</string>
     <string name="thread_id">Thread ID</string>
+    <string name="thread_key">Thread Key</string>
+    <string name="schema">Schema</string>
+    <string name="type">Type</string>
+    <string name="sharing_mode">Sharing Mode</string>
     <string name="block_count">Block Count</string>
+    <string name="head_block_count">Head Block Count</string>
+    <string name="peer_count">Peer Count</string>
     <string name="actions">Actions</string>
     <string name="change_name">Change Name</string>
     <string name="invite_others">Invite Others</string>
