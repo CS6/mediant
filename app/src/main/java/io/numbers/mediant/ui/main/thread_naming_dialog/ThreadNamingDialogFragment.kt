@@ -1,4 +1,4 @@
-package io.numbers.mediant.ui.main.thread_list.thread_creation_dialog
+package io.numbers.mediant.ui.main.thread_naming_dialog
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -9,17 +9,17 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerDialogFragment
 import io.numbers.mediant.R
-import io.numbers.mediant.databinding.DialogThreadCreationBinding
+import io.numbers.mediant.databinding.DialogThreadNamingBinding
 import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import javax.inject.Inject
 
-class ThreadCreationDialogFragment : DaggerDialogFragment() {
+class ThreadNamingDialogFragment : DaggerDialogFragment() {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
-    lateinit var viewModel: ThreadCreationDialogViewModel
+    lateinit var viewModel: ThreadNamingDialogViewModel
 
     lateinit var listener: DialogListener
 
@@ -27,15 +27,15 @@ class ThreadCreationDialogFragment : DaggerDialogFragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(
             this, viewModelProviderFactory
-        )[ThreadCreationDialogViewModel::class.java]
+        )[ThreadNamingDialogViewModel::class.java]
     }
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            val binding: DialogThreadCreationBinding = DataBindingUtil.inflate(
+            val binding: DialogThreadNamingBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
-                R.layout.dialog_thread_creation,
+                R.layout.dialog_thread_naming,
                 null,
                 false
             )

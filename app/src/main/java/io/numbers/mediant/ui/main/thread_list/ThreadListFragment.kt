@@ -18,8 +18,8 @@ import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.ui.listeners.ItemClickListener
 import io.numbers.mediant.ui.main.MainFragmentDirections
 import io.numbers.mediant.ui.main.thread_list.thread_adding_dialog.ThreadAddingDialogFragment
-import io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreationDialogFragment
 import io.numbers.mediant.ui.main.thread_list.thread_invite_dialog.ThreadInviteDialogFragment
+import io.numbers.mediant.ui.main.thread_naming_dialog.ThreadNamingDialogFragment
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.ui.tab.TabFragment
@@ -90,7 +90,7 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
         val dialogCallback = object : DialogListener {
             override fun onDialogPositiveClick(dialog: DialogFragment) {
                 val threadName =
-                    (dialog as ThreadCreationDialogFragment).viewModel.threadName.value ?: ""
+                    (dialog as ThreadNamingDialogFragment).viewModel.threadName.value ?: ""
                 viewModel.addThread(threadName)
                 dialog.dismiss()
             }
@@ -98,9 +98,9 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
             override fun onDialogNegativeClick(dialog: DialogFragment) = dialog.dismiss()
         }
 
-        ThreadCreationDialogFragment().apply { listener = dialogCallback }.show(
+        ThreadNamingDialogFragment().apply { listener = dialogCallback }.show(
             childFragmentManager,
-            ThreadCreationDialogFragment::javaClass.name
+            ThreadNamingDialogFragment::javaClass.name
         )
     }
 

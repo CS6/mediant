@@ -10,18 +10,18 @@ import io.numbers.mediant.di.base.permission_rationale.PermissionRationaleViewMo
 import io.numbers.mediant.di.base.publishing.PublishingViewModelsModule
 import io.numbers.mediant.di.base.thread.ThreadViewModelsModule
 import io.numbers.mediant.di.base.thread_adding_dialog.ThreadAddingDialogViewModelsModule
-import io.numbers.mediant.di.base.thread_creation_dialog.ThreadCreationDialogViewModelsModule
 import io.numbers.mediant.di.base.thread_information.ThreadInformationViewModelsModule
 import io.numbers.mediant.di.base.thread_invite_dialog.ThreadInviteDialogViewModelsModule
 import io.numbers.mediant.di.base.thread_list.ThreadListViewModelsModule
+import io.numbers.mediant.di.base.thread_naming_dialog.ThreadNamingDialogViewModelsModule
 import io.numbers.mediant.ui.initialization.InitializationFragment
 import io.numbers.mediant.ui.main.MainFragment
 import io.numbers.mediant.ui.main.thread.ThreadFragment
 import io.numbers.mediant.ui.main.thread.thread_information.ThreadInformationFragment
 import io.numbers.mediant.ui.main.thread_list.ThreadListFragment
 import io.numbers.mediant.ui.main.thread_list.thread_adding_dialog.ThreadAddingDialogFragment
-import io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreationDialogFragment
 import io.numbers.mediant.ui.main.thread_list.thread_invite_dialog.ThreadInviteDialogFragment
+import io.numbers.mediant.ui.main.thread_naming_dialog.ThreadNamingDialogFragment
 import io.numbers.mediant.ui.media_details.MediaDetailsFragment
 import io.numbers.mediant.ui.permission_rationale.PermissionRationaleFragment
 import io.numbers.mediant.ui.publishing.PublishingFragment
@@ -55,8 +55,8 @@ abstract class BaseFragmentBuildersModule {
     @ContributesAndroidInjector(modules = [ThreadAddingDialogViewModelsModule::class])
     abstract fun contributeThreadAddingDialogFragment(): ThreadAddingDialogFragment
 
-    @ContributesAndroidInjector(modules = [ThreadCreationDialogViewModelsModule::class])
-    abstract fun contributeThreadCreationDialogFragment(): ThreadCreationDialogFragment
+    @ContributesAndroidInjector(modules = [ThreadNamingDialogViewModelsModule::class])
+    abstract fun contributeThreadCreationDialogFragment(): ThreadNamingDialogFragment
 
     @ContributesAndroidInjector(modules = [ThreadInviteDialogViewModelsModule::class])
     abstract fun contributeThreadInviteDialogFragment(): ThreadInviteDialogFragment

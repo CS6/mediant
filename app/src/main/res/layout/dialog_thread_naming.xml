@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="io.numbers.mediant.ui.main.thread_list.thread_creation_dialog.ThreadCreationDialogViewModel" />
+            type="io.numbers.mediant.ui.main.thread_naming_dialog.ThreadNamingDialogViewModel" />
     </data>
 
     <LinearLayout
