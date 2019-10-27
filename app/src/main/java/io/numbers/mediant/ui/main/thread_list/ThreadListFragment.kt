@@ -61,7 +61,9 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.threadList.observe(viewLifecycleOwner, Observer { adapter.data = it })
-        viewModel.openDialog.observe(viewLifecycleOwner, EventObserver { showThreadAddingDialog() })
+        viewModel.openDialogEvent.observe(
+            viewLifecycleOwner,
+            EventObserver { showThreadAddingDialog() })
         viewModel.showSnackbar.observe(viewLifecycleOwner, EventObserver { showSnackbar(view, it) })
         viewModel.showErrorSnackbar.observe(
             viewLifecycleOwner, EventObserver { showErrorSnackbar(view, it) }

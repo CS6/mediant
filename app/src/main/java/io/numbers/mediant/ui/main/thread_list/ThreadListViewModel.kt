@@ -17,7 +17,7 @@ class ThreadListViewModel @Inject constructor(private val textileService: Textil
 
     val threadList = textileService.publicThreadList
     val isLoading = MutableLiveData(false)
-    val openDialog = MutableLiveData<Event<Unit>>()
+    val openDialogEvent = MutableLiveData<Event<Unit>>()
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     val showErrorSnackbar = MutableLiveData<Event<Exception>>()
 
@@ -32,7 +32,7 @@ class ThreadListViewModel @Inject constructor(private val textileService: Textil
     }
 
     fun createThread() {
-        openDialog.value = Event(Unit)
+        openDialogEvent.value = Event(Unit)
     }
 
     fun addThread(name: String) =
