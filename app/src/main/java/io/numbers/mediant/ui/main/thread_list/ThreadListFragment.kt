@@ -60,10 +60,9 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.threadList.observe(viewLifecycleOwner, Observer { adapter.data = it })
+        viewModel.threadList.observe(viewLifecycleOwner, Observer { adapter.submitList(it) })
         viewModel.openDialogEvent.observe(
-            viewLifecycleOwner,
-            EventObserver { showThreadAddingDialog() })
+            viewLifecycleOwner, EventObserver { showThreadAddingDialog() })
         viewModel.showSnackbar.observe(viewLifecycleOwner, EventObserver { showSnackbar(view, it) })
         viewModel.showErrorSnackbar.observe(
             viewLifecycleOwner, EventObserver { showErrorSnackbar(view, it) }
@@ -126,8 +125,8 @@ class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
 
     override fun onItemClick(position: Int) {
         MainFragmentDirections.actionMainFragmentToThreadFragment(
-            adapter.data[position].id,
-            adapter.data[position].name
+            adapter.currentList[position].id,
+            adapter.currentList[position].name
         ).also { findNavController().navigate(it) }
     }
 

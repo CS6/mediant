@@ -17,5 +17,4 @@ class MainPagerAdapter(
     override fun getCount() = tabs.size
 
     override fun getPageTitle(position: Int) = context.resources.getString(tabs[position].title)
-
 }

@@ -76,7 +76,7 @@ class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
         if (!viewModel.isPersonal) viewModel.threadName.observe(viewLifecycleOwner, Observer {
             (activity as AppCompatActivity).supportActionBar?.title = it
         })
-        viewModel.feedList.observe(viewLifecycleOwner, Observer { adapter.data = it })
+        viewModel.feedList.observe(viewLifecycleOwner, Observer { adapter.submitList(it) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

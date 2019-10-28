@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.numbers.mediant.R
 import io.numbers.mediant.ui.listeners.ItemClickListener
@@ -13,28 +13,13 @@ import io.textile.pb.Model
 
 class ThreadListRecyclerViewAdapter(
     private val itemClickListener: ItemClickListener
-) :
-    RecyclerView.Adapter<ThreadListRecyclerViewAdapter.ViewHolder>() {
-
-    var data: List<Model.Thread>
-        get() = differ.currentList
-        set(value) = differ.submitList(value)
-
-    private val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<Model.Thread>() {
-
-        override fun areItemsTheSame(oldItem: Model.Thread, newItem: Model.Thread) =
-            oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: Model.Thread, newItem: Model.Thread) =
-            oldItem == newItem
-    })
-
-    override fun getItemCount() = data.size
+) : ListAdapter<Model.Thread, ThreadListRecyclerViewAdapter.ViewHolder>(itemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder.from(parent, itemClickListener)
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bind(getItem(position))
 
     class ViewHolder(
         itemView: View,
@@ -66,4 +51,12 @@ class ThreadListRecyclerViewAdapter(
             }
         }
     }
+}
+
+val itemCallback = object : DiffUtil.ItemCallback<Model.Thread>() {
+    override fun areItemsTheSame(oldItem: Model.Thread, newItem: Model.Thread) =
+        oldItem.id == newItem.id
+
+    override fun areContentsTheSame(oldItem: Model.Thread, newItem: Model.Thread) =
+        oldItem == newItem
 }
