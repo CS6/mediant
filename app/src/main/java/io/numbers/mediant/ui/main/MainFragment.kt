@@ -12,10 +12,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.BuildConfig.APPLICATION_ID
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentMainBinding
+import io.numbers.mediant.ui.main.thread.ThreadFragment
+import io.numbers.mediant.ui.main.thread_list.ThreadListFragment
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.ui.tab.Tab
@@ -30,21 +33,21 @@ import javax.inject.Inject
 
 class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackbar() {
 
+    private val tabs = listOf(
+        Tab(R.string.feeds, ThreadListFragment()),
+        Tab(R.string.storage, ThreadFragment())
+    )
+
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
     lateinit var viewModel: MainViewModel
 
     @Inject
-    lateinit var tabs: List<Tab>
-
-    @Inject
     lateinit var permissionManager: PermissionManager
 
     @Inject
     lateinit var preferenceHelper: PreferenceHelper
-
-    private lateinit var mainPagerAdapter: MainPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,16 +79,17 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
     }
 
     private fun initViewPager() {
-        tabLayout.setupWithViewPager(viewPager)
+        val adapter = MainViewPagerAdapter(tabs, this)
+        viewPager.adapter = adapter
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.setText(tabs[position].title)
+        }.attach()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) = Unit
             override fun onTabUnselected(tab: TabLayout.Tab) = Unit
             override fun onTabReselected(tab: TabLayout.Tab) =
                 tabs[tab.position].fragment.smoothScrollToTop()
         })
-        activity?.also { mainPagerAdapter = MainPagerAdapter(tabs, it, childFragmentManager) }
-            ?: run { throw RuntimeException("Illegal activity") }
-        viewPager.adapter = mainPagerAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

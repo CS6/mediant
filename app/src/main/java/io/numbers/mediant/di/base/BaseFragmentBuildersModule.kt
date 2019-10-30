@@ -3,7 +3,6 @@ package io.numbers.mediant.di.base
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import io.numbers.mediant.di.base.initialization.InitializationViewModelsModule
-import io.numbers.mediant.di.base.main.MainModule
 import io.numbers.mediant.di.base.main.MainViewModelsModule
 import io.numbers.mediant.di.base.media_details.MediaDetailsViewModelsModule
 import io.numbers.mediant.di.base.permission_rationale.PermissionRationaleViewModelsModule
@@ -40,7 +39,7 @@ abstract class BaseFragmentBuildersModule {
     @ContributesAndroidInjector(modules = [InitializationViewModelsModule::class])
     abstract fun contributeInitializationFragment(): InitializationFragment
 
-    @ContributesAndroidInjector(modules = [MainViewModelsModule::class, MainModule::class])
+    @ContributesAndroidInjector(modules = [MainViewModelsModule::class])
     abstract fun contributeMainFragment(): MainFragment
 
     @ContributesAndroidInjector(modules = [ThreadViewModelsModule::class])
