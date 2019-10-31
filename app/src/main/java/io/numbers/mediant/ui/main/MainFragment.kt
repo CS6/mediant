@@ -117,7 +117,12 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ActivityRequestCodes.CAMERA.value -> if (resultCode == Activity.RESULT_OK) viewModel.uploadPhoto()
+            ActivityRequestCodes.CAMERA.value -> {
+                if (resultCode == Activity.RESULT_OK) viewModel.uploadPhoto()
+                else view?.let {
+                    showErrorSnackbar(it, RuntimeException("Error: camera result: $resultCode"))
+                }
+            }
         }
     }
 
