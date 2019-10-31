@@ -102,6 +102,7 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
                     MainFragmentDirections.actionMainFragmentToThreadInformationFragment(it)
                 )
             }
+            R.id.menuItemNavToOnboarding -> findNavController().navigate(R.id.action_mainFragment_to_onboardingFragment)
         }
         return true
     }

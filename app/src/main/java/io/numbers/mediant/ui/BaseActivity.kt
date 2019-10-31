@@ -31,11 +31,9 @@ class BaseActivity : DaggerAppCompatActivity(), ShowableSnackbar by DefaultShowa
         initViewModel()
 
         setContentView(R.layout.activity_base)
-        setSupportActionBar(toolbar)
-        val navController = findNavController(R.id.nav_host_fragment)
-        val appBarConfiguration =
-            AppBarConfiguration(setOf(R.id.initializationFragment, R.id.mainFragment))
-        toolbar.setupWithNavController(navController, appBarConfiguration)
+
+        initToolbar()
+
         viewModel.handleIntent(intent)
     }
 
@@ -48,6 +46,25 @@ class BaseActivity : DaggerAppCompatActivity(), ShowableSnackbar by DefaultShowa
             viewModel.showSnackbar.observe(this, EventObserver { showSnackbar(view, it) })
             viewModel.showErrorSnackbar.observe(this, EventObserver { showErrorSnackbar(view, it) })
         }
+    }
+
+    private fun initToolbar() {
+        setSupportActionBar(toolbar)
+        val navController = findNavController(R.id.nav_host_fragment).apply {
+            addOnDestinationChangedListener { _, destination, _ ->
+                if (destination.id == R.id.mainFragment) toolbar.visibility = View.VISIBLE
+                if (destination.id == R.id.onboardingFragment) toolbar.visibility = View.GONE
+            }
+        }
+        val appBarConfiguration =
+            AppBarConfiguration(
+                setOf(
+                    R.id.initializationFragment,
+                    R.id.mainFragment,
+                    R.id.onboardingFragment
+                )
+            )
+        toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 
     override fun onNewIntent(intent: Intent) {

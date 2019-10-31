@@ -18,4 +18,9 @@
         android:id="@+id/menuItemPersonalThreadInformation"
         android:title="@string/storage_information"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menuItemNavToOnboarding"
+        android:title="@string/tour"
+        app:showAsAction="never" />
 </menu>

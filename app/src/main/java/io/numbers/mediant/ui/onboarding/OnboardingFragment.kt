@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import io.numbers.mediant.R
+import io.numbers.mediant.ui.onboarding.end_page.OnboardingEndPageFragment
+import io.numbers.mediant.ui.onboarding.name_setting_page.OnboardingNameSettingPageFragment
+import io.numbers.mediant.ui.onboarding.zion_setting_page.OnboardingZionSettingPageFragment
 import kotlinx.android.synthetic.main.fragment_onboarding.*
 
 class OnboardingFragment : Fragment() {
 
     private val pageBuilders = listOf(
-        { LogoPageFragment() },
-        { SecureEnclavePageFragment() },
-        { SetPreferencesPageFragment() }
+        { OnboardingZionSettingPageFragment() },
+        { OnboardingNameSettingPageFragment() },
+        { OnboardingEndPageFragment() }
     )
 
     override fun onCreateView(

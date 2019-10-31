@@ -5,6 +5,7 @@ import dagger.android.ContributesAndroidInjector
 import io.numbers.mediant.di.base.initialization.InitializationViewModelsModule
 import io.numbers.mediant.di.base.main.MainViewModelsModule
 import io.numbers.mediant.di.base.media_details.MediaDetailsViewModelsModule
+import io.numbers.mediant.di.base.onboarding_end_page.OnboardingEndPageViewModelsModule
 import io.numbers.mediant.di.base.permission_rationale.PermissionRationaleViewModelsModule
 import io.numbers.mediant.di.base.publishing.PublishingViewModelsModule
 import io.numbers.mediant.di.base.thread.ThreadViewModelsModule
@@ -22,6 +23,7 @@ import io.numbers.mediant.ui.main.thread_list.thread_adding_dialog.ThreadAddingD
 import io.numbers.mediant.ui.main.thread_list.thread_invite_dialog.ThreadInviteDialogFragment
 import io.numbers.mediant.ui.main.thread_naming_dialog.ThreadNamingDialogFragment
 import io.numbers.mediant.ui.media_details.MediaDetailsFragment
+import io.numbers.mediant.ui.onboarding.end_page.OnboardingEndPageFragment
 import io.numbers.mediant.ui.permission_rationale.PermissionRationaleFragment
 import io.numbers.mediant.ui.publishing.PublishingFragment
 import io.numbers.mediant.ui.settings.PreferencesFragment
@@ -71,6 +73,9 @@ abstract class BaseFragmentBuildersModule {
 
     @ContributesAndroidInjector(modules = [PermissionRationaleViewModelsModule::class])
     abstract fun contributePermissionRationaleFragment(): PermissionRationaleFragment
+
+    @ContributesAndroidInjector(modules = [OnboardingEndPageViewModelsModule::class])
+    abstract fun contributeOnboardingEndPageFragment(): OnboardingEndPageFragment
 
     // Add new Fragments as Dagger client here. Dagger will automatically generate
     // XXXFragmentSubcomponents.

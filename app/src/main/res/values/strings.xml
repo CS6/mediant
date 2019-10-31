@@ -9,6 +9,10 @@
     <string name="camera">Camera</string>
     <string name="dismiss">Dismiss</string>
 
+    <string name="tour">Tour</string>
+    <string name="start">Start</string>
+    <string name="message_end_page">All set!\n Click the start button below to start using MediAnt!</string>
+
     <string name="feeds">Feeds</string>
     <string name="storage">Storage</string>
     <string name="message_proof_generating">Generating proof and signatures…</string>

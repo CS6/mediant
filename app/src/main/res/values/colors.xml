@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="green_light">#0bb791</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="primary" tools:override="true">#aaaaaa</color>
+    <color name="secondary">#cccccc</color>
+    <color name="enabled">#0bb791</color>
 </resources>
