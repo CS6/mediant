@@ -19,40 +19,69 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ImageView
-            android:id="@+id/logo"
-            android:layout_width="@dimen/logo_size"
-            android:layout_height="@dimen/logo_size"
+            android:id="@+id/uscShoahFoundationLogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/default_elevation"
+            app:layout_constraintBottom_toTopOf="@id/starlingCaptureLogo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/usc_shoah_foundation"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/starlingCaptureLogo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:elevation="@dimen/default_elevation"
             app:layout_constraintBottom_toTopOf="@id/loading"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_launcher"
+            app:layout_constraintTop_toBottomOf="@id/uscShoahFoundationLogo"
+            app:srcCompat="@drawable/starling_capture"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:id="@+id/loading"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/logo">
+            app:layout_constraintBottom_toTopOf="@id/powerBy"
+            app:layout_constraintTop_toBottomOf="@id/starlingCaptureLogo">
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/large_margin" />
+                android:layout_margin="@dimen/small_margin" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/loadingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.loadingText}" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/powerBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableBottom="@drawable/numbers_logo"
+            android:drawablePadding="@dimen/small_padding"
+            android:text="@string/power_by"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@id/secure"
+            app:layout_constraintTop_toBottomOf="@id/loading" />
+
+        <TextView
+            android:id="@+id/secure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_circle_green"
+            android:drawablePadding="@dimen/small_padding"
+            android:text="@string/secure"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/powerBy" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

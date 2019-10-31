@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="mediant">MediAnt</string>
     <string name="placeholder">Placeholder</string>
+    <string name="power_by">Power By</string>
+    <string name="secure">Secure</string>
     <string name="message_general_error">Oh no! Bad things happened!</string>
     <string name="connect_to_ipfs">Connecting to IPFS…</string>
     <string name="create_wallet">Creating Textile wallet…</string>

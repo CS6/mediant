@@ -10,6 +10,7 @@ import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,8 +18,7 @@ class InitializationViewModel @Inject constructor(
     private val textileService: TextileService,
     zionService: ZionService,
     preferenceHelper: PreferenceHelper
-) :
-    ViewModel() {
+) : ViewModel() {
 
     val loadingText = MutableLiveData(R.string.connect_to_ipfs)
     val navToMainFragmentEvent = MutableLiveData<Event<Unit>>()
@@ -30,10 +30,13 @@ class InitializationViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) { zionService.initZkma() }
         }
 
-        textileService.safelyInvokeIfNodeOnline {
-            textileService.initPersonalThread()
-            // fire the single live event by posting an arbitrary value at worker thread
-            navToMainFragmentEvent.postValue(Event(Unit))
+        viewModelScope.launch {
+            delay(2000)
+            textileService.safelyInvokeIfNodeOnline {
+                textileService.initPersonalThread()
+                // fire the single live event by posting an arbitrary value at worker thread
+                navToMainFragmentEvent.postValue(Event(Unit))
+            }
         }
     }
 
