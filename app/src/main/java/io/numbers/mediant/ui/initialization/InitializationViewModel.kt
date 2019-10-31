@@ -21,7 +21,9 @@ class InitializationViewModel @Inject constructor(
 ) : ViewModel() {
 
     val loadingText = MutableLiveData(R.string.connect_to_ipfs)
+    val navToOnboardingFragmentEvent = MutableLiveData<Event<Unit>>()
     val navToMainFragmentEvent = MutableLiveData<Event<Unit>>()
+    private var needOnboarding = false
 
     init {
         if (!textileService.hasLaunched.value!!) initializeTextile()
@@ -35,13 +37,15 @@ class InitializationViewModel @Inject constructor(
             textileService.safelyInvokeIfNodeOnline {
                 textileService.initPersonalThread()
                 // fire the single live event by posting an arbitrary value at worker thread
-                navToMainFragmentEvent.postValue(Event(Unit))
+                if (needOnboarding) navToOnboardingFragmentEvent.postValue(Event(Unit))
+                else navToMainFragmentEvent.postValue(Event(Unit))
             }
         }
     }
 
     private fun initializeTextile() {
         if (!textileService.hasInitialized()) {
+            needOnboarding = true
             loadingText.value = R.string.create_wallet
             textileService.createNewWalletAndAccount()
         }

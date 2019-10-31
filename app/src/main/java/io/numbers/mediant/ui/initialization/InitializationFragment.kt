@@ -42,9 +42,11 @@ class InitializationFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.navToMainFragmentEvent.observe(viewLifecycleOwner,
-            EventObserver {
-                findNavController().navigate(R.id.action_initializationFragment_to_mainFragment)
-            })
+        viewModel.navToOnboardingFragmentEvent.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(R.id.action_initializationFragment_to_onboardingFragment)
+        })
+        viewModel.navToMainFragmentEvent.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(R.id.action_initializationFragment_to_mainFragment)
+        })
     }
 }
