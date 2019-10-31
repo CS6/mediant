@@ -1,6 +1,8 @@
 package io.numbers.mediant.ui.tab
 
-interface TabFragment {
+import dagger.android.support.DaggerFragment
 
-    fun smoothScrollToTop()
+abstract class TabFragment : DaggerFragment() {
+
+    abstract fun smoothScrollToTop()
 }

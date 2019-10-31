@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.databinding.FragmentThreadBinding
@@ -25,7 +24,7 @@ import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import io.textile.textile.FeedItemData
 import javax.inject.Inject
 
-class ThreadFragment : DaggerFragment(), TabFragment, FeedItemListener {
+class ThreadFragment : TabFragment(), FeedItemListener {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory

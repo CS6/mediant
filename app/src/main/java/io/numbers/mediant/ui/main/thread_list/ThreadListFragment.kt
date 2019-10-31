@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentThreadListBinding
 import io.numbers.mediant.ui.dialogs.DialogListener
@@ -27,7 +26,7 @@ import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import javax.inject.Inject
 
-class ThreadListFragment : DaggerFragment(), TabFragment, ItemClickListener,
+class ThreadListFragment : TabFragment(), ItemClickListener,
     ShowableSnackbar by DefaultShowableSnackbar() {
 
     @Inject

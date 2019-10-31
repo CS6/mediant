@@ -11,5 +11,5 @@ class MainViewPagerAdapter(
 
     override fun getItemCount() = tabs.size
 
-    override fun createFragment(position: Int) = tabs[position].fragment as Fragment
+    override fun createFragment(position: Int) = tabs[position].fragment
 }
