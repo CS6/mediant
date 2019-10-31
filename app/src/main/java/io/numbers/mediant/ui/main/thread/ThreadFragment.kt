@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
+import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.databinding.FragmentThreadBinding
@@ -17,14 +18,13 @@ import io.numbers.mediant.ui.dialogs.ConfirmationDialogFragment
 import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.ui.listeners.FeedItemListener
 import io.numbers.mediant.ui.main.MainFragmentDirections
-import io.numbers.mediant.ui.tab.TabFragment
 import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.util.timestampToString
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import io.textile.textile.FeedItemData
 import javax.inject.Inject
 
-class ThreadFragment : TabFragment(), FeedItemListener {
+class ThreadFragment : DaggerFragment(), FeedItemListener {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -174,7 +174,7 @@ class ThreadFragment : TabFragment(), FeedItemListener {
         )
     }
 
-    override fun smoothScrollToTop() {
+    private fun smoothScrollToTop() {
         binding.recyclerView.layoutManager?.startSmoothScroll(object :
             LinearSmoothScroller(context) {
             override fun getVerticalSnapPreference() = SNAP_TO_START

@@ -9,9 +9,9 @@ import android.view.*
 import androidx.annotation.StringRes
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.BuildConfig.APPLICATION_ID
@@ -21,7 +21,6 @@ import io.numbers.mediant.ui.main.thread.ThreadFragment
 import io.numbers.mediant.ui.main.thread_list.ThreadListFragment
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
-import io.numbers.mediant.ui.tab.Tab
 import io.numbers.mediant.util.ActivityRequestCodes
 import io.numbers.mediant.util.PermissionManager
 import io.numbers.mediant.util.PermissionRequestType
@@ -33,9 +32,11 @@ import javax.inject.Inject
 
 class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackbar() {
 
+    data class Tab(@StringRes val title: Int, val fragmentBuilder: () -> Fragment)
+
     private val tabs = listOf(
-        Tab(R.string.feeds, ThreadListFragment()),
-        Tab(R.string.storage, ThreadFragment())
+        Tab(R.string.feeds) { ThreadListFragment() },
+        Tab(R.string.storage) { ThreadFragment() }
     )
 
     @Inject
@@ -84,12 +85,6 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.setText(tabs[position].title)
         }.attach()
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) = Unit
-            override fun onTabUnselected(tab: TabLayout.Tab) = Unit
-            override fun onTabReselected(tab: TabLayout.Tab) =
-                tabs[tab.position].fragment.smoothScrollToTop()
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

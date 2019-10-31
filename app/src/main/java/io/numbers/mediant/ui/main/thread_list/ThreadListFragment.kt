@@ -9,8 +9,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearSmoothScroller
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentThreadListBinding
 import io.numbers.mediant.ui.dialogs.DialogListener
@@ -21,12 +21,11 @@ import io.numbers.mediant.ui.main.thread_list.thread_invite_dialog.ThreadInviteD
 import io.numbers.mediant.ui.main.thread_naming_dialog.ThreadNamingDialogFragment
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
-import io.numbers.mediant.ui.tab.TabFragment
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import javax.inject.Inject
 
-class ThreadListFragment : TabFragment(), ItemClickListener,
+class ThreadListFragment : DaggerFragment(), ItemClickListener,
     ShowableSnackbar by DefaultShowableSnackbar() {
 
     @Inject
@@ -127,12 +126,5 @@ class ThreadListFragment : TabFragment(), ItemClickListener,
             adapter.currentList[position].id,
             adapter.currentList[position].name
         ).also { findNavController().navigate(it) }
-    }
-
-    override fun smoothScrollToTop() {
-        binding.recyclerView.layoutManager?.startSmoothScroll(object :
-            LinearSmoothScroller(context) {
-            override fun getVerticalSnapPreference() = SNAP_TO_START
-        }.apply { targetPosition = 0 })
     }
 }
