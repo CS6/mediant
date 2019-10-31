@@ -5,7 +5,6 @@
     <PreferenceCategory android:title="@string/textile">
         <EditTextPreference
             android:title="@string/user_name"
-            app:enabled="false"
             app:icon="@drawable/ic_person_outline_black_24dp"
             app:key="@string/key_user_name"
             app:useSimpleSummaryProvider="true" />

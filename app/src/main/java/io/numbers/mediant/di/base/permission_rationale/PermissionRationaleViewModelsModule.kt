@@ -14,5 +14,5 @@ abstract class PermissionRationaleViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(PermissionRationaleViewModel::class)
-    abstract fun bindSettingsViewModel(viewModel: PermissionRationaleViewModel): ViewModel
+    abstract fun bindViewModel(viewModel: PermissionRationaleViewModel): ViewModel
 }

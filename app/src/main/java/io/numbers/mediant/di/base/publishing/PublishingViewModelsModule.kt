@@ -14,5 +14,5 @@ abstract class PublishingViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(PublishingViewModel::class)
-    abstract fun bindPublishingViewModel(viewModel: PublishingViewModel): ViewModel
+    abstract fun bindViewModel(viewModel: PublishingViewModel): ViewModel
 }

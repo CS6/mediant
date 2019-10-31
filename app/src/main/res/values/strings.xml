@@ -10,6 +10,8 @@
     <string name="dismiss">Dismiss</string>
 
     <string name="tour">Tour</string>
+    <string name="set_user_name">Set User Name</string>
+    <string name="message_set_user_name">Set your user name for Textile profile. You can always change your user name in the setting screen. Note that your profile ID does not relate to your user name.</string>
     <string name="start">Start</string>
     <string name="message_end_page">All set!\n Click the start button below to start using MediAnt!</string>
 

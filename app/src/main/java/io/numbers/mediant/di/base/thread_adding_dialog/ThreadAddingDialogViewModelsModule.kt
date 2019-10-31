@@ -14,5 +14,5 @@ abstract class ThreadAddingDialogViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(ThreadAddingDialogViewModel::class)
-    abstract fun bindThreadAddingDialogViewModel(viewModel: ThreadAddingDialogViewModel): ViewModel
+    abstract fun bindViewModel(viewModel: ThreadAddingDialogViewModel): ViewModel
 }

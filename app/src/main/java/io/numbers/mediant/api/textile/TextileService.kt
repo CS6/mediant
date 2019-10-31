@@ -1,6 +1,7 @@
 package io.numbers.mediant.api.textile
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,7 +18,7 @@ import java.util.*
 import javax.inject.Inject
 
 private const val TEXTILE_FOLDER_NAME = "textile"
-// TODO: implement infinite recycler view to reduce this limit
+// TODO: implement infinite recycler view (via paging library) to reduce this limit
 private const val REQUEST_LIMIT = 999
 const val EXTERNAL_INVITE_LINK_HOST = "https://www.textile.photos/invites/new"
 
@@ -36,6 +37,10 @@ class TextileService @Inject constructor(
         list.filter { it.id != preferenceHelper.personalThreadId }
     }
 
+    // The preference manager does not currently store a strong reference to the listener. We must
+    // store a strong reference to the listener, or it will be susceptible to garbage collection.
+    private lateinit var userNameListener: SharedPreferences.OnSharedPreferenceChangeListener
+
     private val feedItemUpdateEventType: EnumSet<FeedItemType> =
         EnumSet.of(
             FeedItemType.FILES,
@@ -46,6 +51,7 @@ class TextileService @Inject constructor(
     init {
         initNodeStatusLiveDataListeners()
         initThreadLiveDataListeners()
+        initUserNameListeners()
     }
 
     /**
@@ -85,6 +91,19 @@ class TextileService @Inject constructor(
                 isNodeOnline.postValue(false)
             }
         })
+    }
+
+    /**
+     * Profile
+     */
+
+    private fun initUserNameListeners() {
+        userNameListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == preferenceHelper.preferenceKeyUserName) {
+                textile.profile.setName(preferenceHelper.userName ?: "")
+            }
+        }
+        preferenceHelper.sharedPreferences.registerOnSharedPreferenceChangeListener(userNameListener)
     }
 
     /**

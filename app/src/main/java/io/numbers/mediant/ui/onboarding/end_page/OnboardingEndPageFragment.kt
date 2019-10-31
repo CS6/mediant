@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
-import io.numbers.mediant.databinding.FragmentEndPageBinding
+import io.numbers.mediant.databinding.FragmentOnboardingEndPageBinding
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import javax.inject.Inject
@@ -33,8 +33,13 @@ class OnboardingEndPageFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentEndPageBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_end_page, container, false)
+        val binding: FragmentOnboardingEndPageBinding =
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_onboarding_end_page,
+                container,
+                false
+            )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         return binding.root

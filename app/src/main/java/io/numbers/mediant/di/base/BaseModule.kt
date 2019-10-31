@@ -5,6 +5,7 @@ import dagger.Provides
 import io.numbers.mediant.ui.BaseActivity
 import io.numbers.mediant.util.PermissionManager
 
+@Suppress("UNUSED")
 @Module
 class BaseModule {
 

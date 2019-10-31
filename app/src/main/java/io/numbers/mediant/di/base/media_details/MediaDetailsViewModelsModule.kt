@@ -15,5 +15,5 @@ abstract class MediaDetailsViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(MediaDetailsViewModel::class)
-    abstract fun bindMediaDetailsViewModel(viewModel: MediaDetailsViewModel): ViewModel
+    abstract fun bindViewModel(viewModel: MediaDetailsViewModel): ViewModel
 }

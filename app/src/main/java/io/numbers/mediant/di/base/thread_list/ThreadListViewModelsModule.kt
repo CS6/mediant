@@ -14,5 +14,5 @@ abstract class ThreadListViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(ThreadListViewModel::class)
-    abstract fun bindThreadListViewModel(viewModel: ThreadListViewModel): ViewModel
+    abstract fun bindViewModel(viewModel: ThreadListViewModel): ViewModel
 }

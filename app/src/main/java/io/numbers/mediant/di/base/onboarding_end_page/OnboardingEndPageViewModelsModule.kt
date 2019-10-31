@@ -14,5 +14,5 @@ abstract class OnboardingEndPageViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(OnboardingEndPageViewModel::class)
-    abstract fun bindSettingsViewModel(viewModel: OnboardingEndPageViewModel): ViewModel
+    abstract fun bindViewModel(viewModel: OnboardingEndPageViewModel): ViewModel
 }

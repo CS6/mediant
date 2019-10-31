@@ -14,5 +14,5 @@ abstract class ThreadInformationViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(ThreadInformationViewModel::class)
-    abstract fun bindThreadInformationViewModel(viewModel: ThreadInformationViewModel): ViewModel
+    abstract fun bindViewModel(viewModel: ThreadInformationViewModel): ViewModel
 }

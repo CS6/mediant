@@ -1,6 +1,7 @@
 package io.numbers.mediant.util
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import io.numbers.mediant.R
 import org.witness.proofmode.crypto.PgpUtils
@@ -8,8 +9,11 @@ import javax.inject.Inject
 
 class PreferenceHelper @Inject constructor(application: Application) {
 
-    private val sharedPreferences =
+    val sharedPreferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+
+    val preferenceKeyUserName =
+        application.applicationContext.resources.getString(R.string.key_user_name)
     val preferenceKeyWalletRecoveryPhrase =
         application.applicationContext.resources.getString(R.string.key_wallet_recovery_phrase)
     val preferenceKeyPersonalThreadId =
@@ -21,6 +25,11 @@ class PreferenceHelper @Inject constructor(application: Application) {
     val preferenceKeySignWithZion =
         application.applicationContext.resources.getString(R.string.key_sign_with_zion)
 
+    var userName: String?
+        get() = sharedPreferences.getString(preferenceKeyUserName, "")
+        set(value) = sharedPreferences.edit().putString(
+            preferenceKeyUserName, value
+        ).apply()
     var walletRecoveryPhrase: String?
         get() = sharedPreferences.getString(preferenceKeyWalletRecoveryPhrase, null)
         set(value) = sharedPreferences.edit().putString(
