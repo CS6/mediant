@@ -29,12 +29,28 @@
 
         <ImageView
             android:id="@+id/starlingCaptureLogo"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/loading"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@id/powerBy"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/uscShoahFoundationLogo"
             app:srcCompat="@drawable/logo_starling_capture"
             tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/powerBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableBottom="@drawable/logo_numbers"
+            android:drawablePadding="@dimen/small_padding"
+            android:text="@string/power_by"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@id/loading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/starlingCaptureLogo"
+            app:layout_constraintTop_toBottomOf="@id/uscShoahFoundationLogo" />
 
         <LinearLayout
             android:id="@+id/loading"
@@ -42,7 +58,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/powerBy"
+            app:layout_constraintBottom_toTopOf="@id/secure"
             app:layout_constraintTop_toBottomOf="@id/starlingCaptureLogo">
 
             <ProgressBar
@@ -59,17 +75,6 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/powerBy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableBottom="@drawable/logo_numbers"
-            android:drawablePadding="@dimen/small_padding"
-            android:text="@string/power_by"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@id/secure"
-            app:layout_constraintTop_toBottomOf="@id/loading" />
-
-        <TextView
             android:id="@+id/secure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +84,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/powerBy" />
+            app:layout_constraintTop_toBottomOf="@id/loading" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

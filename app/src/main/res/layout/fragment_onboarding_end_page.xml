@@ -30,7 +30,7 @@
             android:layout_width="@dimen/logo_size"
             android:layout_height="@dimen/logo_size"
             android:layout_margin="@dimen/large_margin"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/logo_mediant"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title"

@@ -2,5 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="primary" tools:override="true">#aaaaaa</color>
     <color name="secondary">#cccccc</color>
-    <color name="enabled">#0bb791</color>
+    <color name="enabled">#23ce6b</color>
+    <color name="surface">#272c2c</color>
 </resources>
