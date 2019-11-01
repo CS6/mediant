@@ -1,5 +1,6 @@
 package io.numbers.mediant.ui.initialization
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +21,7 @@ class InitializationViewModel @Inject constructor(
     preferenceHelper: PreferenceHelper
 ) : ViewModel() {
 
-    val loadingText = MutableLiveData(R.string.connect_to_ipfs)
+    val loadingText = MutableLiveData<@StringRes Int>(R.string.connect_to_ipfs)
     val navToOnboardingFragmentEvent = MutableLiveData<Event<Unit>>()
     val navToMainFragmentEvent = MutableLiveData<Event<Unit>>()
     private var needOnboarding = false

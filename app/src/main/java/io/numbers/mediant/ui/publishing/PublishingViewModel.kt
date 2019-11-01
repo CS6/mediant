@@ -40,10 +40,7 @@ class PublishingViewModel @Inject constructor(
     private fun updateImage(ipfsPath: String) {
         textileService.getImageContent(ipfsPath) {
             imageDrawable.postValue(
-                BitmapDrawable(
-                    application.resources,
-                    BitmapFactory.decodeByteArray(it, 0, it.size)
-                )
+                BitmapDrawable(application.resources, BitmapFactory.decodeByteArray(it, 0, it.size))
             )
         }
     }

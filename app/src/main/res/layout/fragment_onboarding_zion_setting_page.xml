@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="io.numbers.mediant.ui.onboarding.zion_setting_page.OnboardingZionSettingPageViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,15 +26,30 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:id="@+id/exodusArtwork"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             android:src="@drawable/exodus_artwork"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toTopOf="@id/zionSwitch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title"
             tools:ignore="ContentDescription" />
+
+        <Switch
+            android:id="@+id/zionSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@={viewModel.zionEnabled}"
+            android:drawableStart="@{viewModel.zionEnabled ? @drawable/ic_verified_user_black_24dp : @drawable/ic_error_black_24dp}"
+            android:drawablePadding="@dimen/small_padding"
+            android:enabled="@{viewModel.isZionSupported}"
+            android:switchPadding="@dimen/medium_padding"
+            android:text="@{viewModel.switchText}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exodusArtwork" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

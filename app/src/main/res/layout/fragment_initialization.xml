@@ -21,7 +21,7 @@
         <ImageView
             android:id="@+id/uscShoahFoundationLogo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toTopOf="@id/starlingCaptureLogo"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo_usc_shoah_foundation"
@@ -58,16 +58,28 @@
                 android:text="@{viewModel.loadingText}" />
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/powerBy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableBottom="@drawable/logo_numbers"
-            android:drawablePadding="@dimen/small_padding"
-            android:text="@string/power_by"
-            android:textAlignment="center"
+            android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/secure"
-            app:layout_constraintTop_toBottomOf="@id/loading" />
+            app:layout_constraintTop_toBottomOf="@id/loading"
+            tools:ignore="UseCompoundDrawables">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_padding"
+                android:text="@string/power_by" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:src="@drawable/logo_numbers"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/secure"

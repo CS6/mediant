@@ -7,6 +7,7 @@ import io.numbers.mediant.di.base.main.MainViewModelsModule
 import io.numbers.mediant.di.base.media_details.MediaDetailsViewModelsModule
 import io.numbers.mediant.di.base.onboarding_end_page.OnboardingEndPageViewModelsModule
 import io.numbers.mediant.di.base.onboarding_name_setting_page.OnboardingNameSettingPageViewModelsModule
+import io.numbers.mediant.di.base.onboarding_zion_setting_page.OnboardingZionSettingPageViewModelsModule
 import io.numbers.mediant.di.base.permission_rationale.PermissionRationaleViewModelsModule
 import io.numbers.mediant.di.base.publishing.PublishingViewModelsModule
 import io.numbers.mediant.di.base.thread.ThreadViewModelsModule
@@ -26,6 +27,7 @@ import io.numbers.mediant.ui.main.thread_naming_dialog.ThreadNamingDialogFragmen
 import io.numbers.mediant.ui.media_details.MediaDetailsFragment
 import io.numbers.mediant.ui.onboarding.end_page.OnboardingEndPageFragment
 import io.numbers.mediant.ui.onboarding.name_setting_page.OnboardingNameSettingPageFragment
+import io.numbers.mediant.ui.onboarding.zion_setting_page.OnboardingZionSettingPageFragment
 import io.numbers.mediant.ui.permission_rationale.PermissionRationaleFragment
 import io.numbers.mediant.ui.publishing.PublishingFragment
 import io.numbers.mediant.ui.settings.PreferencesFragment
@@ -75,6 +77,9 @@ abstract class BaseFragmentBuildersModule {
 
     @ContributesAndroidInjector(modules = [PermissionRationaleViewModelsModule::class])
     abstract fun contributePermissionRationaleFragment(): PermissionRationaleFragment
+
+    @ContributesAndroidInjector(modules = [OnboardingZionSettingPageViewModelsModule::class])
+    abstract fun contributeOnboardingZionSettingPageFragment(): OnboardingZionSettingPageFragment
 
     @ContributesAndroidInjector(modules = [OnboardingNameSettingPageViewModelsModule::class])
     abstract fun contributeOnboardingNameSettingPageFragment(): OnboardingNameSettingPageFragment
