@@ -14,9 +14,9 @@
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_starling_capture"
         android:label="@string/mediant"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_starling_capture_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
         <activity
