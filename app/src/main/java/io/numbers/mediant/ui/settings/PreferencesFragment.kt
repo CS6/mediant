@@ -18,6 +18,7 @@ import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.util.PreferenceHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PreferencesFragment : PreferenceFragmentCompat(),
@@ -94,7 +95,7 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
     private fun initZionPreferences() {
         findPreference<SwitchPreferenceCompat>(preferenceHelper.preferenceKeySignWithZion)?.apply {
-            if (zionService.isHtcExodus1) isEnabled = true
+            if (zionService.isSupported) isEnabled = true
             else {
                 isEnabled = false
                 isChecked = false
@@ -104,14 +105,15 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
             setOnPreferenceChangeListener { preference, newValue ->
                 if (preference == this && newValue == true) {
-                    lifecycleScope.launch(Dispatchers.IO) {
+                    lifecycleScope.launch(Dispatchers.Default) {
                         val result = zionService.initZkma()
                         if (result != RESULT.SUCCESS) {
-                            summary = "Error Code: $result"
-                            isChecked = false
+                            withContext(Dispatchers.Main) {
+                                summary = "Error Code: $result"
+                                isChecked = false
+                            }
                         }
                     }
-
                 }
                 true
             }

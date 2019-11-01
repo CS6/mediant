@@ -29,7 +29,7 @@ class InitializationViewModel @Inject constructor(
     init {
         if (!textileService.hasLaunched.value!!) initializeTextile()
 
-        if (zionService.isHtcExodus1 && preferenceHelper.signWithZion) {
+        if (zionService.isSupported && preferenceHelper.signWithZion) {
             viewModelScope.launch(Dispatchers.IO) { zionService.initZkma() }
         }
 

@@ -21,16 +21,15 @@ class ZionService @Inject constructor(
     private val application: Application
 ) {
 
-    private var uniqueId: Long? = null
-
     val deviceName: String
         get() = DeviceInfo.getDeviceInfo(
             application.applicationContext,
             DeviceInfo.Device.DEVICE_HARDWARE_MODEL
         ).toUpperCase(Locale.ENGLISH)
 
-    val isHtcExodus1: Boolean
-        get() = "HTC EXODUS 1" == deviceName
+    val isSupported = "HTC EXODUS 1" == deviceName
+
+    private var uniqueId: Long? = null
 
     fun initZkma() = zkma.init(application.applicationContext).also {
         if (it == RESULT.SUCCESS) createWalletSeed()

@@ -39,7 +39,7 @@ class TextileService @Inject constructor(
 
     // The preference manager does not currently store a strong reference to the listener. We must
     // store a strong reference to the listener, or it will be susceptible to garbage collection.
-    private lateinit var userNameListener: SharedPreferences.OnSharedPreferenceChangeListener
+    private lateinit var userNamePreferenceListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     private val feedItemUpdateEventType: EnumSet<FeedItemType> =
         EnumSet.of(
@@ -51,7 +51,7 @@ class TextileService @Inject constructor(
     init {
         initNodeStatusLiveDataListeners()
         initThreadLiveDataListeners()
-        initUserNameListeners()
+        initUserNamePreferenceListeners()
     }
 
     /**
@@ -97,13 +97,15 @@ class TextileService @Inject constructor(
      * Profile
      */
 
-    private fun initUserNameListeners() {
-        userNameListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+    private fun initUserNamePreferenceListeners() {
+        userNamePreferenceListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == preferenceHelper.preferenceKeyUserName) {
                 textile.profile.setName(preferenceHelper.userName ?: "")
             }
         }
-        preferenceHelper.sharedPreferences.registerOnSharedPreferenceChangeListener(userNameListener)
+        preferenceHelper.sharedPreferences.registerOnSharedPreferenceChangeListener(
+            userNamePreferenceListener
+        )
     }
 
     /**
