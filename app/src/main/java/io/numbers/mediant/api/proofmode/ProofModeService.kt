@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import io.numbers.mediant.util.deleteDirectory
 import org.witness.proofmode.ProofMode
+import org.witness.proofmode.util.GPSTracker
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -44,6 +45,7 @@ class ProofModeService @Inject constructor(
                 }
             }
             checkProofSignatureBundleCompletion(proof, proofSignature, mediaSignature)
+            proof = "${getGps()} + $proof"
             return ProofSignatureBundle(proof, proofSignature, mediaSignature)
         }
     }
@@ -62,5 +64,10 @@ class ProofModeService @Inject constructor(
         val proofDir = ProofMode.getProofDir(mediaFileHash)
         if (proofDir == null || !proofDir.exists()) throw IOException("Cannot locate proof directory: $mediaFileHash")
         else proofDir.deleteDirectory()
+    }
+
+    private fun getGps(): String {
+        val gpsTracker = GPSTracker(application.applicationContext)
+        return "Latitude: ${gpsTracker.latitude} \nLongitude: ${gpsTracker.longitude}\n"
     }
 }
