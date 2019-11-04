@@ -66,6 +66,7 @@ class ProofModeService @Inject constructor(
         else proofDir.deleteDirectory()
     }
 
+    // XXX: ProofMode cannot get GPSTracker.location in HTC Exodus 1, and I don't know why.
     private fun getGps(): String {
         val gpsTracker = GPSTracker(application.applicationContext)
         return "Latitude: ${gpsTracker.latitude} \nLongitude: ${gpsTracker.longitude}\n"
