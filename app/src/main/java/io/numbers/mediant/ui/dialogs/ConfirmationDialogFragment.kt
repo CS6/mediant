@@ -23,7 +23,7 @@ class ConfirmationDialogFragment : DialogFragment() {
                 .setNegativeButton(R.string.no) { _, _ ->
                     listener.onDialogNegativeClick(this)
                 }
-            builder.create()
+                .create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 }
