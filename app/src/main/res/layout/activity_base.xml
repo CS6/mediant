@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:visibility="gone"
-            app:title="@string/mediant" />
+            app:title="@string/starling_capture" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <fragment

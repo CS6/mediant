@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="mediant">Starling Capture</string>
+    <string name="starling_capture">Starling Capture</string>
     <string name="placeholder">Placeholder</string>
     <string name="power_by">Power By</string>
     <string name="secure">Secure</string>

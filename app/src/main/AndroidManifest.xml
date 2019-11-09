@@ -15,14 +15,14 @@
         android:name=".BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_starling_capture"
-        android:label="@string/mediant"
+        android:label="@string/starling_capture"
         android:roundIcon="@mipmap/ic_starling_capture_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
         <activity
             android:name=".ui.BaseActivity"
-            android:label="@string/mediant"
-            android:launchMode="singleInstance">
+            android:label="@string/starling_capture"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

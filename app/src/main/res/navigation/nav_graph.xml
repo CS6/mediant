@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/initializationFragment"
         android:name="io.numbers.mediant.ui.initialization.InitializationFragment"
-        android:label="@string/mediant"
+        android:label="@string/starling_capture"
         tools:layout="@layout/fragment_initialization">
         <action
             android:id="@+id/action_initializationFragment_to_mainFragment"
@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="io.numbers.mediant.ui.main.MainFragment"
-        android:label="@string/mediant"
+        android:label="@string/starling_capture"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_threadFragment"
@@ -176,7 +176,7 @@
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="io.numbers.mediant.ui.onboarding.OnboardingFragment"
-        android:label="@string/mediant"
+        android:label="@string/starling_capture"
         tools:layout="@layout/fragment_onboarding">
         <action
             android:id="@+id/action_onboardingFragment_to_mainFragment"

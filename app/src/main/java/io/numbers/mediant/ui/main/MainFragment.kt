@@ -28,6 +28,7 @@ import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_main.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackbar() {
@@ -119,9 +120,14 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             ActivityRequestCodes.CAMERA.value -> {
-                if (resultCode == Activity.RESULT_OK) viewModel.uploadPhoto()
-                else view?.let {
-                    showErrorSnackbar(it, RuntimeException("Error: camera result: $resultCode"))
+                when (resultCode) {
+                    Activity.RESULT_OK -> viewModel.uploadPhoto()
+                    Activity.RESULT_CANCELED -> Timber.i("Camera operation cancelled.")
+                    else -> view?.let {
+                        showErrorSnackbar(
+                            it, RuntimeException("Unknown camera result: $resultCode")
+                        )
+                    }
                 }
             }
         }
