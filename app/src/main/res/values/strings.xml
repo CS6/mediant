@@ -9,6 +9,7 @@
     <string name="capture_image">Capture Image</string>
     <string name="capture_video">Capture Video</string>
     <string name="dismiss">Dismiss</string>
+    <string name="message_external_dir_unavailable">External directory unavailable. Save media to internal directory instead.</string>
 
     <string name="tour">Tour</string>
     <string name="set_user_name">Set User Name</string>

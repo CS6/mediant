@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import androidx.annotation.StringRes
@@ -21,6 +22,7 @@ import io.numbers.mediant.ui.main.thread.ThreadFragment
 import io.numbers.mediant.ui.main.thread_list.ThreadListFragment
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
+import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.util.ActivityRequestCodes
 import io.numbers.mediant.util.PermissionManager
 import io.numbers.mediant.util.PermissionRequestType
@@ -170,13 +172,22 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
 
     private fun dispatchCaptureImageIntent() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        activity?.also { fragmentActivity ->
+        activity?.also { activity ->
+            val documents = activity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+            val outputFolder = if (documents != null) documents
+            else {
+                view?.let {
+                    showSnackbar(it, SnackbarArgs(R.string.message_external_dir_unavailable))
+                }
+                activity.filesDir
+            }
+
             // Ensure that there's a camera activity to handle the intent.
-            intent.resolveActivity(fragmentActivity.packageManager)?.also {
+            intent.resolveActivity(activity.packageManager)?.also {
                 // Create the File where the photo should go.
-                val imageFile = viewModel.createImageFile(fragmentActivity.filesDir)
+                val imageFile = viewModel.createImageFile(outputFolder)
                 val imageUri = FileProvider.getUriForFile(
-                    fragmentActivity, "$APPLICATION_ID.provider", imageFile
+                    activity, "$APPLICATION_ID.provider", imageFile
                 )
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
                 startActivityForResult(intent, ActivityRequestCodes.CAPTURE_IMAGE.value)
@@ -186,11 +197,20 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
 
     private fun dispatchCaptureVideoIntent() {
         val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-        activity?.also { fragmentActivity ->
-            intent.resolveActivity(fragmentActivity.packageManager)?.also {
-                val videoFile = viewModel.createVideoFile(fragmentActivity.filesDir)
+        activity?.also { activity ->
+            val documents = activity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+            val outputFolder = if (documents != null) documents
+            else {
+                view?.let {
+                    showSnackbar(it, SnackbarArgs(R.string.message_external_dir_unavailable))
+                }
+                activity.filesDir
+            }
+
+            intent.resolveActivity(activity.packageManager)?.also {
+                val videoFile = viewModel.createVideoFile(outputFolder)
                 val videoUri = FileProvider.getUriForFile(
-                    fragmentActivity, "$APPLICATION_ID.provider", videoFile
+                    activity, "$APPLICATION_ID.provider", videoFile
                 )
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
                 startActivityForResult(intent, ActivityRequestCodes.CAPTURE_VIDEO.value)

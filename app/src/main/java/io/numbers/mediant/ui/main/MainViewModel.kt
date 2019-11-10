@@ -34,11 +34,13 @@ class MainViewModel @Inject constructor(
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     val showErrorSnackbar = MutableLiveData<Event<Exception>>()
+    private lateinit var currentOutputFolder: File
     private lateinit var currentImagePath: String
     private lateinit var currentVideoPath: String
 
     fun uploadImage() = viewModelScope.launch(Dispatchers.IO) {
         generateMetaJson(currentImagePath, Meta.MediaType.JPG)?.also { metaJson ->
+            writeMeta(metaJson)
             textileService.addFile(currentImagePath, metaJson, object : Handlers.BlockHandler {
                 override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
                     Event(SnackbarArgs(R.string.message_media_uploaded))
@@ -51,6 +53,7 @@ class MainViewModel @Inject constructor(
 
     fun uploadVideo() = viewModelScope.launch(Dispatchers.IO) {
         generateMetaJson(currentVideoPath, Meta.MediaType.MP4)?.also { metaJson ->
+            writeMeta(metaJson)
             Timber.i(metaJson)
             textileService.addFile(currentVideoPath, metaJson, object : Handlers.BlockHandler {
                 override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
@@ -60,6 +63,12 @@ class MainViewModel @Inject constructor(
                 override fun onError(e: Exception) = showErrorSnackbar.postValue(Event(e))
             })
         }
+    }
+
+    private fun writeMeta(metaJson: String) {
+        val outputFile = currentOutputFolder.resolve("meta.json")
+        outputFile.writeText(metaJson)
+        Timber.i("Write meta to file: $outputFile")
     }
 
     private fun generateMetaJson(filePath: String, mediaType: Meta.MediaType): String? {
@@ -92,13 +101,24 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun createImageFile(directory: File): File =
-        File.createTempFile("JPEG_${System.currentTimeMillis()}", ".jpg", directory).apply {
+    fun createImageFile(root: File): File {
+        createCurrentOutputFolder(root)
+        return File(currentOutputFolder, "media.jpg").apply {
             currentImagePath = absolutePath
+            Timber.i("New image will be saved to: $currentImagePath")
         }
+    }
 
-    fun createVideoFile(directory: File): File =
-        File.createTempFile("MP4_${System.currentTimeMillis()}", ".mp4", directory).apply {
+    fun createVideoFile(root: File): File {
+        createCurrentOutputFolder(root)
+        return File(currentOutputFolder, "media.mp4").apply {
             currentVideoPath = absolutePath
+            Timber.i("New video will be saved to: $currentVideoPath")
         }
+    }
+
+    private fun createCurrentOutputFolder(root: File) {
+        currentOutputFolder = root.resolve("${System.currentTimeMillis()}")
+        if (!currentOutputFolder.exists()) currentOutputFolder.mkdir()
+    }
 }
