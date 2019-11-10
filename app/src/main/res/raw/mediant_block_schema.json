@@ -1,0 +1,45 @@
+{
+  "name": "mediant_block",
+  "mill": "/json",
+  "pin": true,
+  "json_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+      "media": {
+        "type": "string",
+        "contentEncoding": "base64"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "jpg",
+          "mp4"
+        ]
+      },
+      "proof": {
+        "type": "string"
+      },
+      "media_signature": {
+        "type": "string"
+      },
+      "proof_signature": {
+        "type": "string"
+      },
+      "signature_provider": {
+        "type": "string",
+        "enum": [
+          "proofmode",
+          "zion"
+        ]
+      }
+    },
+    "required": [
+      "media",
+      "proof",
+      "media_signature",
+      "proof_signature",
+      "signature_provider"
+    ]
+  }
+}

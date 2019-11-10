@@ -4,10 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import io.numbers.mediant.R
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.proofmode.ProofSignatureBundle
+import io.numbers.mediant.api.textile.MediaType
+import io.numbers.mediant.api.textile.SignatureProvider
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
@@ -34,18 +35,29 @@ class MainViewModel @Inject constructor(
     private lateinit var currentPhotoPath: String
 
     fun uploadPhoto() = viewModelScope.launch(Dispatchers.IO) {
-        generateProofBundleJson()?.also {
-            textileService.addFile(currentPhotoPath, it, object : Handlers.BlockHandler {
-                override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
-                    Event(SnackbarArgs(R.string.message_media_uploaded))
-                )
+        val signatureProvider = if (preferenceHelper.signWithZion) SignatureProvider.ZION
+        else SignatureProvider.PROOFMODE
 
-                override fun onError(e: Exception) = showErrorSnackbar.postValue(Event(e))
-            })
+        val callback = object : Handlers.BlockHandler {
+            override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
+                Event(SnackbarArgs(R.string.message_media_uploaded))
+            )
+
+            override fun onError(e: Exception) = showErrorSnackbar.postValue(Event(e))
+        }
+
+        generateProofBundle()?.also {
+            textileService.addMediantBlockData(
+                currentPhotoPath,
+                MediaType.JPG,
+                it,
+                signatureProvider,
+                callback
+            )
         }
     }
 
-    private fun generateProofBundleJson(): String? {
+    private fun generateProofBundle(): ProofSignatureBundle? {
         val snackbarArgs =
             SnackbarArgs(R.string.message_proof_generating, Snackbar.LENGTH_INDEFINITE)
         showSnackbar.postValue(Event(snackbarArgs))
@@ -53,9 +65,8 @@ class MainViewModel @Inject constructor(
             val proofSignatureBundle = if (preferenceHelper.signWithZion) {
                 generateProofWithZion(currentPhotoPath)
             } else proofModeService.generateProofAndSignatures(currentPhotoPath)
-            val proofSignatureBundleJson = Gson().toJson(proofSignatureBundle)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_proof_generated)))
-            proofSignatureBundleJson
+            proofSignatureBundle
         } catch (e: Exception) {
             showErrorSnackbar.postValue(Event(e))
             null

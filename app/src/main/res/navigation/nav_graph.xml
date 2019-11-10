@@ -128,11 +128,8 @@
         android:label="@string/publish"
         tools:layout="@layout/fragment_publishing">
         <argument
-            android:name="dataHash"
+            android:name="fileHash"
             app:argType="string" />
-        <argument
-            android:name="fileIndex"
-            app:argType="integer" />
         <argument
             android:name="userName"
             app:argType="string" />
@@ -140,7 +137,7 @@
             android:name="date"
             app:argType="string" />
         <argument
-            android:name="caption"
+            android:name="dataHash"
             app:argType="string" />
     </fragment>
     <fragment
@@ -149,16 +146,13 @@
         android:label="@string/details"
         tools:layout="@layout/fragment_media_details">
         <argument
-            android:name="imageIpfsPath"
+            android:name="fileHash"
             app:argType="string" />
         <argument
             android:name="userName"
             app:argType="string" />
         <argument
             android:name="blockTimestamp"
-            app:argType="string" />
-        <argument
-            android:name="proofSignatureJson"
             app:argType="string" />
         <argument
             android:name="blockHash"

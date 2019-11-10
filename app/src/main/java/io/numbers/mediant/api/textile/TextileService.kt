@@ -3,14 +3,18 @@ package io.numbers.mediant.api.textile
 import android.app.Application
 import android.content.SharedPreferences
 import android.net.Uri
+import android.util.Base64
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import io.numbers.mediant.BuildConfig
+import io.numbers.mediant.R
+import io.numbers.mediant.api.proofmode.ProofSignatureBundle
 import io.numbers.mediant.util.PreferenceHelper
 import io.textile.pb.Model
 import io.textile.pb.View
 import io.textile.textile.*
+import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 import java.net.URLEncoder
@@ -22,7 +26,6 @@ private const val TEXTILE_FOLDER_NAME = "textile"
 private const val REQUEST_LIMIT = 999
 const val EXTERNAL_INVITE_LINK_HOST = "https://www.textile.photos/invites/new"
 
-// TODO: replace Timber.e with throw (handle exception by showing snackbar)
 class TextileService @Inject constructor(
     private val textile: Textile,
     private val preferenceHelper: PreferenceHelper,
@@ -160,7 +163,7 @@ class TextileService @Inject constructor(
         sharing: Model.Thread.Sharing
     ): Model.Thread {
         val schema = View.AddThreadConfig.Schema.newBuilder()
-            .setPreset(View.AddThreadConfig.Schema.Preset.MEDIA)
+            .setJson(readJsonSchema())
             .build()
         val config = View.AddThreadConfig.newBuilder()
             .setKey(generateThreadKey(threadName))
@@ -171,6 +174,12 @@ class TextileService @Inject constructor(
             .build()
         return textile.threads.add(config)
     }
+
+    private fun readJsonSchema() =
+        application.resources
+            .openRawResource(R.raw.mediant_block_schema)
+            .bufferedReader()
+            .use { it.readText() }
 
     private fun generateThreadKey(name: String): String {
         var key: String
@@ -208,66 +217,69 @@ class TextileService @Inject constructor(
      * Files
      */
 
-    fun addFile(filePath: String, caption: String, callback: Handlers.BlockHandler) =
-        textile.files.addFiles(filePath, preferenceHelper.personalThreadId, caption, callback)
+    fun addMediantBlockData(
+        mediaPath: String,
+        mediaType: MediaType,
+        proofSignatureBundle: ProofSignatureBundle,
+        signatureProvider: SignatureProvider,
+        callback: Handlers.BlockHandler
+    ) {
+        // TODO: DANGEROUS! Memory might out of resource by reading the entire file.
+        val mediaBase64 = Base64.encodeToString(File(mediaPath).readBytes(), Base64.DEFAULT)
 
-    fun getImageContent(files: View.Files, minWidth: Long = 500, callback: (ByteArray) -> Unit) {
-        // imageContentForMinWidth usage: (Textile has not documented)
-        // https://github.com/textileio/photos/blob/master/App/Components/authoring-input.tsx#L184
-        textile.files.imageContentForMinWidth(
-            getFileIpfsPath(files), minWidth, object : Handlers.DataHandler {
+        val data = JSONObject()
+        data.put(Properties.MEDIA.value, mediaBase64)
+        data.put(Properties.TYPE.value, mediaType.value)
+        data.put(Properties.PROOF.value, proofSignatureBundle.proof)
+        data.put(Properties.MEDIA_SIGNATURE.value, proofSignatureBundle.mediaSignature)
+        data.put(Properties.PROOF_SIGNATURE.value, proofSignatureBundle.proofSignature)
+        data.put(Properties.SIGNATURE_PROVIDER.value, signatureProvider.value)
 
-                override fun onComplete(data: ByteArray, media: String) =
-                    if (media == "image/jpeg" || media == "image/png") callback(data)
-                    else Timber.e("Unknown data type: $media")
-
-                override fun onError(e: Exception) {
-                    Timber.e("error: get image content callback")
-                    Timber.e(e)
-                }
-            })
+        val base64 = Base64.encodeToString(data.toString().toByteArray(), Base64.DEFAULT)
+        textile.files.addData(base64, preferenceHelper.personalThreadId, "", callback)
     }
 
-    fun getImageContent(ipfsPath: String, minWidth: Long = 500, callback: (ByteArray) -> Unit) {
-        // imageContentForMinWidth usage: (Textile has not documented)
-        // https://github.com/textileio/photos/blob/master/App/Components/authoring-input.tsx#L184
-        textile.files.imageContentForMinWidth(ipfsPath, minWidth, object : Handlers.DataHandler {
+    fun getMediantBlock(
+        fileHash: String,
+        callback: (ByteArray, MediaType, ProofSignatureBundle, SignatureProvider) -> Unit
+    ) {
+        textile.files.content(fileHash, object : Handlers.DataHandler {
+            override fun onComplete(data: ByteArray, media: String) {
+                if (media == "application/json") {
+                    val jsonObject = JSONObject(String(data))
 
-            override fun onComplete(data: ByteArray, media: String) =
-                if (media == "image/jpeg" || media == "image/png") callback(data)
-                else Timber.e("Unknown data type: $media")
+                    val proofSignatureBundle = ProofSignatureBundle(
+                        jsonObject.getString(Properties.PROOF.value),
+                        jsonObject.getString(Properties.PROOF_SIGNATURE.value),
+                        jsonObject.getString(Properties.MEDIA_SIGNATURE.value)
+                    )
 
-            override fun onError(e: java.lang.Exception?) {
-                Timber.e("error: get image content callback")
-                Timber.e(e)
+                    callback(
+                        Base64.decode(jsonObject.getString(Properties.MEDIA.value), Base64.DEFAULT),
+                        MediaType[jsonObject.getString(Properties.TYPE.value)]!!,
+                        proofSignatureBundle,
+                        SignatureProvider[jsonObject.getString(Properties.SIGNATURE_PROVIDER.value)]!!
+                    )
+                } else Timber.e("Unknown media type: $media")
             }
+
+            override fun onError(e: Exception) = Timber.e(e)
         })
     }
 
-    fun getFileIpfsPath(files: View.Files): String {
-        val fileIndex = getFileIndex(files)
-        return "${files.data}/$fileIndex"
-    }
-
-    fun getFileIndex(files: View.Files) = files.filesList.let {
-        if (it != null && it.size > 0 && it[0].index != 0) it[0].index
-        else 0
-    }
+    fun getMediantBlock(
+        files: View.Files,
+        callback: (ByteArray, MediaType, ProofSignatureBundle, SignatureProvider) -> Unit
+    ) = getMediantBlock(files.getFiles(0).file.hash, callback)
 
     fun shareFile(
         dataHash: String,
-        caption: String,
         threadId: String,
         callback: (Model.Block) -> Unit
     ) {
-        textile.files.shareFiles(dataHash, threadId, caption, object : Handlers.BlockHandler {
-
+        textile.files.shareFiles(dataHash, threadId, "", object : Handlers.BlockHandler {
             override fun onComplete(block: Model.Block) = callback(block)
-
-            override fun onError(e: java.lang.Exception) {
-                Timber.e("error: share file callback")
-                Timber.e(e)
-            }
+            override fun onError(e: java.lang.Exception) = Timber.e(e)
         })
     }
 

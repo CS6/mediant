@@ -4,7 +4,7 @@ import io.textile.textile.FeedItemData
 
 interface FeedItemListener {
 
-    fun onShowProof(feedItemData: FeedItemData)
+    fun onShowDetails(feedItemData: FeedItemData)
 
     fun onPublish(feedItemData: FeedItemData)
 

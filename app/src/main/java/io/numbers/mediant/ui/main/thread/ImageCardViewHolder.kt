@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import io.numbers.mediant.R
+import io.numbers.mediant.api.textile.MediaType
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.ui.listeners.FeedItemListener
 import io.numbers.mediant.util.timestampToString
@@ -36,13 +37,15 @@ class ImageCardViewHolder(
 
         userNameTextView.text = item.files.user.name
         dateTextView.text = timestampToString(item.files.date)
-        showProofButton.setOnClickListener { listener.onShowProof(item) }
+        showProofButton.setOnClickListener { listener.onShowDetails(item) }
         publishButton.setOnClickListener { listener.onPublish(item) }
         deleteButton.setOnClickListener { listener.onDelete(item) }
 
-        textileService.getImageContent(item.files) {
-            job = CoroutineScope(Dispatchers.Main).launch(Dispatchers.Main) {
-                imageView.setImageBitmap(BitmapFactory.decodeByteArray(it, 0, it.size))
+        textileService.getMediantBlock(item.files) { bytes, mediaType, _, _ ->
+            job = CoroutineScope(Dispatchers.Main).launch {
+                if (mediaType == MediaType.JPG) {
+                    imageView.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.size))
+                }
             }
         }
 

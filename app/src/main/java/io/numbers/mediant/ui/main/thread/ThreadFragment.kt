@@ -126,21 +126,19 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
         }.show(childFragmentManager, ConfirmationDialogFragment::javaClass.name)
     }
 
-    override fun onShowProof(feedItemData: FeedItemData) {
+    override fun onShowDetails(feedItemData: FeedItemData) {
         // TODO: use block API after available: https://github.com/textileio/android-textile/issues/15
         findNavController().navigate(
             if (viewModel.isPersonal) MainFragmentDirections.actionMainFragmentToMediaDetailsFragment(
-                textileService.getFileIpfsPath(feedItemData.files),
+                feedItemData.files.getFiles(0).file.hash,
                 feedItemData.files.user.name,
                 timestampToString(feedItemData.files.date),
-                feedItemData.files.caption,
                 feedItemData.block
             )
             else ThreadFragmentDirections.actionThreadFragmentToMediaDetailsFragment(
-                textileService.getFileIpfsPath(feedItemData.files),
+                feedItemData.files.getFiles(0).file.hash,
                 feedItemData.files.user.name,
                 timestampToString(feedItemData.files.date),
-                feedItemData.files.caption,
                 feedItemData.block
             )
         )
@@ -150,11 +148,10 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
         findNavController().navigate(
             // TODO: use block API after available: https://github.com/textileio/android-textile/issues/15
             MainFragmentDirections.actionMainFragmentToPublishingFragment(
-                feedItemData.files.data,
-                textileService.getFileIndex(feedItemData.files),
+                feedItemData.files.getFiles(0).file.hash,
                 feedItemData.files.user.name,
                 timestampToString(feedItemData.files.date),
-                feedItemData.files.caption
+                feedItemData.files.data
             )
         )
     }

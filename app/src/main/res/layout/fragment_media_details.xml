@@ -121,13 +121,30 @@
                 app:layout_constraintTop_toBottomOf="@+id/mediaSignatureTitle" />
 
             <TextView
+                android:id="@+id/signatureProviderTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/signature_provider"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                app:layout_constraintTop_toBottomOf="@+id/mediaSignature" />
+
+            <TextView
+                android:id="@+id/signatureProvider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@{viewModel.signatureProvider}"
+                app:layout_constraintTop_toBottomOf="@+id/signatureProviderTitle" />
+
+            <TextView
                 android:id="@+id/blockHashTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/medium_margin"
                 android:text="@string/block_hash"
                 android:textAppearance="?attr/textAppearanceSubtitle1"
-                app:layout_constraintTop_toBottomOf="@+id/mediaSignature" />
+                app:layout_constraintTop_toBottomOf="@+id/signatureProvider" />
 
             <TextView
                 android:id="@+id/blockHash"
