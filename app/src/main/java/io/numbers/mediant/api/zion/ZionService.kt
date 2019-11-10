@@ -27,22 +27,34 @@ class ZionService @Inject constructor(
             DeviceInfo.Device.DEVICE_HARDWARE_MODEL
         ).toUpperCase(Locale.ENGLISH)
 
-    val isSupported = "HTC EXODUS 1" == deviceName
+    val isSupported = setOf("HTC EXODUS 1", "HTC EXODUS 1S").contains(deviceName)
 
     private var uniqueId: Long? = null
 
-    fun initZkma() = zkma.init(application.applicationContext).also {
-        if (it == RESULT.SUCCESS) createWalletSeed()
+    fun initZkma(): Int {
+        zkma.init(application.applicationContext).also {
+            return if (it == RESULT.SUCCESS) createWalletSeed()
+            else it
+        }
     }
 
-    private fun createWalletSeed() {
+    private fun createWalletSeed(): Int {
         val walletNameHash = getHashFromString(ZION_WALLET_NAME)
-        uniqueId = zkma.register(ZION_WALLET_NAME, walletNameHash)
-        uniqueId?.also {
-            when (val result = zkma.createSeed(it)) {
-                RESULT.SUCCESS -> Timber.i("Zion seed created successfully.")
-                RESULT.E_TEEKM_SEED_EXISTS -> Timber.i("Zion seed has been already created.")
-                else -> Timber.e("Zion seed creation result: $result")
+        zkma.register(ZION_WALLET_NAME, walletNameHash).also {
+            uniqueId = it
+            return when (val result = zkma.createSeed(it)) {
+                RESULT.SUCCESS -> {
+                    Timber.i("Zion seed created successfully.")
+                    RESULT.SUCCESS
+                }
+                RESULT.E_TEEKM_SEED_EXISTS -> {
+                    Timber.i("Zion seed has been already created.")
+                    RESULT.SUCCESS
+                }
+                else -> {
+                    Timber.e("Zion seed creation result: $result")
+                    result
+                }
             }
         }
     }
