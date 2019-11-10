@@ -1,5 +1,6 @@
 package io.numbers.mediant.util
 
+import android.graphics.Bitmap
 import com.google.protobuf.Timestamp
 import io.textile.textile.Util
 import org.witness.proofmode.crypto.HashUtils
@@ -29,4 +30,10 @@ fun getHashFromString(string: String): String {
     val messageDigest = MessageDigest.getInstance("SHA-256")
     val digest = messageDigest.digest(string.toByteArray())
     return HashUtils.asHex(digest)
+}
+
+fun rescaleBitmap(bitmap: Bitmap, width: Int = 800): Bitmap {
+    val scale = width.toDouble() / bitmap.width
+    val newHeight = (bitmap.height * scale).toInt()
+    return Bitmap.createScaledBitmap(bitmap, width, newHeight, true)
 }

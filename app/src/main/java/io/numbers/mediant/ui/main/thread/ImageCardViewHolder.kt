@@ -10,6 +10,7 @@ import android.widget.TextView
 import io.numbers.mediant.R
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.ui.listeners.FeedItemListener
+import io.numbers.mediant.util.rescaleBitmap
 import io.numbers.mediant.util.timestampToString
 import io.textile.textile.FeedItemData
 import kotlinx.coroutines.CoroutineScope
@@ -43,8 +44,9 @@ class ImageCardViewHolder(
         deleteButton.setOnClickListener { listener.onDelete(item) }
 
         textileService.fetchRawContent(item.files) {
+            val bitmap = rescaleBitmap(BitmapFactory.decodeByteArray(it, 0, it.size))
             job = CoroutineScope(Dispatchers.Main).launch(Dispatchers.Main) {
-                imageView.setImageBitmap(BitmapFactory.decodeByteArray(it, 0, it.size))
+                imageView.setImageBitmap(bitmap)
             }
         }
 

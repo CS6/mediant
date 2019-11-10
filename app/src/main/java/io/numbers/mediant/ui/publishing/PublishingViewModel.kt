@@ -8,6 +8,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.numbers.mediant.api.textile.TextileService
+import io.numbers.mediant.util.rescaleBitmap
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,8 +39,9 @@ class PublishingViewModel @Inject constructor(
 
     private fun updateImage(fileHash: String) {
         textileService.fetchRawContent(fileHash) {
+            val bitmap = rescaleBitmap(BitmapFactory.decodeByteArray(it, 0, it.size))
             imageDrawable.postValue(
-                BitmapDrawable(application.resources, BitmapFactory.decodeByteArray(it, 0, it.size))
+                BitmapDrawable(application.resources, bitmap)
             )
         }
     }

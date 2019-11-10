@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.model.Meta
+import io.numbers.mediant.util.rescaleBitmap
 import javax.inject.Inject
 
 class MediaDetailsViewModel @Inject constructor(
@@ -30,8 +31,9 @@ class MediaDetailsViewModel @Inject constructor(
 
     private fun updateImage(fileHash: String) {
         textileService.fetchRawContent(fileHash) {
+            val bitmap = rescaleBitmap(BitmapFactory.decodeByteArray(it, 0, it.size))
             imageDrawable.postValue(
-                BitmapDrawable(application.resources, BitmapFactory.decodeByteArray(it, 0, it.size))
+                BitmapDrawable(application.resources, bitmap)
             )
         }
     }
