@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuItemThreadInformation"
+        android:id="@+id/navToThreadInformation"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/information"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menuItemInviteOthers"
+        android:id="@+id/inviteOthers"
         android:icon="@drawable/ic_share_black_24dp"
         android:title="@string/invite_others"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menuItemRefresh"
+        android:id="@+id/refresh"
         android:title="@string/refresh"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menuItemScrollToTop"
+        android:id="@+id/scrollToTop"
         android:title="@string/scroll_to_top"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menuItemLeaveThread"
+        android:id="@+id/leaveThread"
         android:icon="@drawable/ic_delete_black_24dp"
         android:title="@string/leave_thread" />
 </menu>

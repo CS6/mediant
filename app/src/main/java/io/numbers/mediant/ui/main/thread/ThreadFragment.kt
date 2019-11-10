@@ -92,11 +92,11 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menuItemThreadInformation -> showInformation()
-            R.id.menuItemInviteOthers -> inviteOthers()
-            R.id.menuItemRefresh -> viewModel.loadFeedList()
-            R.id.menuItemScrollToTop -> smoothScrollToTop()
-            R.id.menuItemLeaveThread -> leaveThread()
+            R.id.navToThreadInformation -> showInformation()
+            R.id.inviteOthers -> inviteOthers()
+            R.id.refresh -> viewModel.loadFeedList()
+            R.id.scrollToTop -> smoothScrollToTop()
+            R.id.leaveThread -> leaveThread()
         }
         return true
     }
