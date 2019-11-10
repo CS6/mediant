@@ -32,9 +32,19 @@ class PermissionManager @Inject constructor(
 }
 
 enum class PermissionRequestType(val value: PermissionRequest) {
-    PROOFMODE(
+    PROOFMODE_IMAGE(
         PermissionRequest(
             0,
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            R.string.message_proofmode_permissions_rationale
+        )
+    ),
+    PROOFMODE_VIDEO(
+        PermissionRequest(
+            1,
             arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_FINE_LOCATION

@@ -6,7 +6,8 @@
     <string name="message_general_error">Oh no! Bad things happened!</string>
     <string name="connect_to_ipfs">Connecting to IPFS…</string>
     <string name="create_wallet">Creating Textile wallet…</string>
-    <string name="camera">Camera</string>
+    <string name="capture_image">Capture Image</string>
+    <string name="capture_video">Capture Video</string>
     <string name="dismiss">Dismiss</string>
 
     <string name="tour">Tour</string>

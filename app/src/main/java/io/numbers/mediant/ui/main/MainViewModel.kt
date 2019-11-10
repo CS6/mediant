@@ -20,6 +20,7 @@ import io.textile.textile.Handlers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.witness.proofmode.crypto.HashUtils
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -33,11 +34,12 @@ class MainViewModel @Inject constructor(
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     val showErrorSnackbar = MutableLiveData<Event<Exception>>()
-    private lateinit var currentPhotoPath: String
+    private lateinit var currentImagePath: String
+    private lateinit var currentVideoPath: String
 
-    fun uploadPhoto() = viewModelScope.launch(Dispatchers.IO) {
-        generateMetaJson(Meta.MediaType.JPG)?.also { metaJson ->
-            textileService.addFile(currentPhotoPath, metaJson, object : Handlers.BlockHandler {
+    fun uploadImage() = viewModelScope.launch(Dispatchers.IO) {
+        generateMetaJson(currentImagePath, Meta.MediaType.JPG)?.also { metaJson ->
+            textileService.addFile(currentImagePath, metaJson, object : Handlers.BlockHandler {
                 override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
                     Event(SnackbarArgs(R.string.message_media_uploaded))
                 )
@@ -47,14 +49,27 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun generateMetaJson(mediaType: Meta.MediaType): String? {
+    fun uploadVideo() = viewModelScope.launch(Dispatchers.IO) {
+        generateMetaJson(currentVideoPath, Meta.MediaType.MP4)?.also { metaJson ->
+            Timber.i(metaJson)
+//            textileService.addFile(currentImagePath, metaJson, object : Handlers.BlockHandler {
+//                override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
+//                    Event(SnackbarArgs(R.string.message_media_uploaded))
+//                )
+//
+//                override fun onError(e: Exception) = showErrorSnackbar.postValue(Event(e))
+//            })
+        }
+    }
+
+    private fun generateMetaJson(filePath: String, mediaType: Meta.MediaType): String? {
         val snackbarArgs =
             SnackbarArgs(R.string.message_proof_generating, Snackbar.LENGTH_INDEFINITE)
         showSnackbar.postValue(Event(snackbarArgs))
         return try {
             val proofSignatureBundle = if (preferenceHelper.signWithZion) {
-                generateProofWithZion(currentPhotoPath)
-            } else proofModeService.generateProofAndSignatures(currentPhotoPath)
+                generateProofWithZion(filePath)
+            } else proofModeService.generateProofAndSignatures(filePath)
 
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_proof_generated)))
 
@@ -77,8 +92,13 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun createPhotoFile(directory: File): File =
+    fun createImageFile(directory: File): File =
         File.createTempFile("JPEG_${System.currentTimeMillis()}", ".jpg", directory).apply {
-            currentPhotoPath = absolutePath
+            currentImagePath = absolutePath
+        }
+
+    fun createVideoFile(directory: File): File =
+        File.createTempFile("MP4_${System.currentTimeMillis()}", ".mp4", directory).apply {
+            currentVideoPath = absolutePath
         }
 }

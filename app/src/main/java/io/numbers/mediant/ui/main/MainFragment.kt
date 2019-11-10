@@ -96,32 +96,52 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menuItemNavToSettings -> findNavController().navigate(R.id.action_mainFragment_to_preferencesFragment)
-            R.id.menuItemOpenCamera -> prepareCamera()
-            R.id.menuItemPersonalThreadInformation -> preferenceHelper.personalThreadId?.let {
+            R.id.navToSettings -> findNavController().navigate(R.id.action_mainFragment_to_preferencesFragment)
+            R.id.captureImage -> prepareCapturingImage()
+            R.id.captureVideo -> prepareCapturingVideo()
+            R.id.navToPersonalThreadInformation -> preferenceHelper.personalThreadId?.let {
                 findNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToThreadInformationFragment(it)
                 )
             }
-            R.id.menuItemNavToOnboarding -> findNavController().navigate(R.id.action_mainFragment_to_onboardingFragment)
+            R.id.navToOnboarding -> findNavController().navigate(R.id.action_mainFragment_to_onboardingFragment)
         }
         return true
     }
 
-    private fun prepareCamera() {
-        if (permissionManager.hasPermissions(PermissionRequestType.PROOFMODE)) {
-            dispatchTakePhotoIntent()
-        } else if (!permissionManager.askPermissions(PermissionRequestType.PROOFMODE, this)) {
-            navigateToPermissionRationaleFragment(PermissionRequestType.PROOFMODE.value.rationale)
+    private fun prepareCapturingImage() {
+        if (permissionManager.hasPermissions(PermissionRequestType.PROOFMODE_IMAGE)) {
+            dispatchCaptureImageIntent()
+        } else if (!permissionManager.askPermissions(PermissionRequestType.PROOFMODE_IMAGE, this)) {
+            navigateToPermissionRationaleFragment(PermissionRequestType.PROOFMODE_IMAGE.value.rationale)
+        }
+    }
+
+    private fun prepareCapturingVideo() {
+        if (permissionManager.hasPermissions(PermissionRequestType.PROOFMODE_VIDEO)) {
+            dispatchCaptureVideoIntent()
+        } else if (!permissionManager.askPermissions(PermissionRequestType.PROOFMODE_VIDEO, this)) {
+            navigateToPermissionRationaleFragment(PermissionRequestType.PROOFMODE_VIDEO.value.rationale)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ActivityRequestCodes.CAMERA.value -> {
+            ActivityRequestCodes.CAPTURE_IMAGE.value -> {
                 when (resultCode) {
-                    Activity.RESULT_OK -> viewModel.uploadPhoto()
+                    Activity.RESULT_OK -> viewModel.uploadImage()
+                    Activity.RESULT_CANCELED -> Timber.i("Camera operation cancelled.")
+                    else -> view?.let {
+                        showErrorSnackbar(
+                            it, RuntimeException("Unknown camera result: $resultCode")
+                        )
+                    }
+                }
+            }
+            ActivityRequestCodes.CAPTURE_VIDEO.value -> {
+                when (resultCode) {
+                    Activity.RESULT_OK -> viewModel.uploadVideo()
                     Activity.RESULT_CANCELED -> Timber.i("Camera operation cancelled.")
                     else -> view?.let {
                         showErrorSnackbar(
@@ -140,26 +160,40 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            PermissionRequestType.PROOFMODE.value.code -> {
+            PermissionRequestType.PROOFMODE_IMAGE.value.code -> {
                 if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                    dispatchTakePhotoIntent()
-                } else navigateToPermissionRationaleFragment(PermissionRequestType.PROOFMODE.value.rationale)
+                    dispatchCaptureImageIntent()
+                } else navigateToPermissionRationaleFragment(PermissionRequestType.PROOFMODE_IMAGE.value.rationale)
             }
         }
     }
 
-    private fun dispatchTakePhotoIntent() {
+    private fun dispatchCaptureImageIntent() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         activity?.also { fragmentActivity ->
             // Ensure that there's a camera activity to handle the intent.
             intent.resolveActivity(fragmentActivity.packageManager)?.also {
                 // Create the File where the photo should go.
-                val photoFile = viewModel.createPhotoFile(fragmentActivity.filesDir)
-                val photoUri = FileProvider.getUriForFile(
-                    fragmentActivity, "$APPLICATION_ID.provider", photoFile
+                val imageFile = viewModel.createImageFile(fragmentActivity.filesDir)
+                val imageUri = FileProvider.getUriForFile(
+                    fragmentActivity, "$APPLICATION_ID.provider", imageFile
                 )
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                startActivityForResult(intent, ActivityRequestCodes.CAMERA.value)
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+                startActivityForResult(intent, ActivityRequestCodes.CAPTURE_IMAGE.value)
+            }
+        }
+    }
+
+    private fun dispatchCaptureVideoIntent() {
+        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        activity?.also { fragmentActivity ->
+            intent.resolveActivity(fragmentActivity.packageManager)?.also {
+                val videoFile = viewModel.createVideoFile(fragmentActivity.filesDir)
+                val videoUri = FileProvider.getUriForFile(
+                    fragmentActivity, "$APPLICATION_ID.provider", videoFile
+                )
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
+                startActivityForResult(intent, ActivityRequestCodes.CAPTURE_VIDEO.value)
             }
         }
     }

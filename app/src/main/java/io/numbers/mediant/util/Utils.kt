@@ -8,7 +8,7 @@ import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 
-enum class ActivityRequestCodes(val value: Int) { CAMERA(0) }
+enum class ActivityRequestCodes(val value: Int) { CAPTURE_IMAGE(0), CAPTURE_VIDEO(1) }
 
 fun timestampToString(timestamp: Timestamp): String =
     SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault()).format(

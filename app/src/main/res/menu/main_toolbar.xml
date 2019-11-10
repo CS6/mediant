@@ -3,24 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuItemOpenCamera"
+        android:id="@+id/captureImage"
         android:icon="@drawable/ic_camera_black_24dp"
-        android:title="@string/camera"
+        android:title="@string/capture_image"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/menuItemNavToSettings"
+        android:id="@+id/captureVideo"
+        android:icon="@drawable/ic_videocam_black_24dp"
+        android:title="@string/capture_video"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/navToSettings"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/settings"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menuItemPersonalThreadInformation"
+        android:id="@+id/navToPersonalThreadInformation"
         android:title="@string/storage_information"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menuItemNavToOnboarding"
+        android:id="@+id/navToOnboarding"
         android:title="@string/tour"
         app:showAsAction="never" />
 </menu>
