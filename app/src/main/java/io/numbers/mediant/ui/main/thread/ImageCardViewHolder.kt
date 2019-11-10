@@ -40,7 +40,7 @@ class ImageCardViewHolder(
         publishButton.setOnClickListener { listener.onPublish(item) }
         deleteButton.setOnClickListener { listener.onDelete(item) }
 
-        textileService.getImageContent(item.files) {
+        textileService.fetchRawContent(item.files) {
             job = CoroutineScope(Dispatchers.Main).launch(Dispatchers.Main) {
                 imageView.setImageBitmap(BitmapFactory.decodeByteArray(it, 0, it.size))
             }

@@ -130,17 +130,17 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
         // TODO: use block API after available: https://github.com/textileio/android-textile/issues/15
         findNavController().navigate(
             if (viewModel.isPersonal) MainFragmentDirections.actionMainFragmentToMediaDetailsFragment(
-                textileService.getFileIpfsPath(feedItemData.files),
+                feedItemData.files.getFiles(0).file.hash,
+                feedItemData.files.caption,
                 feedItemData.files.user.name,
                 timestampToString(feedItemData.files.date),
-                feedItemData.files.caption,
                 feedItemData.block
             )
             else ThreadFragmentDirections.actionThreadFragmentToMediaDetailsFragment(
-                textileService.getFileIpfsPath(feedItemData.files),
+                feedItemData.files.getFiles(0).file.hash,
+                feedItemData.files.caption,
                 feedItemData.files.user.name,
                 timestampToString(feedItemData.files.date),
-                feedItemData.files.caption,
                 feedItemData.block
             )
         )
@@ -151,10 +151,10 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
             // TODO: use block API after available: https://github.com/textileio/android-textile/issues/15
             MainFragmentDirections.actionMainFragmentToPublishingFragment(
                 feedItemData.files.data,
-                textileService.getFileIndex(feedItemData.files),
+                feedItemData.files.getFiles(0).file.hash,
+                feedItemData.files.caption,
                 feedItemData.files.user.name,
-                timestampToString(feedItemData.files.date),
-                feedItemData.files.caption
+                timestampToString(feedItemData.files.date)
             )
         )
     }

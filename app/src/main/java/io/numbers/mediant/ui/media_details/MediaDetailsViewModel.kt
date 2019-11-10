@@ -8,6 +8,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.numbers.mediant.api.textile.TextileService
+import io.numbers.mediant.model.Meta
 import javax.inject.Inject
 
 class MediaDetailsViewModel @Inject constructor(
@@ -15,26 +16,22 @@ class MediaDetailsViewModel @Inject constructor(
     private val textileService: TextileService
 ) : ViewModel() {
 
-    val imageIpfsPath = MutableLiveData("")
+    val fileHash = MutableLiveData("")
     val imageDrawable = MediatorLiveData<Drawable>()
     val userName = MutableLiveData("")
     val blockTimestamp = MutableLiveData("")
-    val proof = MutableLiveData("")
-    val proofSignature = MutableLiveData("")
-    val mediaSignature = MutableLiveData("")
     val blockHash = MutableLiveData("")
 
+    val meta = MutableLiveData<Meta>()
+
     init {
-        imageDrawable.addSource(imageIpfsPath) { updateImage(it) }
+        imageDrawable.addSource(fileHash) { updateImage(it) }
     }
 
-    private fun updateImage(ipfsPath: String) {
-        textileService.getImageContent(ipfsPath) {
+    private fun updateImage(fileHash: String) {
+        textileService.fetchRawContent(fileHash) {
             imageDrawable.postValue(
-                BitmapDrawable(
-                    application.resources,
-                    BitmapFactory.decodeByteArray(it, 0, it.size)
-                )
+                BitmapDrawable(application.resources, BitmapFactory.decodeByteArray(it, 0, it.size))
             )
         }
     }

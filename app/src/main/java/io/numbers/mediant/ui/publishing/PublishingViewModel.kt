@@ -17,18 +17,17 @@ class PublishingViewModel @Inject constructor(
 ) : ViewModel() {
 
     val dataHash = MutableLiveData("")
-    val fileIndex = MutableLiveData(0)
+    val fileHash = MutableLiveData("")
     val imageDrawable = MediatorLiveData<Drawable>()
     val userName = MutableLiveData("")
-    val date = MutableLiveData("")
-    val caption = MutableLiveData("")
+    val blockTimestamp = MutableLiveData("")
+    val fileMeta = MutableLiveData("")
     val threadList = textileService.publicThreadList
     val isLoading = MutableLiveData(false)
 
     init {
         loadThreadList()
-        imageDrawable.addSource(dataHash) { if (!it.isNullOrEmpty()) updateImage("$it/${fileIndex.value}") }
-        imageDrawable.addSource(fileIndex) { if (!dataHash.value.isNullOrEmpty()) updateImage("${dataHash.value}/$it") }
+        imageDrawable.addSource(fileHash) { if (!dataHash.value.isNullOrEmpty()) updateImage(it) }
     }
 
     fun loadThreadList() {
@@ -37,8 +36,8 @@ class PublishingViewModel @Inject constructor(
         isLoading.value = false
     }
 
-    private fun updateImage(ipfsPath: String) {
-        textileService.getImageContent(ipfsPath) {
+    private fun updateImage(fileHash: String) {
+        textileService.fetchRawContent(fileHash) {
             imageDrawable.postValue(
                 BitmapDrawable(application.resources, BitmapFactory.decodeByteArray(it, 0, it.size))
             )
@@ -47,8 +46,8 @@ class PublishingViewModel @Inject constructor(
 
     fun publishFile(threadId: String) {
         dataHash.value?.also { hash ->
-            textileService.shareFile(hash, caption.value ?: "", threadId) {
-                Timber.i("shared: ${it.id}")
+            textileService.shareFile(hash, fileMeta.value ?: "", threadId) {
+                Timber.i("Shared: ${it.id}")
             }
         }
     }

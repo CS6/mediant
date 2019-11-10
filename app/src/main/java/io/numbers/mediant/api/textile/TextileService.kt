@@ -160,7 +160,7 @@ class TextileService @Inject constructor(
         sharing: Model.Thread.Sharing
     ): Model.Thread {
         val schema = View.AddThreadConfig.Schema.newBuilder()
-            .setPreset(View.AddThreadConfig.Schema.Preset.MEDIA)
+            .setPreset(View.AddThreadConfig.Schema.Preset.BLOB)
             .build()
         val config = View.AddThreadConfig.newBuilder()
             .setKey(generateThreadKey(threadName))
@@ -211,48 +211,20 @@ class TextileService @Inject constructor(
     fun addFile(filePath: String, caption: String, callback: Handlers.BlockHandler) =
         textile.files.addFiles(filePath, preferenceHelper.personalThreadId, caption, callback)
 
-    fun getImageContent(files: View.Files, minWidth: Long = 500, callback: (ByteArray) -> Unit) {
-        // imageContentForMinWidth usage: (Textile has not documented)
-        // https://github.com/textileio/photos/blob/master/App/Components/authoring-input.tsx#L184
-        textile.files.imageContentForMinWidth(
-            getFileIpfsPath(files), minWidth, object : Handlers.DataHandler {
-
-                override fun onComplete(data: ByteArray, media: String) =
-                    if (media == "image/jpeg" || media == "image/png") callback(data)
-                    else Timber.e("Unknown data type: $media")
-
-                override fun onError(e: Exception) {
-                    Timber.e("error: get image content callback")
-                    Timber.e(e)
-                }
-            })
-    }
-
-    fun getImageContent(ipfsPath: String, minWidth: Long = 500, callback: (ByteArray) -> Unit) {
-        // imageContentForMinWidth usage: (Textile has not documented)
-        // https://github.com/textileio/photos/blob/master/App/Components/authoring-input.tsx#L184
-        textile.files.imageContentForMinWidth(ipfsPath, minWidth, object : Handlers.DataHandler {
-
-            override fun onComplete(data: ByteArray, media: String) =
-                if (media == "image/jpeg" || media == "image/png") callback(data)
-                else Timber.e("Unknown data type: $media")
-
-            override fun onError(e: java.lang.Exception?) {
-                Timber.e("error: get image content callback")
-                Timber.e(e)
+    fun fetchRawContent(fileHash: String, callback: (ByteArray) -> Unit) {
+        Timber.i("Fetching content: $fileHash")
+        textile.files.content(fileHash, object : Handlers.DataHandler {
+            override fun onComplete(data: ByteArray, media: String) {
+                Timber.i("Get raw content with media type: $media")
+                callback(data)
             }
+
+            override fun onError(e: Exception) = Timber.e(e)
         })
     }
 
-    fun getFileIpfsPath(files: View.Files): String {
-        val fileIndex = getFileIndex(files)
-        return "${files.data}/$fileIndex"
-    }
-
-    fun getFileIndex(files: View.Files) = files.filesList.let {
-        if (it != null && it.size > 0 && it[0].index != 0) it[0].index
-        else 0
-    }
+    fun fetchRawContent(files: View.Files, callback: (ByteArray) -> Unit) =
+        fetchRawContent(files.getFiles(0).file.hash, callback)
 
     fun shareFile(
         dataHash: String,
@@ -261,13 +233,8 @@ class TextileService @Inject constructor(
         callback: (Model.Block) -> Unit
     ) {
         textile.files.shareFiles(dataHash, threadId, caption, object : Handlers.BlockHandler {
-
             override fun onComplete(block: Model.Block) = callback(block)
-
-            override fun onError(e: java.lang.Exception) {
-                Timber.e("error: share file callback")
-                Timber.e(e)
-            }
+            override fun onError(e: java.lang.Exception) = Timber.e(e)
         })
     }
 

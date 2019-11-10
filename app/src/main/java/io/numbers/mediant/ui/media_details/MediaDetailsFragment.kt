@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
-import com.google.gson.Gson
+import com.squareup.moshi.JsonAdapter
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
-import io.numbers.mediant.api.proofmode.ProofSignatureBundle
 import io.numbers.mediant.databinding.FragmentMediaDetailsBinding
+import io.numbers.mediant.model.Meta
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import javax.inject.Inject
 
@@ -20,6 +20,9 @@ class MediaDetailsFragment : DaggerFragment() {
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
     lateinit var viewModel: MediaDetailsViewModel
+
+    @Inject
+    lateinit var metaJsonAdapter: JsonAdapter<Meta>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,22 +44,16 @@ class MediaDetailsFragment : DaggerFragment() {
         return binding.root
     }
 
-    private fun initLiveData() = arguments?.let {
-        viewModel.imageIpfsPath.value = MediaDetailsFragmentArgs.fromBundle(it).imageIpfsPath
+    private fun initLiveData() = arguments?.also {
+        viewModel.fileHash.value = MediaDetailsFragmentArgs.fromBundle(it).fileHash
         viewModel.userName.value = MediaDetailsFragmentArgs.fromBundle(it).userName
         viewModel.blockTimestamp.value = MediaDetailsFragmentArgs.fromBundle(it).blockTimestamp
         viewModel.blockHash.value = MediaDetailsFragmentArgs.fromBundle(it).blockHash
 
-        val proofSignatureBundle = try {
-            Gson().fromJson(
-                MediaDetailsFragmentArgs.fromBundle(it).proofSignatureJson,
-                ProofSignatureBundle::class.java
-            )
+        viewModel.meta.value = try {
+            metaJsonAdapter.fromJson(MediaDetailsFragmentArgs.fromBundle(it).fileMeta)
         } catch (e: Exception) {
-            ProofSignatureBundle("Not Available", "Not Available", "Not Available")
+            Meta(Meta.MediaType.UNKNOWN, "N/A", "N/A", "N/A", Meta.SignatureProvider.UNKNOWN)
         }
-        viewModel.proof.value = proofSignatureBundle.proof
-        viewModel.proofSignature.value = proofSignatureBundle.proofSignature
-        viewModel.mediaSignature.value = proofSignatureBundle.mediaSignature
     }
 }

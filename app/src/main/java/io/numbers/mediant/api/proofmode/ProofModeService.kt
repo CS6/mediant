@@ -2,6 +2,7 @@ package io.numbers.mediant.api.proofmode
 
 import android.app.Application
 import android.net.Uri
+import io.numbers.mediant.model.Meta
 import io.numbers.mediant.util.deleteDirectory
 import org.witness.proofmode.ProofMode
 import org.witness.proofmode.util.GPSTracker
@@ -45,8 +46,16 @@ class ProofModeService @Inject constructor(
                 }
             }
             checkProofSignatureBundleCompletion(proof, proofSignature, mediaSignature)
+
+            // XXX: Unreliable workaround for Exodus or some devices which cannot get GPS.
             proof = "${getGps()} + $proof"
-            return ProofSignatureBundle(proof, proofSignature, mediaSignature)
+
+            return ProofSignatureBundle(
+                proof,
+                proofSignature,
+                mediaSignature,
+                Meta.SignatureProvider.PROOFMODE
+            )
         }
     }
 

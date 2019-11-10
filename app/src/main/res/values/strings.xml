@@ -61,11 +61,13 @@
     <string name="no">No</string>
 
     <string name="details">Details</string>
+    <string name="media_type">Media Type</string>
     <string name="source_user">Source User</string>
     <string name="block_timestamp">Block Timestamp</string>
     <string name="proof">Proof</string>
     <string name="proof_signature">Proof Signature</string>
     <string name="media_signature">Media Signature</string>
+    <string name="signature_provider">Signature Provider</string>
     <string name="block_hash">Block Hash</string>
 
     <string name="settings">Settings</string>

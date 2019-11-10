@@ -2,11 +2,13 @@ package io.numbers.mediant.di
 
 import android.app.Application
 import com.htc.htcwalletsdk.Export.HtcWalletSdkManager
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
+import io.numbers.mediant.model.Meta
 import io.numbers.mediant.util.PreferenceHelper
 import io.textile.textile.Textile
 import javax.inject.Singleton
@@ -46,4 +48,12 @@ class AppModule {
         HtcWalletSdkManager.getInstance(),
         application
     )
+
+    @Singleton
+    @Provides
+    fun provideMoshi() = Moshi.Builder().build()
+
+    @Singleton
+    @Provides
+    fun provideMetaJsonAdapter(moshi: Moshi) = moshi.adapter<Meta>(Meta::class.java)
 }
