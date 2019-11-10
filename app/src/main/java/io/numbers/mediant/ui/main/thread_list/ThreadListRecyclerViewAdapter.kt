@@ -46,7 +46,7 @@ class ThreadListRecyclerViewAdapter(
                 itemClickListener: ItemClickListener
             ): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.layout_thread_item, parent, false)
+                val view = layoutInflater.inflate(R.layout.item_thread_list, parent, false)
                 return ViewHolder(view, itemClickListener)
             }
         }

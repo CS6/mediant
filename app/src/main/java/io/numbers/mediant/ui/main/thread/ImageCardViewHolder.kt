@@ -66,7 +66,7 @@ class ImageCardViewHolder(
         ): ThreadRecyclerViewAdapter.ViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val view =
-                layoutInflater.inflate(R.layout.layout_thread_image_card, parent, false)
+                layoutInflater.inflate(R.layout.item_thread_image_card, parent, false)
             return ImageCardViewHolder(view, textileService, listener, isPersonal)
         }
     }

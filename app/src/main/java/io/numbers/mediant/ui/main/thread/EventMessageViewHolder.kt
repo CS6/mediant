@@ -65,7 +65,7 @@ class EventMessageViewHolder(itemView: View) : ThreadRecyclerViewAdapter.ViewHol
         fun from(parent: ViewGroup): ThreadRecyclerViewAdapter.ViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val view =
-                layoutInflater.inflate(R.layout.layout_thread_event_message, parent, false)
+                layoutInflater.inflate(R.layout.item_thread_event_message, parent, false)
             return EventMessageViewHolder(view)
         }
     }

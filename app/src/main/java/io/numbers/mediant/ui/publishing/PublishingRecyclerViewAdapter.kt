@@ -58,7 +58,7 @@ class PublishingRecyclerViewAdapter(private val itemClickListener: ItemClickList
             fun from(parent: ViewGroup, itemClickListener: ItemClickListener): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val view =
-                    layoutInflater.inflate(R.layout.layout_publishing_thread_item, parent, false)
+                    layoutInflater.inflate(R.layout.item_publishing_thread, parent, false)
                 return ViewHolder(view, itemClickListener)
             }
         }
