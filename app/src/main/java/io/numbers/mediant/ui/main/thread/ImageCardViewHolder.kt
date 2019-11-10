@@ -12,9 +12,11 @@ import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.ui.listeners.FeedItemListener
 import io.numbers.mediant.util.timestampToString
 import io.textile.textile.FeedItemData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 class ImageCardViewHolder(
     itemView: View,
     private val textileService: TextileService,

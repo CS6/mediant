@@ -52,13 +52,13 @@ class MainViewModel @Inject constructor(
     fun uploadVideo() = viewModelScope.launch(Dispatchers.IO) {
         generateMetaJson(currentVideoPath, Meta.MediaType.MP4)?.also { metaJson ->
             Timber.i(metaJson)
-//            textileService.addFile(currentImagePath, metaJson, object : Handlers.BlockHandler {
-//                override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
-//                    Event(SnackbarArgs(R.string.message_media_uploaded))
-//                )
-//
-//                override fun onError(e: Exception) = showErrorSnackbar.postValue(Event(e))
-//            })
+            textileService.addFile(currentVideoPath, metaJson, object : Handlers.BlockHandler {
+                override fun onComplete(block: Model.Block?) = showSnackbar.postValue(
+                    Event(SnackbarArgs(R.string.message_media_uploaded))
+                )
+
+                override fun onError(e: Exception) = showErrorSnackbar.postValue(Event(e))
+            })
         }
     }
 

@@ -10,10 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
+import com.squareup.moshi.JsonAdapter
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.databinding.FragmentThreadBinding
+import io.numbers.mediant.model.Meta
 import io.numbers.mediant.ui.dialogs.ConfirmationDialogFragment
 import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.ui.listeners.FeedItemListener
@@ -37,6 +39,9 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
     @Inject
     lateinit var textileService: TextileService
 
+    @Inject
+    lateinit var metaJsonAdapter: JsonAdapter<Meta>
+
     private lateinit var adapter: ThreadRecyclerViewAdapter
     private lateinit var binding: FragmentThreadBinding
 
@@ -59,7 +64,8 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
         setThreadIdToViewModel()
         if (!viewModel.isPersonal) setHasOptionsMenu(true)
 
-        adapter = ThreadRecyclerViewAdapter(textileService, this, viewModel.isPersonal)
+        adapter =
+            ThreadRecyclerViewAdapter(textileService, metaJsonAdapter, this, viewModel.isPersonal)
         binding.recyclerView.adapter = adapter
         return binding.root
     }

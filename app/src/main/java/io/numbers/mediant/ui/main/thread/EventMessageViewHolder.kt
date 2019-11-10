@@ -47,7 +47,11 @@ class EventMessageViewHolder(itemView: View) : ThreadRecyclerViewAdapter.ViewHol
                     userNameTextView.text = item.announce.user.name
                     dateTextView.text = timestampToString(item.announce.date)
                 }
-                else -> {
+                FeedItemType.FILES -> {
+                    userNameTextView.text = item.files.user.name
+                    dateTextView.text = timestampToString(item.files.date)
+                }
+                null -> {
                 }
             }
         } catch (e: Exception) {
