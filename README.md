@@ -1,12 +1,12 @@
-# Mediant
+# Starling Capture
 
-<img src="https://user-images.githubusercontent.com/292790/66003547-5398cf80-e49e-11e9-9ad5-1e372c7d2e54.png" width="100" style="display: block; margin: 0 auto" />
+<img src="app/src/main/res/mipmap-xxxhdpi/ic_starling_capture.png" width="100" style="display: block; margin: 0 auto" />
 
-Mediant is a photo-sharing App with only verifiable photos and videos. Photos and videos are signed and uploaded to the decentralized storage with their fingerprint. Users can create groups and share the content with friends.
+Starling Capture is a photo-sharing App with only verifiable photos and videos. Photos and videos are signed and uploaded to the decentralized storage with their fingerprint. Users can create groups and share the content with friends.
 
-| ![preview](https://user-images.githubusercontent.com/14951000/67363171-5cf9f100-f59f-11e9-83b4-9e98c7311521.png)  |  ![preview](https://user-images.githubusercontent.com/14951000/67362997-ff65a480-f59e-11e9-8963-aa9adc6184f2.png) |  ![preview](https://user-images.githubusercontent.com/14951000/67363006-0096d180-f59f-11e9-9d5f-fbbb898dab2f.png) |
+| ![preview](https://user-images.githubusercontent.com/14951000/69495169-f863e600-0efe-11ea-9d8d-fcc55adc6f69.png)  |  ![preview](https://user-images.githubusercontent.com/14951000/69495170-f863e600-0efe-11ea-867c-bbbb3166d7bb.png) |  ![preview](https://user-images.githubusercontent.com/14951000/69495171-f863e600-0efe-11ea-9580-3753aca0f741.png) |
 |---|---|---|
-| ![preview](https://user-images.githubusercontent.com/14951000/67363004-fffe3b00-f59e-11e9-9e7d-738339dd6d03.png)  |  ![preview](https://user-images.githubusercontent.com/14951000/67363002-fffe3b00-f59e-11e9-9565-abb7789fe8aa.png) | ![preview](https://user-images.githubusercontent.com/14951000/67363000-fffe3b00-f59e-11e9-90dc-1e8f86b42ca6.png)  |
+| ![preview](https://user-images.githubusercontent.com/14951000/69495173-f8fc7c80-0efe-11ea-8597-9026f5f232c1.png)  |  ![preview](https://user-images.githubusercontent.com/14951000/69495174-f8fc7c80-0efe-11ea-897a-f1b027c41a8f.png) | ![preview](https://user-images.githubusercontent.com/14951000/69495175-f8fc7c80-0efe-11ea-9285-2b4394da72b5.png)  |
 
 ## Features
 
