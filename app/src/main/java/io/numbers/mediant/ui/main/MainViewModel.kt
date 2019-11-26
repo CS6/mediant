@@ -71,7 +71,7 @@ class MainViewModel @Inject constructor(
         Timber.i("Write meta to file: $outputFile")
     }
 
-    private fun generateMetaJson(filePath: String, mediaType: Meta.MediaType): String? {
+    private suspend fun generateMetaJson(filePath: String, mediaType: Meta.MediaType): String? {
         val snackbarArgs =
             SnackbarArgs(R.string.message_proof_generating, Snackbar.LENGTH_INDEFINITE)
         showSnackbar.postValue(Event(snackbarArgs))
@@ -85,11 +85,12 @@ class MainViewModel @Inject constructor(
             metaJsonAdapter.toJson(Meta(mediaType, proofSignatureBundle))
         } catch (e: Exception) {
             showErrorSnackbar.postValue(Event(e))
+            Timber.e(e)
             null
         }
     }
 
-    private fun generateProofWithZion(filePath: String): ProofSignatureBundle {
+    private suspend fun generateProofWithZion(filePath: String): ProofSignatureBundle {
         val proof = proofModeService.generateProofAndSignatures(filePath).proof
         val mediaHash = HashUtils.getSHA256FromFileContent(File(filePath))
         val proofHash = getHashFromString(proof)

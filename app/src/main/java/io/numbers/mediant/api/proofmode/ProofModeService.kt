@@ -1,83 +1,65 @@
 package io.numbers.mediant.api.proofmode
 
 import android.app.Application
-import android.net.Uri
+import io.numbers.infosnapshot.InfoSnapshotBuilder
 import io.numbers.mediant.model.Meta
-import io.numbers.mediant.util.deleteDirectory
-import org.witness.proofmode.ProofMode
-import org.witness.proofmode.util.GPSTracker
+import org.json.JSONObject
+import org.spongycastle.jce.provider.BouncyCastleProvider
+import org.witness.proofmode.crypto.HashUtils
+import org.witness.proofmode.crypto.PgpUtils
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.IOException
+import java.security.Security
 import javax.inject.Inject
-
-const val proofFileSuffix = ProofMode.PROOF_FILE_TAG
-const val mediaSignatureFileSuffix = ProofMode.OPENPGP_FILE_TAG
-const val proofSignatureFileSuffix = "${ProofMode.PROOF_FILE_TAG}${ProofMode.OPENPGP_FILE_TAG}"
 
 // TODO: catch throws by showing error message on snackbar
 class ProofModeService @Inject constructor(
     private val application: Application
 ) {
 
-    fun generateProofAndSignatures(filePath: String): ProofSignatureBundle {
-        val mediaFileHash =
-            ProofMode.generateProof(application.applicationContext, Uri.fromFile(File(filePath)))
-        if (mediaFileHash.isNullOrEmpty()) throw IOException("Cannot generate proof.")
-        else {
-            return getProofSignatureBundle(mediaFileHash).also {
-                removeProofSignatureFiles(mediaFileHash)
-            }
+    suspend fun generateProofAndSignatures(filePath: String): ProofSignatureBundle {
+        val proof = JSONObject(
+            InfoSnapshotBuilder(application.applicationContext)
+                .apply { duration = 3000 }
+                .snap()
+                .toJson()
+        ).put("mediaHash", HashUtils.getSHA256FromFileContent(File(filePath))).toString(2)
+        val mediaSignature = generateMediaSignature(filePath)
+        val proofSignature = generateProofSignature(proof)
+
+        return ProofSignatureBundle(
+            proof,
+            proofSignature,
+            mediaSignature,
+            Meta.SignatureProvider.PROOFMODE
+        )
+    }
+
+    private fun generateProofSignature(proof: String): String {
+        val proofSignatureStream = ByteArrayOutputStream()
+        PgpUtils.getInstance(application.applicationContext).createDetachedSignature(
+            ByteArrayInputStream(proof.toByteArray()),
+            proofSignatureStream,
+            PgpUtils.DEFAULT_PASSWORD
+        )
+        return String(proofSignatureStream.toByteArray())
+    }
+
+    private fun generateMediaSignature(filePath: String): String {
+        val mediaSignatureStream = ByteArrayOutputStream()
+        PgpUtils.getInstance(application.applicationContext).createDetachedSignature(
+            File(filePath).inputStream(),
+            mediaSignatureStream,
+            PgpUtils.DEFAULT_PASSWORD
+        )
+        return String(mediaSignatureStream.toByteArray())
+    }
+
+    companion object {
+        init {
+            // Add provider for PgpUtils().createDetachedSignature() from ProofMode
+            Security.addProvider(BouncyCastleProvider())
         }
-    }
-
-    private fun getProofSignatureBundle(mediaFileHash: String): ProofSignatureBundle {
-        val proofDir = ProofMode.getProofDir(mediaFileHash)
-        if (proofDir == null || !proofDir.exists()) throw IOException("Cannot locate proof directory: $mediaFileHash")
-        else {
-            var proof = ""
-            var proofSignature = ""
-            var mediaSignature = ""
-            proofDir.listFiles()?.forEach {
-                when {
-                    it.name.endsWith(proofSignatureFileSuffix) -> proofSignature = it.readText()
-                    it.name.endsWith(proofFileSuffix) -> proof = it.readText()
-                    it.name.endsWith(mediaSignatureFileSuffix) -> mediaSignature =
-                        it.readText()
-                }
-            }
-            checkProofSignatureBundleCompletion(proof, proofSignature, mediaSignature)
-
-            // XXX: Unreliable workaround for Exodus or some devices which cannot get GPS.
-            proof = "${getGps()} + $proof"
-
-            return ProofSignatureBundle(
-                proof,
-                proofSignature,
-                mediaSignature,
-                Meta.SignatureProvider.PROOFMODE
-            )
-        }
-    }
-
-    private fun checkProofSignatureBundleCompletion(
-        proof: String,
-        proofSignature: String,
-        mediaSignature: String
-    ) {
-        if (proof.isEmpty()) throw IOException("Cannot read proof from file.")
-        if (proofSignature.isEmpty()) throw IOException("Cannot read proof signature from file.")
-        if (mediaSignature.isEmpty()) throw IOException("Cannot read media signature from file.")
-    }
-
-    private fun removeProofSignatureFiles(mediaFileHash: String) {
-        val proofDir = ProofMode.getProofDir(mediaFileHash)
-        if (proofDir == null || !proofDir.exists()) throw IOException("Cannot locate proof directory: $mediaFileHash")
-        else proofDir.deleteDirectory()
-    }
-
-    // XXX: ProofMode cannot get GPSTracker.location in HTC Exodus 1, and I don't know why.
-    private fun getGps(): String {
-        val gpsTracker = GPSTracker(application.applicationContext)
-        return "Latitude: ${gpsTracker.latitude} \nLongitude: ${gpsTracker.longitude}\n"
     }
 }
