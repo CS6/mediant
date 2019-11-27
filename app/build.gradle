@@ -42,7 +42,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.github.numbersprotocol:android-info-snapshot:0.3.1"
+    implementation "com.github.numbersprotocol:android-info-snapshot:0.4.0"
 
     implementation "io.textile:textile:2.0.9"
 

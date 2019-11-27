@@ -22,6 +22,8 @@ class PreferenceHelper @Inject constructor(application: Application) {
         application.applicationContext.resources.getString(R.string.key_proofmode_pgp_password)
     val preferenceKeyProofModePgpPublicKey =
         application.applicationContext.resources.getString(R.string.key_proofmode_pgp_public_key)
+    val preferenceKeyInfoSnapshotDuration =
+        application.applicationContext.resources.getString(R.string.key_info_snapshot_duration)
     val preferenceKeySignWithZion =
         application.applicationContext.resources.getString(R.string.key_sign_with_zion)
 
@@ -51,6 +53,12 @@ class PreferenceHelper @Inject constructor(application: Application) {
         get() = sharedPreferences.getString(preferenceKeyProofModePgpPublicKey, null)
         set(value) = sharedPreferences.edit().putString(
             preferenceKeyProofModePgpPublicKey,
+            value
+        ).apply()
+    var infoSnapshotDuration: Int
+        get() = sharedPreferences.getInt(preferenceKeyInfoSnapshotDuration, 3)
+        set(value) = sharedPreferences.edit().putInt(
+            preferenceKeyInfoSnapshotDuration,
             value
         ).apply()
     var signWithZion: Boolean

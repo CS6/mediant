@@ -3,6 +3,7 @@ package io.numbers.mediant.api.proofmode
 import android.app.Application
 import io.numbers.infosnapshot.InfoSnapshotBuilder
 import io.numbers.mediant.model.Meta
+import io.numbers.mediant.util.PreferenceHelper
 import org.json.JSONObject
 import org.spongycastle.jce.provider.BouncyCastleProvider
 import org.witness.proofmode.crypto.HashUtils
@@ -15,13 +16,14 @@ import javax.inject.Inject
 
 // TODO: catch throws by showing error message on snackbar
 class ProofModeService @Inject constructor(
-    private val application: Application
+    private val application: Application,
+    private val preferenceHelper: PreferenceHelper
 ) {
 
     suspend fun generateProofAndSignatures(filePath: String): ProofSignatureBundle {
         val proof = JSONObject(
             InfoSnapshotBuilder(application.applicationContext)
-                .apply { duration = 3000 }
+                .apply { duration = preferenceHelper.infoSnapshotDuration.toLong() * 1000 }
                 .snap()
                 .toJson()
         ).put("mediaHash", HashUtils.getSHA256FromFileContent(File(filePath))).toString(2)

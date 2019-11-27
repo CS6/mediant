@@ -5,6 +5,11 @@
     <string name="key_personal_thread_id">personalThreadId</string>
     <string name="key_proofmode_pgp_password">proofModePgpPassword</string>
     <string name="key_proofmode_pgp_public_key">proofModePgpPublicKey</string>
-
+    <string name="key_info_snapshot_duration">infoSnapshotDuration</string>
+    <string name="key_info_snapshot_collect_device_info">infoSnapshotCollectDeviceInfo</string>
+    <string name="key_info_snapshot_collect_locale_info">infoSnapshotCollectLocaleInfo</string>
+    <string name="key_info_snapshot_collect_location_info">infoSnapshotCollectLocationInfo</string>
+    <string name="key_info_snapshot_collect_sensor_info">infoSnapshotCollectSensorInfo</string>
+    <string name="key_info_snapshot_collect_settings_info">infoSnapshotCollectSettingsInfo</string>
     <string name="key_sign_with_zion">signWithZion</string>
 </resources>

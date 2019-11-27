@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
-import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentMediaDetailsBinding
 import io.numbers.mediant.model.Meta
+import io.numbers.mediant.model.MetaJsonAdapter
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ class MediaDetailsFragment : DaggerFragment() {
     lateinit var viewModel: MediaDetailsViewModel
 
     @Inject
-    lateinit var metaJsonAdapter: JsonAdapter<Meta>
+    lateinit var moshi: Moshi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,7 @@ class MediaDetailsFragment : DaggerFragment() {
         viewModel.blockHash.value = MediaDetailsFragmentArgs.fromBundle(it).blockHash
 
         viewModel.meta.value = try {
-            metaJsonAdapter.fromJson(MediaDetailsFragmentArgs.fromBundle(it).fileMeta)
+            MetaJsonAdapter(moshi).fromJson(MediaDetailsFragmentArgs.fromBundle(it).fileMeta)
         } catch (e: Exception) {
             Meta(Meta.MediaType.UNKNOWN, "N/A", "N/A", "N/A", Meta.SignatureProvider.UNKNOWN)
         }

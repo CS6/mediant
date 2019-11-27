@@ -2,11 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="@string/textile">
+    <PreferenceCategory app:title="@string/textile">
         <EditTextPreference
-            android:title="@string/user_name"
             app:icon="@drawable/ic_person_outline_black_24dp"
             app:key="@string/key_user_name"
+            app:title="@string/user_name"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
@@ -22,13 +22,13 @@
             app:title="@string/personal_thread_id" />
 
         <Preference
-            android:title="@string/cafes"
             app:enabled="false"
             app:icon="@drawable/ic_local_cafe_black_24dp"
-            app:persistent="false" />
+            app:persistent="false"
+            app:title="@string/cafes" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/proofmode">
+    <PreferenceCategory app:title="@string/proofmode">
         <Preference
             app:icon="@drawable/ic_vpn_key_black_24dp"
             app:key="@string/key_proofmode_pgp_password"
@@ -42,7 +42,18 @@
             app:title="@string/proofmode_pgp_public_key" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/zion">
+    <PreferenceCategory app:title="@string/info_snapshot">
+        <SeekBarPreference
+            android:max="10"
+            app:defaultValue="3"
+            app:key="@string/key_info_snapshot_duration"
+            app:min="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/snapshot_duration_summary"
+            app:title="@string/snapshot_duration" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/zion">
         <SwitchPreferenceCompat
             app:enabled="false"
             app:icon="@drawable/ic_memory_black_24dp"

@@ -8,7 +8,6 @@ import dagger.Provides
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
-import io.numbers.mediant.model.Meta
 import io.numbers.mediant.util.PreferenceHelper
 import io.textile.textile.Textile
 import javax.inject.Singleton
@@ -40,7 +39,10 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideProofModeService(application: Application) = ProofModeService(application)
+    fun provideProofModeService(
+        application: Application,
+        preferenceHelper: PreferenceHelper
+    ) = ProofModeService(application, preferenceHelper)
 
     @Singleton
     @Provides
@@ -51,9 +53,5 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideMoshi() = Moshi.Builder().build()
-
-    @Singleton
-    @Provides
-    fun provideMetaJsonAdapter(moshi: Moshi) = moshi.adapter<Meta>(Meta::class.java)
+    fun provideMoshi(): Moshi = Moshi.Builder().build()
 }

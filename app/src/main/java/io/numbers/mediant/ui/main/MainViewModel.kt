@@ -4,13 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import io.numbers.mediant.R
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.proofmode.ProofSignatureBundle
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.model.Meta
+import io.numbers.mediant.model.MetaJsonAdapter
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.util.getHashFromString
@@ -29,7 +30,7 @@ class MainViewModel @Inject constructor(
     private val proofModeService: ProofModeService,
     private val zionService: ZionService,
     private val preferenceHelper: PreferenceHelper,
-    private val metaJsonAdapter: JsonAdapter<Meta>
+    private val moshi: Moshi
 ) : ViewModel() {
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
@@ -82,7 +83,7 @@ class MainViewModel @Inject constructor(
 
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_proof_generated)))
 
-            metaJsonAdapter.toJson(Meta(mediaType, proofSignatureBundle))
+            MetaJsonAdapter(moshi).toJson(Meta(mediaType, proofSignatureBundle))
         } catch (e: Exception) {
             showErrorSnackbar.postValue(Event(e))
             Timber.e(e)
