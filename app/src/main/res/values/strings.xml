@@ -96,4 +96,7 @@
 
     <string name="title_permission_rationale">Permission Denied</string>
     <string name="message_proofmode_permissions_rationale">MediAnt requires permissions to save the proof (including GPS info) and signature of the pictures you take into device\'s storage. Go to settings to turn on the permissions of this APP.</string>
+
+    <string name="connect_canon_camera">Connect to Canon Camera</string>
+    <string name="successfully_connect_to_canon_camera">Successfully Connect to Canon Camera</string>
 </resources>

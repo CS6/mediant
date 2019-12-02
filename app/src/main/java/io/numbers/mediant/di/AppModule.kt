@@ -5,11 +5,15 @@ import com.htc.htcwalletsdk.Export.HtcWalletSdkManager
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import io.numbers.mediant.api.cc.BASE_URL
+import io.numbers.mediant.api.cc.CanonCCApi
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.util.PreferenceHelper
 import io.textile.textile.Textile
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 // Provides all application-level dependencies, such as Retrofit, Textile, etc.
@@ -50,6 +54,17 @@ class AppModule {
         HtcWalletSdkManager.getInstance(),
         application
     )
+
+    @Singleton
+    @Provides
+    fun provideRetrofitInstance(): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideCanonCCApi(retrofit: Retrofit): CanonCCApi = retrofit.create(CanonCCApi::class.java)
 
     @Singleton
     @Provides
