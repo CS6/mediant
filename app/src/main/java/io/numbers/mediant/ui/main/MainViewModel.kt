@@ -4,17 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.numbers.mediant.R
-import io.numbers.mediant.api.Mediant
+import io.numbers.mediant.api.MediantService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    private val mediant: Mediant
+    private val mediantService: MediantService
 ) : ViewModel() {
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
@@ -22,7 +21,7 @@ class MainViewModel @Inject constructor(
 
     fun uploadImage() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            mediant.uploadImage()
+            mediantService.uploadImage()
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {
             showErrorSnackbar.postValue(Event(e))
@@ -31,31 +30,13 @@ class MainViewModel @Inject constructor(
 
     fun uploadVideo() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            mediant.uploadVideo()
+            mediantService.uploadVideo()
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {
             showErrorSnackbar.postValue(Event(e))
         }
     }
 
-    fun createImageFile(root: File): File {
-        createCurrentOutputFolder(root)
-        return File(mediant.currentOutputFolder, "media.jpg").apply {
-            mediant.currentImagePath = absolutePath
-            Timber.i("New image will be saved to: ${mediant.currentImagePath}")
-        }
-    }
-
-    fun createVideoFile(root: File): File {
-        createCurrentOutputFolder(root)
-        return File(mediant.currentOutputFolder, "media.mp4").apply {
-            mediant.currentVideoPath = absolutePath
-            Timber.i("New video will be saved to: ${mediant.currentVideoPath}")
-        }
-    }
-
-    private fun createCurrentOutputFolder(root: File) {
-        mediant.currentOutputFolder = root.resolve("${System.currentTimeMillis()}")
-        if (!mediant.currentOutputFolder.exists()) mediant.currentOutputFolder.mkdir()
-    }
+    fun createMediaFile(root: File, fileName: String) =
+        mediantService.createMediaFile(root, fileName)
 }

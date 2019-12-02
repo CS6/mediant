@@ -1,6 +1,5 @@
 package io.numbers.mediant.api
 
-import androidx.annotation.WorkerThread
 import com.squareup.moshi.Moshi
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.proofmode.ProofSignatureBundle
@@ -15,7 +14,7 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-class Mediant @Inject constructor(
+class MediantService @Inject constructor(
     private val textileService: TextileService,
     private val proofModeService: ProofModeService,
     private val zionService: ZionService,
@@ -24,21 +23,18 @@ class Mediant @Inject constructor(
 ) {
 
     lateinit var currentOutputFolder: File
-    lateinit var currentImagePath: String
-    lateinit var currentVideoPath: String
+    private lateinit var currentMediaPath: String
 
-    @WorkerThread
     suspend fun uploadImage() {
-        val metaJson = generateMetaJson(currentImagePath, Meta.MediaType.JPG)
+        val metaJson = generateMetaJson(currentMediaPath, Meta.MediaType.JPG)
         writeMeta(metaJson)
-        textileService.addFile(currentImagePath, metaJson)
+        textileService.addFile(currentMediaPath, metaJson)
     }
 
-    @WorkerThread
     suspend fun uploadVideo() {
-        val metaJson = generateMetaJson(currentVideoPath, Meta.MediaType.MP4)
+        val metaJson = generateMetaJson(currentMediaPath, Meta.MediaType.MP4)
         writeMeta(metaJson)
-        textileService.addFile(currentVideoPath, metaJson)
+        textileService.addFile(currentMediaPath, metaJson)
     }
 
     private fun writeMeta(metaJson: String) {
@@ -64,5 +60,18 @@ class Mediant @Inject constructor(
             zionService.signMessage(mediaHash),
             Meta.SignatureProvider.ZION
         )
+    }
+
+    fun createMediaFile(root: File, fileName: String): File {
+        createCurrentOutputFolder(root)
+        return File(currentOutputFolder, fileName).apply {
+            currentMediaPath = absolutePath
+            Timber.i("New image will be saved to: $currentMediaPath")
+        }
+    }
+
+    private fun createCurrentOutputFolder(root: File) {
+        currentOutputFolder = root.resolve("${System.currentTimeMillis()}")
+        if (!currentOutputFolder.exists()) currentOutputFolder.mkdir()
     }
 }

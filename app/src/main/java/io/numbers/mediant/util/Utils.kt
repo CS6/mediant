@@ -5,6 +5,7 @@ import com.google.protobuf.Timestamp
 import io.textile.textile.Util
 import org.witness.proofmode.crypto.HashUtils
 import java.io.File
+import java.io.InputStream
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,14 +17,12 @@ fun timestampToString(timestamp: Timestamp): String =
         Util.timestampToDate(timestamp)
     )
 
-fun File.deleteDirectory(): Boolean {
-    return if (exists()) {
-        listFiles()?.forEach {
-            if (it.isDirectory) it.deleteDirectory()
-            else it.delete()
+fun File.fromInputStream(inputStream: InputStream) {
+    inputStream.use { input ->
+        this.outputStream().use { fileOut ->
+            input.copyTo(fileOut)
         }
-        delete()
-    } else false
+    }
 }
 
 fun getHashFromString(string: String): String {

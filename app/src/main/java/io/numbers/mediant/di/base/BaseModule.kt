@@ -3,7 +3,7 @@ package io.numbers.mediant.di.base
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
-import io.numbers.mediant.api.Mediant
+import io.numbers.mediant.api.MediantService
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
@@ -25,5 +25,5 @@ class BaseModule {
         zionService: ZionService,
         preferenceHelper: PreferenceHelper,
         moshi: Moshi
-    ) = Mediant(textileService, proofModeService, zionService, preferenceHelper, moshi)
+    ) = MediantService(textileService, proofModeService, zionService, preferenceHelper, moshi)
 }

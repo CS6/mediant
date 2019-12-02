@@ -176,16 +176,14 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
             val documents = activity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
             val outputFolder = if (documents != null) documents
             else {
-                view?.let {
-                    showSnackbar(it, SnackbarArgs(R.string.message_external_dir_unavailable))
-                }
+                showSnackbar(requireView(), SnackbarArgs(R.string.message_external_dir_unavailable))
                 activity.filesDir
             }
 
             // Ensure that there's a camera activity to handle the intent.
             intent.resolveActivity(activity.packageManager)?.also {
                 // Create the File where the photo should go.
-                val imageFile = viewModel.createImageFile(outputFolder)
+                val imageFile = viewModel.createMediaFile(outputFolder, "media.jpg")
                 val imageUri = FileProvider.getUriForFile(
                     activity, "$APPLICATION_ID.provider", imageFile
                 )
@@ -208,7 +206,7 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
             }
 
             intent.resolveActivity(activity.packageManager)?.also {
-                val videoFile = viewModel.createVideoFile(outputFolder)
+                val videoFile = viewModel.createMediaFile(outputFolder, "media.mp4")
                 val videoUri = FileProvider.getUriForFile(
                     activity, "$APPLICATION_ID.provider", videoFile
                 )

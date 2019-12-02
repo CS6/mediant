@@ -5,29 +5,37 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.numbers.mediant.R
+import io.numbers.mediant.api.MediantService
 import io.numbers.mediant.api.canon_camera_control.ADDED_CONTENTS
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.api.textile.EXTERNAL_INVITE_LINK_HOST
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.util.PreferenceHelper
+import io.numbers.mediant.util.fromInputStream
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.File
+import java.io.InputStream
 import javax.inject.Inject
 
 class BaseViewModel @Inject constructor(
     private val textileService: TextileService,
     private val preferenceHelper: PreferenceHelper,
-    private val canonCameraControlService: CanonCameraControlService
+    private val canonCameraControlService: CanonCameraControlService,
+    private val mediantService: MediantService
 ) : ViewModel() {
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     val showErrorSnackbar = MutableLiveData<Event<Exception>>()
 
-    private var canonCameraPollingLoop: Job? = null
+    val saveMediaFromStream = MutableLiveData<Event<InputStream>>()
+
+    var canonCameraPollingLoop: Job? = null
 
     fun handleIntent(intent: Intent) {
         if (intent.action == Intent.ACTION_VIEW) {
@@ -47,13 +55,19 @@ class BaseViewModel @Inject constructor(
     }
 
     fun startCanonCameraPollingLoop() {
+        Timber.i("Start polling loop.")
         canonCameraPollingLoop = viewModelScope.launch(Dispatchers.IO) {
             try {
                 canonCameraControlService.startPolling().collect {
                     if (it.has(ADDED_CONTENTS)) {
                         val urls = it.getJSONArray(ADDED_CONTENTS)
                         for (i in 0 until urls.length()) {
-                            val content = canonCameraControlService.getContent(urls.getString(i))
+                            val url = urls.getString(i)
+                            Timber.i("Detect new contents: $url")
+                            if (url.endsWith(".jpg", true)) {
+                                val content = canonCameraControlService.getContent(url)
+                                saveMediaFromStream.postValue(Event(content.byteStream()))
+                            }
                         }
                     }
                 }
@@ -64,12 +78,22 @@ class BaseViewModel @Inject constructor(
         }
     }
 
-    fun stopCanonCameraPollingLoop() {
-        canonCameraPollingLoop?.cancel()
+    fun uploadImage(
+        directory: File,
+        inputStream: InputStream
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            val mediaFile = mediantService.createMediaFile(directory, "media.jpg")
+            mediaFile.fromInputStream(inputStream)
+            mediantService.uploadImage()
+            showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
+        } catch (e: Exception) {
+            showErrorSnackbar.postValue(Event(e))
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        preferenceHelper.enablePollingCanonCameraStatus = false
+    fun stopCanonCameraPollingLoop() {
+        Timber.i("Stop polling loop.")
+        canonCameraPollingLoop?.cancel()
     }
 }
