@@ -29,8 +29,4 @@
         android:id="@+id/navToOnboarding"
         android:title="@string/tour"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/connect_canon_camera"
-        android:title="@string/connect_canon_camera" />
 </menu>

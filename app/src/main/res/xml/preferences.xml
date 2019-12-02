@@ -60,4 +60,16 @@
             app:key="@string/key_sign_with_zion"
             app:title="@string/sign_with_zion" />
     </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/canon_camera_control_api">
+        <Preference
+            app:icon="@drawable/ic_linked_camera_black_24dp"
+            app:key="@string/key_connect_to_canon_camera"
+            app:title="@string/connect_canon_camera" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:icon="@drawable/ic_sync_black_24dp"
+            app:key="@string/key_enable_polling_canon_camera_status"
+            app:title="@string/polling" />
+    </PreferenceCategory>
 </PreferenceScreen>

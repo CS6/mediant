@@ -5,20 +5,28 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.numbers.mediant.R
+import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.api.textile.EXTERNAL_INVITE_LINK_HOST
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
+import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class BaseViewModel @Inject constructor(
-    private val textileService: TextileService
+    private val textileService: TextileService,
+    private val preferenceHelper: PreferenceHelper,
+    private val canonCameraControlService: CanonCameraControlService
 ) : ViewModel() {
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     val showErrorSnackbar = MutableLiveData<Event<Exception>>()
+
+    private var canonCameraPollingLoop: Job? = null
 
     fun handleIntent(intent: Intent) {
         if (intent.action == Intent.ACTION_VIEW) {
@@ -35,5 +43,27 @@ class BaseViewModel @Inject constructor(
                 } else showSnackbar.postValue(Event(SnackbarArgs(R.string.message_invite_parsing_error)))
             }
         }
+    }
+
+    fun startCanonCameraPollingLoop() {
+        canonCameraPollingLoop = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                canonCameraControlService.startPolling {
+                    Timber.i(it.toString(2))
+                }
+            } catch (e: Exception) {
+                preferenceHelper.enablePollingCanonCameraStatus = false
+                showErrorSnackbar.postValue(Event(e))
+            }
+        }
+    }
+
+    fun stopCanonCameraPollingLoop() {
+        canonCameraPollingLoop?.cancel()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        preferenceHelper.enablePollingCanonCameraStatus = false
     }
 }

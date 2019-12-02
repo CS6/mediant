@@ -56,14 +56,13 @@ class BaseActivity : DaggerAppCompatActivity(), ShowableSnackbar by DefaultShowa
                 if (destination.id == R.id.onboardingFragment) toolbar.visibility = View.GONE
             }
         }
-        val appBarConfiguration =
-            AppBarConfiguration(
-                setOf(
-                    R.id.initializationFragment,
-                    R.id.mainFragment,
-                    R.id.onboardingFragment
-                )
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.initializationFragment,
+                R.id.mainFragment,
+                R.id.onboardingFragment
             )
+        )
         toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 

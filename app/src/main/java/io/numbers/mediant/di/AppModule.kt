@@ -5,8 +5,9 @@ import com.htc.htcwalletsdk.Export.HtcWalletSdkManager
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
-import io.numbers.mediant.api.cc.BASE_URL
-import io.numbers.mediant.api.cc.CanonCCApi
+import io.numbers.mediant.api.canon_camera_control.BASE_URL
+import io.numbers.mediant.api.canon_camera_control.CanonCameraControlApi
+import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
@@ -64,7 +65,13 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideCanonCCApi(retrofit: Retrofit): CanonCCApi = retrofit.create(CanonCCApi::class.java)
+    fun provideCanonCCApi(retrofit: Retrofit): CanonCameraControlApi =
+        retrofit.create(CanonCameraControlApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCanonCCService(canonCameraControlApi: CanonCameraControlApi) =
+        CanonCameraControlService(canonCameraControlApi)
 
     @Singleton
     @Provides

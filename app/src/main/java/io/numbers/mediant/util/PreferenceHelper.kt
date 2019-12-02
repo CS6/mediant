@@ -26,6 +26,10 @@ class PreferenceHelper @Inject constructor(application: Application) {
         application.applicationContext.resources.getString(R.string.key_info_snapshot_duration)
     val preferenceKeySignWithZion =
         application.applicationContext.resources.getString(R.string.key_sign_with_zion)
+    val preferenceKeyConnectToCanonCamera =
+        application.applicationContext.resources.getString(R.string.key_connect_to_canon_camera)
+    val preferenceKeyEnablePollingCanonCameraStatus =
+        application.applicationContext.resources.getString(R.string.key_enable_polling_canon_camera_status)
 
     var userName: String?
         get() = sharedPreferences.getString(preferenceKeyUserName, "")
@@ -64,6 +68,11 @@ class PreferenceHelper @Inject constructor(application: Application) {
     var signWithZion: Boolean
         get() = sharedPreferences.getBoolean(preferenceKeySignWithZion, false)
         set(value) = sharedPreferences.edit().putBoolean(preferenceKeySignWithZion, value).apply()
+    var enablePollingCanonCameraStatus: Boolean
+        get() = sharedPreferences.getBoolean(preferenceKeyEnablePollingCanonCameraStatus, false)
+        set(value) = sharedPreferences.edit().putBoolean(
+            preferenceKeyEnablePollingCanonCameraStatus, value
+        ).apply()
 
     init {
         sharedPreferences.edit().putString(

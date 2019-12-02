@@ -11,7 +11,9 @@ import androidx.preference.SwitchPreferenceCompat
 import com.htc.htcwalletsdk.Export.RESULT
 import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
+import io.numbers.mediant.api.canon_camera_control.CanonCameraControlApi
 import io.numbers.mediant.api.zion.ZionService
+import io.numbers.mediant.ui.BaseActivity
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
@@ -30,6 +32,9 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     @Inject
     lateinit var zionService: ZionService
 
+    @Inject
+    lateinit var canonCameraControlApi: CanonCameraControlApi
+
     private val summaryMaxLength = 100
 
     private lateinit var clipboard: ClipboardManager
@@ -45,6 +50,7 @@ class PreferencesFragment : PreferenceFragmentCompat(),
         initTextilePreferences()
         initProofModePreferences()
         initZionPreferences()
+        initCanonCCApiPreferences()
     }
 
     private fun initTextilePreferences() {
@@ -114,6 +120,37 @@ class PreferencesFragment : PreferenceFragmentCompat(),
                             }
                         }
                     }
+                }
+                true
+            }
+        }
+    }
+
+    private fun initCanonCCApiPreferences() {
+        findPreference<Preference>(preferenceHelper.preferenceKeyConnectToCanonCamera)?.apply {
+            setOnPreferenceClickListener {
+                lifecycleScope.launch {
+                    try {
+                        canonCameraControlApi.connect()
+                        showSnackbar(
+                            requireView(),
+                            SnackbarArgs(R.string.successfully_connect_to_canon_camera)
+                        )
+                    } catch (e: Exception) {
+                        showErrorSnackbar(requireView(), e)
+                    }
+                }
+                true
+            }
+        }
+
+        findPreference<SwitchPreferenceCompat>(preferenceHelper.preferenceKeyEnablePollingCanonCameraStatus)?.apply {
+            setOnPreferenceChangeListener { preference, newValue ->
+                val activity = requireActivity() as BaseActivity
+                if (preference == this && newValue == true) {
+                    activity.viewModel.startCanonCameraPollingLoop()
+                } else {
+                    activity.viewModel.stopCanonCameraPollingLoop()
                 }
                 true
             }
