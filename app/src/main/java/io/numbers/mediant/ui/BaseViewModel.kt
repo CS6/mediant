@@ -35,7 +35,12 @@ class BaseViewModel @Inject constructor(
 
     val saveMediaFromStream = MutableLiveData<Event<InputStream>>()
 
-    var canonCameraPollingLoop: Job? = null
+    private var canonCameraPollingLoop: Job? = null
+
+    init {
+        // Disable Canon camera polling (preference) every time the app starts.
+        preferenceHelper.enablePollingCanonCameraStatus = false
+    }
 
     fun handleIntent(intent: Intent) {
         if (intent.action == Intent.ACTION_VIEW) {
