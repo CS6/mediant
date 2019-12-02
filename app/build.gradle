@@ -1,8 +1,8 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "kotlin-kapt"
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 29
@@ -18,7 +18,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -35,22 +35,23 @@ android {
 
 repositories {
     flatDir {
-        dirs project(':app').file('libs')
+        dirs project(":app").file("libs")
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    implementation "com.github.numbersprotocol:android-info-snapshot:0.4.0"
+    implementation "com.github.numbersprotocol:android-info-snapshot:0.4.1"
 
     implementation "io.textile:textile:2.0.9"
 
-    implementation(name: 'ZKMA-release', ext: 'aar')
+    implementation(name: "ZKMA-release", ext: "aar")
 
     implementation "com.eternitywall:opentimestamps:0.1.14.1"
-    implementation ("org.witness:android-libproofmode:0.0.3") {
-        exclude group: "com.google.android.gms" // avoid version conflicts between android-info-snapshot
+    implementation("org.witness:android-libproofmode:0.0.3") {
+        exclude group: "com.google.android.gms"
+        // avoid version conflicts between android-info-snapshot
     }
 
     implementation "com.squareup.moshi:moshi:1.9.2"
