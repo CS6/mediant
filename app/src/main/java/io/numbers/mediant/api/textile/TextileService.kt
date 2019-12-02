@@ -11,11 +11,14 @@ import io.numbers.mediant.util.PreferenceHelper
 import io.textile.pb.Model
 import io.textile.pb.View
 import io.textile.textile.*
+import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import java.io.File
 import java.net.URLEncoder
 import java.util.*
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 private const val TEXTILE_FOLDER_NAME = "textile"
 // TODO: implement infinite recycler view (via paging library) to reduce this limit
@@ -208,8 +211,15 @@ class TextileService @Inject constructor(
      * Files
      */
 
-    fun addFile(filePath: String, caption: String, callback: Handlers.BlockHandler) =
-        textile.files.addFiles(filePath, preferenceHelper.personalThreadId, caption, callback)
+    suspend fun addFile(filePath: String, caption: String) =
+        suspendCancellableCoroutine<Model.Block> {
+            textile.files.addFiles(
+                filePath, preferenceHelper.personalThreadId, caption,
+                object : Handlers.BlockHandler {
+                    override fun onComplete(block: Model.Block) = it.resume(block)
+                    override fun onError(e: Exception) = it.resumeWithException(e)
+                })
+        }
 
     fun fetchRawContent(fileHash: String, callback: (ByteArray) -> Unit) {
         Timber.i("Fetching content: $fileHash")
