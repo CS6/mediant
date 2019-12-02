@@ -11,7 +11,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.htc.htcwalletsdk.Export.RESULT
 import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
-import io.numbers.mediant.api.canon_camera_control.CanonCameraControlApi
+import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.ui.BaseActivity
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
@@ -33,7 +33,7 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     lateinit var zionService: ZionService
 
     @Inject
-    lateinit var canonCameraControlApi: CanonCameraControlApi
+    lateinit var canonCameraControlService: CanonCameraControlService
 
     private val summaryMaxLength = 100
 
@@ -131,7 +131,7 @@ class PreferencesFragment : PreferenceFragmentCompat(),
             setOnPreferenceClickListener {
                 lifecycleScope.launch {
                     try {
-                        canonCameraControlApi.connect()
+                        canonCameraControlService.connect()
                         showSnackbar(
                             requireView(),
                             SnackbarArgs(R.string.successfully_connect_to_canon_camera)

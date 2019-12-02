@@ -1,8 +1,12 @@
 package io.numbers.mediant.api.canon_camera_control
 
+import okhttp3.ResponseBody
 import retrofit2.http.GET
+import retrofit2.http.Url
 
 const val BASE_URL = "http://192.168.1.2:8080/"
+
+const val ADDED_CONTENTS = "addedcontents"
 
 interface CanonCameraControlApi {
 
@@ -11,4 +15,7 @@ interface CanonCameraControlApi {
 
     @GET("ccapi/ver100/event/polling")
     suspend fun poll(): String
+
+    @GET
+    suspend fun getContent(@Url url: String): ResponseBody
 }

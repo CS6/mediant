@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.numbers.mediant.R
+import io.numbers.mediant.api.canon_camera_control.ADDED_CONTENTS
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.api.textile.EXTERNAL_INVITE_LINK_HOST
 import io.numbers.mediant.api.textile.TextileService
@@ -13,8 +14,8 @@ import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class BaseViewModel @Inject constructor(
@@ -48,8 +49,13 @@ class BaseViewModel @Inject constructor(
     fun startCanonCameraPollingLoop() {
         canonCameraPollingLoop = viewModelScope.launch(Dispatchers.IO) {
             try {
-                canonCameraControlService.startPolling {
-                    Timber.i(it.toString(2))
+                canonCameraControlService.startPolling().collect {
+                    if (it.has(ADDED_CONTENTS)) {
+                        val urls = it.getJSONArray(ADDED_CONTENTS)
+                        for (i in 0 until urls.length()) {
+                            val content = canonCameraControlService.getContent(urls.getString(i))
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 preferenceHelper.enablePollingCanonCameraStatus = false
