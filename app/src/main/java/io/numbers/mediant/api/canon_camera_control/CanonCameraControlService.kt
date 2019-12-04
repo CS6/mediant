@@ -21,12 +21,12 @@ class CanonCameraControlService @Inject constructor(private val canonCameraContr
                 if (e.code() == 503) Timber.e(e)
                 else throw e
             }
-            delay(1000)
+            delay(3000)
         }
     }
 
     suspend fun getContent(@Url url: String): ResponseBody {
-        Timber.i("Get contents: $url")
+        Timber.i("Try to get contents: $url")
         return canonCameraControlApi.getContent(url)
     }
 }

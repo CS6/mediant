@@ -72,6 +72,7 @@ class BaseViewModel @Inject constructor(
                             Timber.i("Detect new contents: $url")
                             if (url.endsWith(".jpg", true)) {
                                 val content = canonCameraControlService.getContent(url)
+                                Timber.d("${content.hashCode()}")
                                 saveMediaFromStream.postValue(Event(content.byteStream()))
                             }
                         }
