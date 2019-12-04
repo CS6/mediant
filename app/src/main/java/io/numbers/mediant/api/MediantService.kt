@@ -22,22 +22,19 @@ class MediantService @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    lateinit var currentOutputFolder: File
-    private lateinit var currentMediaPath: String
-
-    suspend fun uploadImage() {
-        val metaJson = generateMetaJson(currentMediaPath, Meta.MediaType.JPG)
-        writeMeta(metaJson)
-        textileService.addFile(currentMediaPath, metaJson)
+    suspend fun uploadImage(file: File, currentOutputFolder: File) {
+        val metaJson = generateMetaJson(file.absolutePath, Meta.MediaType.JPG)
+        writeMeta(metaJson, currentOutputFolder)
+        textileService.addFile(file.absolutePath, metaJson)
     }
 
-    suspend fun uploadVideo() {
-        val metaJson = generateMetaJson(currentMediaPath, Meta.MediaType.MP4)
-        writeMeta(metaJson)
-        textileService.addFile(currentMediaPath, metaJson)
+    suspend fun uploadVideo(file: File, currentOutputFolder: File) {
+        val metaJson = generateMetaJson(file.absolutePath, Meta.MediaType.MP4)
+        writeMeta(metaJson, currentOutputFolder)
+        textileService.addFile(file.absolutePath, metaJson)
     }
 
-    private fun writeMeta(metaJson: String) {
+    private fun writeMeta(metaJson: String, currentOutputFolder: File) {
         val outputFile = currentOutputFolder.resolve("meta.json")
         outputFile.writeText(metaJson)
         Timber.i("Write meta to file: $outputFile")
@@ -63,15 +60,15 @@ class MediantService @Inject constructor(
     }
 
     fun createMediaFile(root: File, fileName: String): File {
-        createCurrentOutputFolder(root)
+        val currentOutputFolder = createCurrentOutputFolder(root)
         return File(currentOutputFolder, fileName).apply {
-            currentMediaPath = absolutePath
-            Timber.i("New image will be saved to: $currentMediaPath")
+            Timber.i("New image will be saved to: $absolutePath")
         }
     }
 
-    private fun createCurrentOutputFolder(root: File) {
-        currentOutputFolder = root.resolve("${System.currentTimeMillis()}")
+    private fun createCurrentOutputFolder(root: File): File {
+        val currentOutputFolder = root.resolve("${System.currentTimeMillis()}")
         if (!currentOutputFolder.exists()) currentOutputFolder.mkdir()
+        return currentOutputFolder
     }
 }

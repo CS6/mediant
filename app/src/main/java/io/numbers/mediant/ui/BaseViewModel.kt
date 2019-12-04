@@ -64,6 +64,7 @@ class BaseViewModel @Inject constructor(
         canonCameraPollingLoop = viewModelScope.launch(Dispatchers.IO) {
             try {
                 canonCameraControlService.startPolling().collect {
+                    Timber.v(it.toString(2))
                     if (it.has(ADDED_CONTENTS)) {
                         val urls = it.getJSONArray(ADDED_CONTENTS)
                         for (i in 0 until urls.length()) {
@@ -87,10 +88,11 @@ class BaseViewModel @Inject constructor(
         directory: File,
         inputStream: InputStream
     ) = viewModelScope.launch(Dispatchers.IO) {
+        Timber.d("Try to upload image from $directory.")
         try {
             val mediaFile = mediantService.createMediaFile(directory, "media.jpg")
             mediaFile.fromInputStream(inputStream)
-            mediantService.uploadImage()
+            mediantService.uploadImage(mediaFile, directory)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {
             showErrorSnackbar.postValue(Event(e))

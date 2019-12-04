@@ -18,10 +18,12 @@ class MainViewModel @Inject constructor(
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     val showErrorSnackbar = MutableLiveData<Event<Exception>>()
+    private lateinit var mediaFile: File
+    private lateinit var currentOutputFolder: File
 
     fun uploadImage() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            mediantService.uploadImage()
+            mediantService.uploadImage(mediaFile, currentOutputFolder)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {
             showErrorSnackbar.postValue(Event(e))
@@ -30,13 +32,16 @@ class MainViewModel @Inject constructor(
 
     fun uploadVideo() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            mediantService.uploadVideo()
+            mediantService.uploadVideo(mediaFile, currentOutputFolder)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {
             showErrorSnackbar.postValue(Event(e))
         }
     }
 
-    fun createMediaFile(root: File, fileName: String) =
-        mediantService.createMediaFile(root, fileName)
+    fun createMediaFile(root: File, fileName: String): File {
+        currentOutputFolder = root
+        mediaFile = mediantService.createMediaFile(root, fileName)
+        return mediaFile
+    }
 }
