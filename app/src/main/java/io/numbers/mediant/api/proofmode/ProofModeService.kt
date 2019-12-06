@@ -1,6 +1,7 @@
 package io.numbers.mediant.api.proofmode
 
 import android.app.Application
+import com.github.wnameless.json.flattener.JsonFlattener
 import io.numbers.infosnapshot.InfoSnapshotBuilder
 import io.numbers.mediant.model.Meta
 import io.numbers.mediant.util.PreferenceHelper
@@ -21,12 +22,22 @@ class ProofModeService @Inject constructor(
 ) {
 
     suspend fun generateProofAndSignatures(filePath: String): ProofSignatureBundle {
-        val proof = JSONObject(
+        var proof = JSONObject(
             InfoSnapshotBuilder(application.applicationContext)
                 .apply { duration = preferenceHelper.infoSnapshotDuration.toLong() * 1000 }
                 .snap()
                 .toJson()
         ).put("mediaHash", HashUtils.getSHA256FromFileContent(File(filePath))).toString(2)
+
+        // TODO: Use RecycleView for better UI control.
+        // Currently, we only flatten JSON for readability (request from Jonathan).
+        proof = JSONObject(JsonFlattener.flatten(proof)).toString(0)
+            .replace("\"", "")
+            .replace("{", "")
+            .replace("}", "")
+        /////////////////////////////////////////////////////////////
+
+
         val mediaSignature = generateMediaSignature(filePath)
         val proofSignature = generateProofSignature(proof)
 
