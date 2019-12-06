@@ -54,10 +54,6 @@ dependencies {
         // avoid version conflicts between android-info-snapshot
     }
 
-    // To flatten json for readability temporarily. After use RecycleView for metadata display, we
-    // do not need this dependency.
-    implementation "com.github.wnameless.json:json-flattener:0.8.1"
-
     implementation "com.squareup.retrofit2:retrofit:2.6.2"
     implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
     implementation "com.squareup.retrofit2:converter-scalars:2.6.2"
