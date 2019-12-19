@@ -29,4 +29,9 @@
         android:id="@+id/navToOnboarding"
         android:title="@string/tour"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/openLiveView"
+        android:title="@string/open_ccapi_live_view"
+        app:showAsAction="never" />
 </menu>

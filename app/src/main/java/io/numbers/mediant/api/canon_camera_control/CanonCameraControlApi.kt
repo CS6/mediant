@@ -1,9 +1,8 @@
 package io.numbers.mediant.api.canon_camera_control
 
 import okhttp3.ResponseBody
-import retrofit2.http.GET
-import retrofit2.http.Streaming
-import retrofit2.http.Url
+import org.json.JSONObject
+import retrofit2.http.*
 
 const val BASE_URL = "http://192.168.1.2:8080/"
 
@@ -20,4 +19,17 @@ interface CanonCameraControlApi {
     @GET
     @Streaming
     suspend fun getContent(@Url url: String): ResponseBody
+
+    @POST("ccapi/ver100/shooting/liveview")
+    suspend fun startLiveView(
+        @Body body: String = JSONObject().run {
+            put("liveviewsize", "medium")
+            put("cameradisplay", "on")
+            toString()
+        }
+    ): String
+
+    @GET("ccapi/ver100/shooting/liveview/flip")
+    @Streaming
+    suspend fun retrieveLiveView(): ResponseBody
 }

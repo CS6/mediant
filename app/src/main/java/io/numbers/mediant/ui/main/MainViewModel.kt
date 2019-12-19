@@ -1,25 +1,37 @@
 package io.numbers.mediant.ui.main
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.numbers.mediant.R
 import io.numbers.mediant.api.MediantService
+import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    private val mediantService: MediantService
+    private val mediantService: MediantService,
+    private val canonCameraControlService: CanonCameraControlService
 ) : ViewModel() {
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     val showErrorSnackbar = MutableLiveData<Event<Exception>>()
+
     private lateinit var mediaFile: File
     private lateinit var currentOutputFolder: File
+
+    val liveViewCardState = MutableLiveData(BottomSheetBehavior.STATE_HIDDEN)
+    val currentLiveView = MutableLiveData<Bitmap>()
+    private var liveViewJob: Job? = null
 
     fun uploadImage() = viewModelScope.launch(Dispatchers.IO) {
         try {
@@ -43,5 +55,22 @@ class MainViewModel @Inject constructor(
         currentOutputFolder = root
         mediaFile = mediantService.createMediaFile(root, fileName)
         return mediaFile
+    }
+
+    fun startLiveView() {
+        liveViewJob = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                canonCameraControlService.startLiveView().collect {
+                    val bitmap = BitmapFactory.decodeStream(it)
+                    currentLiveView.postValue(bitmap)
+                }
+            } catch (e: Exception) {
+                showErrorSnackbar.postValue(Event(e))
+            }
+        }
+    }
+
+    fun stopLiveView() {
+        liveViewJob?.cancel()
     }
 }

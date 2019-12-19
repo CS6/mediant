@@ -101,4 +101,5 @@
     <string name="connect_canon_camera">Connect to Canon Camera</string>
     <string name="successfully_connect_to_canon_camera">Successfully Connect to Canon Camera</string>
     <string name="polling">Polling</string>
+    <string name="open_ccapi_live_view">Open CCAPI Live View</string>
 </resources>

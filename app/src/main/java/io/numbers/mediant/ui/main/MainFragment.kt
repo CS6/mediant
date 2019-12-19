@@ -8,11 +8,14 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import androidx.annotation.StringRes
+import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.android.support.DaggerFragment
 import io.numbers.mediant.BuildConfig.APPLICATION_ID
@@ -41,6 +44,8 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         Tab(R.string.feeds) { ThreadListFragment() },
         Tab(R.string.storage) { ThreadFragment() }
     )
+
+    private lateinit var liveViewCardBehavior: BottomSheetBehavior<CardView>
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -80,6 +85,19 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         viewModel.showErrorSnackbar.observe(
             viewLifecycleOwner, EventObserver { showErrorSnackbar(view, it) }
         )
+
+        liveViewCardBehavior = BottomSheetBehavior.from(liveViewCardView).apply {
+            addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN) viewModel.stopLiveView()
+                }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+            })
+        }
+        viewModel.liveViewCardState.observe(viewLifecycleOwner, Observer {
+            liveViewCardBehavior.state = it
+        })
     }
 
     private fun initViewPager() {
@@ -107,6 +125,7 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
                 )
             }
             R.id.navToOnboarding -> findNavController().navigate(R.id.action_mainFragment_to_onboardingFragment)
+            R.id.openLiveView -> startLiveView()
         }
         return true
     }
@@ -125,6 +144,11 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         } else if (!permissionManager.askPermissions(PermissionRequestType.PROOFMODE_VIDEO, this)) {
             navigateToPermissionRationaleFragment(PermissionRequestType.PROOFMODE_VIDEO.value.rationale)
         }
+    }
+
+    private fun startLiveView() {
+        viewModel.liveViewCardState.value = BottomSheetBehavior.STATE_EXPANDED
+        viewModel.startLiveView()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
