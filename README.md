@@ -12,4 +12,4 @@ Starling Capture is a photo-sharing App with only verifiable photos and videos. 
 
 * Decentralized Storage with Textile
 * Proof Generation with ProofMode
-* Hardware Signature with Zion (Only Support HTC Exodus 1)
+* Hardware Signature with Zion (Support HTC Exodus 1 and 1s currently)
