@@ -8,16 +8,13 @@ import org.witness.proofmode.ProofMode
 import org.witness.proofmode.util.GPSTracker
 import java.io.File
 import java.io.IOException
-import javax.inject.Inject
 
 const val proofFileSuffix = ProofMode.PROOF_FILE_TAG
 const val mediaSignatureFileSuffix = ProofMode.OPENPGP_FILE_TAG
 const val proofSignatureFileSuffix = "${ProofMode.PROOF_FILE_TAG}${ProofMode.OPENPGP_FILE_TAG}"
 
 // TODO: catch throws by showing error message on snackbar
-class ProofModeService @Inject constructor(
-    private val application: Application
-) {
+class ProofModeService(private val application: Application) {
 
     fun generateProofAndSignatures(filePath: String): ProofSignatureBundle {
         val mediaFileHash =

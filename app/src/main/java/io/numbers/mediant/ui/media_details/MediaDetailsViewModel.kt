@@ -10,9 +10,8 @@ import androidx.lifecycle.ViewModel
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.model.Meta
 import io.numbers.mediant.util.rescaleBitmap
-import javax.inject.Inject
 
-class MediaDetailsViewModel @Inject constructor(
+class MediaDetailsViewModel(
     private val application: Application,
     private val textileService: TextileService
 ) : ViewModel() {

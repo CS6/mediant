@@ -6,29 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
-import dagger.android.support.DaggerFragment
+import androidx.fragment.app.Fragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentThreadInformationBinding
 import io.numbers.mediant.ui.dialogs.DialogListener
 import io.numbers.mediant.ui.main.thread_naming_dialog.ThreadNamingDialogFragment
 import io.numbers.mediant.viewmodel.EventObserver
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class ThreadInformationFragment : DaggerFragment() {
+class ThreadInformationFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: ThreadInformationViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[ThreadInformationViewModel::class.java]
-    }
+    private val threadInformationViewModel: ThreadInformationViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,21 +27,22 @@ class ThreadInformationFragment : DaggerFragment() {
             inflater, R.layout.fragment_thread_information, container, false
         )
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = threadInformationViewModel
         initLiveData()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.showNamingDialogEvent.observe(viewLifecycleOwner, EventObserver {
+        threadInformationViewModel.showNamingDialogEvent.observe(viewLifecycleOwner, EventObserver {
             showThreadNamingDialog()
         })
     }
 
     private fun initLiveData() {
         arguments?.let {
-            viewModel.threadId.value = ThreadInformationFragmentArgs.fromBundle(it).threadId
+            threadInformationViewModel.threadId.value =
+                ThreadInformationFragmentArgs.fromBundle(it).threadId
         }
     }
 
@@ -61,8 +50,9 @@ class ThreadInformationFragment : DaggerFragment() {
         val dialogCallback = object : DialogListener {
             override fun onDialogPositiveClick(dialog: DialogFragment) {
                 val threadName =
-                    (dialog as ThreadNamingDialogFragment).viewModel.threadName.value ?: ""
-                viewModel.setThreadName(threadName)
+                    (dialog as ThreadNamingDialogFragment).threadNamingDialogViewModel.threadName.value
+                        ?: ""
+                threadInformationViewModel.setThreadName(threadName)
                 dialog.dismiss()
             }
 

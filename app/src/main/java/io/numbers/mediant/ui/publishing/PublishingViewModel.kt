@@ -10,9 +10,8 @@ import androidx.lifecycle.ViewModel
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.util.rescaleBitmap
 import timber.log.Timber
-import javax.inject.Inject
 
-class PublishingViewModel @Inject constructor(
+class PublishingViewModel(
     private val application: Application,
     private val textileService: TextileService
 ) : ViewModel() {

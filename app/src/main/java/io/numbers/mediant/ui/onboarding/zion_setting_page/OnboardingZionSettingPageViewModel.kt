@@ -9,9 +9,8 @@ import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class OnboardingZionSettingPageViewModel @Inject constructor(
+class OnboardingZionSettingPageViewModel(
     private val zionService: ZionService,
     private val preferenceHelper: PreferenceHelper
 ) : ViewModel() {

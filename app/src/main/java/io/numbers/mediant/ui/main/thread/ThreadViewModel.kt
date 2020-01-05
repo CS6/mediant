@@ -8,9 +8,8 @@ import io.textile.pb.View
 import io.textile.textile.BaseTextileEventListener
 import io.textile.textile.FeedItemData
 import io.textile.textile.FeedItemType
-import javax.inject.Inject
 
-class ThreadViewModel @Inject constructor(
+class ThreadViewModel(
     private val textileService: TextileService,
     private val preferenceHelper: PreferenceHelper
 ) : ViewModel() {

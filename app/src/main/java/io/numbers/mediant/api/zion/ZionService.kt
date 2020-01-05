@@ -11,15 +11,11 @@ import org.witness.proofmode.crypto.HashUtils
 import org.witness.proofmode.util.DeviceInfo
 import timber.log.Timber
 import java.util.*
-import javax.inject.Inject
 
 const val ZION_WALLET_NAME = APPLICATION_ID
 const val ETHEREUM_TYPE = 60
 
-class ZionService @Inject constructor(
-    private val zkma: HtcWalletSdkManager,
-    private val application: Application
-) {
+class ZionService(private val zkma: HtcWalletSdkManager, private val application: Application) {
 
     val deviceName: String
         get() = DeviceInfo.getDeviceInfo(

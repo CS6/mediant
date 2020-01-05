@@ -6,9 +6,8 @@ import androidx.lifecycle.ViewModel
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.viewmodel.Event
 import io.textile.pb.Model
-import javax.inject.Inject
 
-class ThreadInformationViewModel @Inject constructor(private val textileService: TextileService) :
+class ThreadInformationViewModel(private val textileService: TextileService) :
     ViewModel() {
 
     val threadId = MutableLiveData<String>()

@@ -5,9 +5,8 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import io.numbers.mediant.R
 import org.witness.proofmode.crypto.PgpUtils
-import javax.inject.Inject
 
-class PreferenceHelper @Inject constructor(application: Application) {
+class PreferenceHelper(application: Application) {
 
     val sharedPreferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(application.applicationContext)

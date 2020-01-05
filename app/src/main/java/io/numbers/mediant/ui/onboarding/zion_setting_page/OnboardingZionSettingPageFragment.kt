@@ -5,31 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentOnboardingZionSettingPageBinding
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.viewmodel.EventObserver
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class OnboardingZionSettingPageFragment : DaggerFragment(),
+class OnboardingZionSettingPageFragment : Fragment(),
     ShowableSnackbar by DefaultShowableSnackbar() {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: OnboardingZionSettingPageViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[OnboardingZionSettingPageViewModel::class.java]
-    }
+    private val onboardingZionSettingPageViewModel: OnboardingZionSettingPageViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,17 +32,20 @@ class OnboardingZionSettingPageFragment : DaggerFragment(),
                 false
             )
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = onboardingZionSettingPageViewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.showSnackbar.observe(viewLifecycleOwner, EventObserver { showSnackbar(view, it) })
-        viewModel.showErrorSnackbar.observe(
+        onboardingZionSettingPageViewModel.showSnackbar.observe(
+            viewLifecycleOwner,
+            EventObserver { showSnackbar(view, it) })
+        onboardingZionSettingPageViewModel.showErrorSnackbar.observe(
             viewLifecycleOwner, EventObserver { showErrorSnackbar(view, it) }
         )
-        viewModel.zionEnabled.observe(
-            viewLifecycleOwner, Observer { viewModel.syncSignWithZionPreference() })
+        onboardingZionSettingPageViewModel.zionEnabled.observe(
+            viewLifecycleOwner,
+            Observer { onboardingZionSettingPageViewModel.syncSignWithZionPreference() })
     }
 }

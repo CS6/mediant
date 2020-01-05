@@ -1,27 +1,27 @@
 package io.numbers.mediant.util
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import io.numbers.mediant.R
-import io.numbers.mediant.ui.BaseActivity
-import javax.inject.Inject
 
-class PermissionManager @Inject constructor(
-    private val baseActivity: BaseActivity
-) {
+class PermissionManager(private val context: Context) {
 
     fun hasPermissions(permissionRequestType: PermissionRequestType) =
         permissionRequestType.value.permissions.all {
-            ContextCompat.checkSelfPermission(baseActivity, it) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }
 
     fun askPermissions(permissionRequestType: PermissionRequestType, fragment: Fragment): Boolean {
         permissionRequestType.value.permissions.forEach {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(baseActivity, it)) return false
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    fragment.requireActivity(), it
+                )
+            ) return false
         }
         fragment.requestPermissions(
             permissionRequestType.value.permissions,

@@ -5,31 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.Fragment
 import com.squareup.moshi.JsonAdapter
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentMediaDetailsBinding
 import io.numbers.mediant.model.Meta
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class MediaDetailsFragment : DaggerFragment() {
+class MediaDetailsFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
-    lateinit var viewModel: MediaDetailsViewModel
+    private val mediaDetailsViewModel: MediaDetailsViewModel by viewModel()
 
-    @Inject
-    lateinit var metaJsonAdapter: JsonAdapter<Meta>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[MediaDetailsViewModel::class.java]
-    }
+    private val metaJsonAdapter: JsonAdapter<Meta> by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,18 +28,19 @@ class MediaDetailsFragment : DaggerFragment() {
         val binding: FragmentMediaDetailsBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_media_details, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = mediaDetailsViewModel
         initLiveData()
         return binding.root
     }
 
     private fun initLiveData() = arguments?.also {
-        viewModel.fileHash.value = MediaDetailsFragmentArgs.fromBundle(it).fileHash
-        viewModel.userName.value = MediaDetailsFragmentArgs.fromBundle(it).userName
-        viewModel.blockTimestamp.value = MediaDetailsFragmentArgs.fromBundle(it).blockTimestamp
-        viewModel.blockHash.value = MediaDetailsFragmentArgs.fromBundle(it).blockHash
+        mediaDetailsViewModel.fileHash.value = MediaDetailsFragmentArgs.fromBundle(it).fileHash
+        mediaDetailsViewModel.userName.value = MediaDetailsFragmentArgs.fromBundle(it).userName
+        mediaDetailsViewModel.blockTimestamp.value =
+            MediaDetailsFragmentArgs.fromBundle(it).blockTimestamp
+        mediaDetailsViewModel.blockHash.value = MediaDetailsFragmentArgs.fromBundle(it).blockHash
 
-        viewModel.meta.value = try {
+        mediaDetailsViewModel.meta.value = try {
             metaJsonAdapter.fromJson(MediaDetailsFragmentArgs.fromBundle(it).fileMeta)
         } catch (e: Exception) {
             Meta(Meta.MediaType.UNKNOWN, "N/A", "N/A", "N/A", Meta.SignatureProvider.UNKNOWN)

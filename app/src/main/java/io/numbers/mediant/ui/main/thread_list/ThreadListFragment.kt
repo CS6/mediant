@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentThreadListBinding
 import io.numbers.mediant.ui.dialogs.DialogListener
@@ -22,27 +21,16 @@ import io.numbers.mediant.ui.main.thread_naming_dialog.ThreadNamingDialogFragmen
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.viewmodel.EventObserver
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class ThreadListFragment : DaggerFragment(), ItemClickListener,
+class ThreadListFragment : Fragment(), ItemClickListener,
     ShowableSnackbar by DefaultShowableSnackbar() {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: ThreadListViewModel
+    private val threadListViewModel: ThreadListViewModel by viewModel()
 
     private val adapter = ThreadListRecyclerViewAdapter(this)
 
     private lateinit var binding: FragmentThreadListBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[ThreadListViewModel::class.java]
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,18 +39,22 @@ class ThreadListFragment : DaggerFragment(), ItemClickListener,
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_thread_list, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = threadListViewModel
         binding.recyclerView.adapter = adapter
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.threadList.observe(viewLifecycleOwner, Observer { adapter.submitList(it) })
-        viewModel.openDialogEvent.observe(
+        threadListViewModel.threadList.observe(
+            viewLifecycleOwner,
+            Observer { adapter.submitList(it) })
+        threadListViewModel.openDialogEvent.observe(
             viewLifecycleOwner, EventObserver { showThreadAddingDialog() })
-        viewModel.showSnackbar.observe(viewLifecycleOwner, EventObserver { showSnackbar(view, it) })
-        viewModel.showErrorSnackbar.observe(
+        threadListViewModel.showSnackbar.observe(
+            viewLifecycleOwner,
+            EventObserver { showSnackbar(view, it) })
+        threadListViewModel.showErrorSnackbar.observe(
             viewLifecycleOwner, EventObserver { showErrorSnackbar(view, it) }
         )
     }
@@ -89,8 +81,9 @@ class ThreadListFragment : DaggerFragment(), ItemClickListener,
         val dialogCallback = object : DialogListener {
             override fun onDialogPositiveClick(dialog: DialogFragment) {
                 val threadName =
-                    (dialog as ThreadNamingDialogFragment).viewModel.threadName.value ?: ""
-                viewModel.addThread(threadName)
+                    (dialog as ThreadNamingDialogFragment).threadNamingDialogViewModel.threadName.value
+                        ?: ""
+                threadListViewModel.addThread(threadName)
                 dialog.dismiss()
             }
 
@@ -107,9 +100,9 @@ class ThreadListFragment : DaggerFragment(), ItemClickListener,
         val dialogCallback = object : DialogListener {
             override fun onDialogPositiveClick(dialog: DialogFragment) {
                 dialog as ThreadInviteDialogFragment
-                val inviteId = dialog.viewModel.inviteId.value ?: ""
-                val inviteKey = dialog.viewModel.inviteKey.value ?: ""
-                viewModel.acceptInvite(inviteId, inviteKey)
+                val inviteId = dialog.threadInviteDialogViewModel.inviteId.value ?: ""
+                val inviteKey = dialog.threadInviteDialogViewModel.inviteKey.value ?: ""
+                threadListViewModel.acceptInvite(inviteId, inviteKey)
                 dialog.dismiss()
             }
 

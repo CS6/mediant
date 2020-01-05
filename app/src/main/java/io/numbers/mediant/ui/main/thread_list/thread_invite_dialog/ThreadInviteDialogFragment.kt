@@ -5,30 +5,18 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import dagger.android.support.DaggerDialogFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.DialogThreadInviteBinding
 import io.numbers.mediant.ui.dialogs.DialogListener
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class ThreadInviteDialogFragment : DaggerDialogFragment() {
+class ThreadInviteDialogFragment : DialogFragment() {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: ThreadInviteDialogViewModel
+    val threadInviteDialogViewModel: ThreadInviteDialogViewModel by viewModel()
 
     lateinit var listener: DialogListener
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[ThreadInviteDialogViewModel::class.java]
-    }
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -40,7 +28,7 @@ class ThreadInviteDialogFragment : DaggerDialogFragment() {
                 false
             )
             binding.lifecycleOwner = this
-            binding.viewModel = viewModel
+            binding.viewModel = threadInviteDialogViewModel
             val builder = MaterialAlertDialogBuilder(it)
             builder.setView(binding.root)
                 .setTitle(R.string.accept_invite)

@@ -9,7 +9,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.htc.htcwalletsdk.Export.RESULT
-import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
@@ -19,16 +18,14 @@ import io.numbers.mediant.util.PreferenceHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class PreferencesFragment : PreferenceFragmentCompat(),
     ShowableSnackbar by DefaultShowableSnackbar() {
 
-    @Inject
-    lateinit var preferenceHelper: PreferenceHelper
+    private val preferenceHelper: PreferenceHelper by inject()
 
-    @Inject
-    lateinit var zionService: ZionService
+    private val zionService: ZionService by inject()
 
     private val summaryMaxLength = 100
 
@@ -36,7 +33,6 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (activity as DaggerAppCompatActivity).androidInjector().inject(this)
         clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 

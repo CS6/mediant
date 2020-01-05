@@ -5,30 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentPublishingBinding
 import io.numbers.mediant.ui.listeners.ItemClickListener
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class PublishingFragment : DaggerFragment(), ItemClickListener {
+class PublishingFragment : Fragment(), ItemClickListener {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: PublishingViewModel
+    private val publishingViewModel: PublishingViewModel by viewModel()
 
     private val adapter = PublishingRecyclerViewAdapter(this)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[PublishingViewModel::class.java]
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,15 +26,16 @@ class PublishingFragment : DaggerFragment(), ItemClickListener {
         val binding: FragmentPublishingBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_publishing, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = publishingViewModel
         binding.recyclerView.adapter = adapter
 
         arguments?.let {
-            viewModel.dataHash.value = PublishingFragmentArgs.fromBundle(it).dataHash
-            viewModel.fileHash.value = PublishingFragmentArgs.fromBundle(it).fileHash
-            viewModel.fileMeta.value = PublishingFragmentArgs.fromBundle(it).fileMeta
-            viewModel.userName.value = PublishingFragmentArgs.fromBundle(it).userName
-            viewModel.blockTimestamp.value = PublishingFragmentArgs.fromBundle(it).blockTimestamp
+            publishingViewModel.dataHash.value = PublishingFragmentArgs.fromBundle(it).dataHash
+            publishingViewModel.fileHash.value = PublishingFragmentArgs.fromBundle(it).fileHash
+            publishingViewModel.fileMeta.value = PublishingFragmentArgs.fromBundle(it).fileMeta
+            publishingViewModel.userName.value = PublishingFragmentArgs.fromBundle(it).userName
+            publishingViewModel.blockTimestamp.value =
+                PublishingFragmentArgs.fromBundle(it).blockTimestamp
         }
 
         return binding.root
@@ -54,8 +43,9 @@ class PublishingFragment : DaggerFragment(), ItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.threadList.observe(viewLifecycleOwner, Observer { adapter.data = it })
+        publishingViewModel.threadList.observe(viewLifecycleOwner, Observer { adapter.data = it })
     }
 
-    override fun onItemClick(position: Int) = viewModel.publishFile(adapter.data[position].id)
+    override fun onItemClick(position: Int) =
+        publishingViewModel.publishFile(adapter.data[position].id)
 }

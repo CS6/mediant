@@ -22,9 +22,8 @@ import kotlinx.coroutines.launch
 import org.witness.proofmode.crypto.HashUtils
 import timber.log.Timber
 import java.io.File
-import javax.inject.Inject
 
-class MainViewModel @Inject constructor(
+class MainViewModel(
     private val textileService: TextileService,
     private val proofModeService: ProofModeService,
     private val zionService: ZionService,

@@ -6,12 +6,11 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
 import com.squareup.moshi.JsonAdapter
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.databinding.FragmentThreadBinding
@@ -22,35 +21,19 @@ import io.numbers.mediant.ui.listeners.FeedItemListener
 import io.numbers.mediant.ui.main.MainFragmentDirections
 import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.util.timestampToString
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import io.textile.textile.FeedItemData
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class ThreadFragment : DaggerFragment(), FeedItemListener {
+class ThreadFragment : Fragment(), FeedItemListener {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: ThreadViewModel
-
-    @Inject
-    lateinit var preferenceHelper: PreferenceHelper
-
-    @Inject
-    lateinit var textileService: TextileService
-
-    @Inject
-    lateinit var metaJsonAdapter: JsonAdapter<Meta>
+    private val threadViewModel: ThreadViewModel by viewModel()
+    private val preferenceHelper: PreferenceHelper by inject()
+    private val textileService: TextileService by inject()
+    private val metaJsonAdapter: JsonAdapter<Meta> by inject()
 
     private lateinit var adapter: ThreadRecyclerViewAdapter
     private lateinit var binding: FragmentThreadBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[ThreadViewModel::class.java]
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,13 +42,18 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_thread, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = threadViewModel
 
         setThreadIdToViewModel()
-        if (!viewModel.isPersonal) setHasOptionsMenu(true)
+        if (!threadViewModel.isPersonal) setHasOptionsMenu(true)
 
         adapter =
-            ThreadRecyclerViewAdapter(textileService, metaJsonAdapter, this, viewModel.isPersonal)
+            ThreadRecyclerViewAdapter(
+                textileService,
+                metaJsonAdapter,
+                this,
+                threadViewModel.isPersonal
+            )
         binding.recyclerView.adapter = adapter
         return binding.root
     }
@@ -73,15 +61,17 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
     private fun setThreadIdToViewModel() {
         val threadId = arguments?.let { ThreadFragmentArgs.fromBundle(it).threadId }
             ?: preferenceHelper.personalThreadId
-        threadId?.also { viewModel.threadId = it }
+        threadId?.also { threadViewModel.threadId = it }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (!viewModel.isPersonal) viewModel.threadName.observe(viewLifecycleOwner, Observer {
-            (activity as AppCompatActivity).supportActionBar?.title = it
-        })
-        viewModel.feedList.observe(viewLifecycleOwner, Observer { adapter.submitList(it) })
+        if (!threadViewModel.isPersonal) threadViewModel.threadName.observe(
+            viewLifecycleOwner,
+            Observer {
+                (activity as AppCompatActivity).supportActionBar?.title = it
+            })
+        threadViewModel.feedList.observe(viewLifecycleOwner, Observer { adapter.submitList(it) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -94,7 +84,7 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
         when (item.itemId) {
             R.id.navToThreadInformation -> showInformation()
             R.id.inviteOthers -> inviteOthers()
-            R.id.refresh -> viewModel.loadFeedList()
+            R.id.refresh -> threadViewModel.loadFeedList()
             R.id.scrollToTop -> smoothScrollToTop()
             R.id.leaveThread -> leaveThread()
         }
@@ -103,14 +93,14 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
 
     private fun showInformation() {
         findNavController().navigate(
-            ThreadFragmentDirections.actionThreadFragmentToThreadInformationFragment(viewModel.threadId)
+            ThreadFragmentDirections.actionThreadFragmentToThreadInformationFragment(threadViewModel.threadId)
         )
     }
 
     private fun inviteOthers() {
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, textileService.addExternalInvite(viewModel.threadId))
+            putExtra(Intent.EXTRA_TEXT, textileService.addExternalInvite(threadViewModel.threadId))
             type = "text/plain"
         }
         startActivity(Intent.createChooser(sendIntent, resources.getString(R.string.invite_others)))
@@ -119,7 +109,7 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
     private fun leaveThread() {
         val dialogCallback = object : DialogListener {
             override fun onDialogPositiveClick(dialog: DialogFragment) {
-                textileService.leaveThread(viewModel.threadId)
+                textileService.leaveThread(threadViewModel.threadId)
                 dialog.dismiss()
                 findNavController().popBackStack()
             }
@@ -135,7 +125,7 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
     override fun onShowProof(feedItemData: FeedItemData) {
         // TODO: use block API after available: https://github.com/textileio/android-textile/issues/15
         findNavController().navigate(
-            if (viewModel.isPersonal) MainFragmentDirections.actionMainFragmentToMediaDetailsFragment(
+            if (threadViewModel.isPersonal) MainFragmentDirections.actionMainFragmentToMediaDetailsFragment(
                 feedItemData.files.getFiles(0).file.hash,
                 feedItemData.files.caption,
                 feedItemData.files.user.name,
@@ -168,7 +158,7 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
     override fun onDelete(feedItemData: FeedItemData) {
         val dialogCallback = object : DialogListener {
             override fun onDialogPositiveClick(dialog: DialogFragment) {
-                viewModel.deleteFile(feedItemData.files)
+                threadViewModel.deleteFile(feedItemData.files)
                 dialog.dismiss()
             }
 

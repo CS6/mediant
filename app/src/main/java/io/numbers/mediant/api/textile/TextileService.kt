@@ -15,7 +15,6 @@ import timber.log.Timber
 import java.io.File
 import java.net.URLEncoder
 import java.util.*
-import javax.inject.Inject
 
 private const val TEXTILE_FOLDER_NAME = "textile"
 // TODO: implement infinite recycler view (via paging library) to reduce this limit
@@ -23,7 +22,7 @@ private const val REQUEST_LIMIT = 999
 const val EXTERNAL_INVITE_LINK_HOST = "https://www.textile.photos/invites/new"
 
 // TODO: replace Timber.e with throw (handle exception by showing snackbar)
-class TextileService @Inject constructor(
+class TextileService(
     private val textile: Textile,
     private val preferenceHelper: PreferenceHelper,
     private val application: Application

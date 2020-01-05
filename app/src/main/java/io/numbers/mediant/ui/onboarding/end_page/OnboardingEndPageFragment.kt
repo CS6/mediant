@@ -5,28 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentOnboardingEndPageBinding
 import io.numbers.mediant.viewmodel.EventObserver
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class OnboardingEndPageFragment : DaggerFragment() {
+class OnboardingEndPageFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: OnboardingEndPageViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[OnboardingEndPageViewModel::class.java]
-    }
+    private val onboardingEndPageViewModel: OnboardingEndPageViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,14 +29,16 @@ class OnboardingEndPageFragment : DaggerFragment() {
                 false
             )
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = onboardingEndPageViewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.navToMainFragmentEvent.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(R.id.action_onboardingFragment_to_mainFragment)
-        })
+        onboardingEndPageViewModel.navToMainFragmentEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigate(R.id.action_onboardingFragment_to_mainFragment)
+            })
     }
 }

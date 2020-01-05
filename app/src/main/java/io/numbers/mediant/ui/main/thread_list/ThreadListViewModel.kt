@@ -10,9 +10,8 @@ import io.numbers.mediant.viewmodel.Event
 import io.textile.pb.Model
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class ThreadListViewModel @Inject constructor(private val textileService: TextileService) :
+class ThreadListViewModel(private val textileService: TextileService) :
     ViewModel() {
 
     val threadList = textileService.publicThreadList

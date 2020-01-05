@@ -3,27 +3,22 @@ package io.numbers.mediant.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.viewmodel.EventObserver
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_base.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 // Extends from DaggerAppCompatActivity so we do NOT need to write `AndroidInjection.inject(this)`
 // in BaseActivity.onCreate() method.
-class BaseActivity : DaggerAppCompatActivity(), ShowableSnackbar by DefaultShowableSnackbar() {
+class BaseActivity : AppCompatActivity(), ShowableSnackbar by DefaultShowableSnackbar() {
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: BaseViewModel
+    private val viewModel: BaseViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +33,6 @@ class BaseActivity : DaggerAppCompatActivity(), ShowableSnackbar by DefaultShowa
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[BaseViewModel::class.java]
-
         findViewById<View?>(android.R.id.content)?.also { view ->
             viewModel.showSnackbar.observe(this, EventObserver { showSnackbar(view, it) })
             viewModel.showErrorSnackbar.observe(this, EventObserver { showErrorSnackbar(view, it) })

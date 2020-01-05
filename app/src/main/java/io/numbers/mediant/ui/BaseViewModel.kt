@@ -11,11 +11,8 @@ import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class BaseViewModel @Inject constructor(
-    private val textileService: TextileService
-) : ViewModel() {
+class BaseViewModel(private val textileService: TextileService) : ViewModel() {
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
     val showErrorSnackbar = MutableLiveData<Event<Exception>>()

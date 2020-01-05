@@ -11,10 +11,8 @@ import androidx.annotation.StringRes
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
-import dagger.android.support.DaggerFragment
 import io.numbers.mediant.BuildConfig.APPLICATION_ID
 import io.numbers.mediant.R
 import io.numbers.mediant.databinding.FragmentMainBinding
@@ -28,12 +26,12 @@ import io.numbers.mediant.util.PermissionManager
 import io.numbers.mediant.util.PermissionRequestType
 import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.viewmodel.EventObserver
-import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_main.*
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
-class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackbar() {
+class MainFragment : Fragment(), ShowableSnackbar by DefaultShowableSnackbar() {
 
     data class Tab(@StringRes val title: Int, val fragmentBuilder: () -> Fragment)
 
@@ -42,22 +40,14 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         Tab(R.string.storage) { ThreadFragment() }
     )
 
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
+    private val mainViewModel: MainViewModel by viewModel()
 
-    lateinit var viewModel: MainViewModel
+    private val permissionManager: PermissionManager by inject()
 
-    @Inject
-    lateinit var permissionManager: PermissionManager
-
-    @Inject
-    lateinit var preferenceHelper: PreferenceHelper
+    private val preferenceHelper: PreferenceHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this, viewModelProviderFactory
-        )[MainViewModel::class.java]
         setHasOptionsMenu(true)
     }
 
@@ -69,15 +59,17 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         val binding: FragmentMainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = mainViewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
-        viewModel.showSnackbar.observe(viewLifecycleOwner, EventObserver { showSnackbar(view, it) })
-        viewModel.showErrorSnackbar.observe(
+        mainViewModel.showSnackbar.observe(
+            viewLifecycleOwner,
+            EventObserver { showSnackbar(view, it) })
+        mainViewModel.showErrorSnackbar.observe(
             viewLifecycleOwner, EventObserver { showErrorSnackbar(view, it) }
         )
     }
@@ -132,7 +124,7 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         when (requestCode) {
             ActivityRequestCodes.CAPTURE_IMAGE.value -> {
                 when (resultCode) {
-                    Activity.RESULT_OK -> viewModel.uploadImage()
+                    Activity.RESULT_OK -> mainViewModel.uploadImage()
                     Activity.RESULT_CANCELED -> Timber.i("Camera operation cancelled.")
                     else -> view?.let {
                         showErrorSnackbar(
@@ -143,7 +135,7 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
             }
             ActivityRequestCodes.CAPTURE_VIDEO.value -> {
                 when (resultCode) {
-                    Activity.RESULT_OK -> viewModel.uploadVideo()
+                    Activity.RESULT_OK -> mainViewModel.uploadVideo()
                     Activity.RESULT_CANCELED -> Timber.i("Camera operation cancelled.")
                     else -> view?.let {
                         showErrorSnackbar(
@@ -185,7 +177,7 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
             // Ensure that there's a camera activity to handle the intent.
             intent.resolveActivity(activity.packageManager)?.also {
                 // Create the File where the photo should go.
-                val imageFile = viewModel.createImageFile(outputFolder)
+                val imageFile = mainViewModel.createImageFile(outputFolder)
                 val imageUri = FileProvider.getUriForFile(
                     activity, "$APPLICATION_ID.provider", imageFile
                 )
@@ -208,7 +200,7 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
             }
 
             intent.resolveActivity(activity.packageManager)?.also {
-                val videoFile = viewModel.createVideoFile(outputFolder)
+                val videoFile = mainViewModel.createVideoFile(outputFolder)
                 val videoUri = FileProvider.getUriForFile(
                     activity, "$APPLICATION_ID.provider", videoFile
                 )

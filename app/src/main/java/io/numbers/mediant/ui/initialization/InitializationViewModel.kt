@@ -13,9 +13,8 @@ import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class InitializationViewModel @Inject constructor(
+class InitializationViewModel(
     private val textileService: TextileService,
     zionService: ZionService,
     preferenceHelper: PreferenceHelper
