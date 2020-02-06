@@ -3,6 +3,7 @@ package io.numbers.mediant.api
 import com.squareup.moshi.Moshi
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.proofmode.ProofSignatureBundle
+import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.model.Meta
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class MediantService @Inject constructor(
     private val textileService: TextileService,
     private val proofModeService: ProofModeService,
+    private val sessionBasedSignatureService: SessionBasedSignatureService,
     private val zionService: ZionService,
     private val preferenceHelper: PreferenceHelper,
     private val moshi: Moshi

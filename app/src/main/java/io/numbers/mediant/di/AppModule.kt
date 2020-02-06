@@ -9,6 +9,8 @@ import io.numbers.mediant.api.canon_camera_control.BASE_URL
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlApi
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.api.proofmode.ProofModeService
+import io.numbers.mediant.api.session_based_signature.SessionBasedSignaturePgp
+import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.util.PreferenceHelper
@@ -72,6 +74,19 @@ class AppModule {
     @Provides
     fun provideCanonCCService(canonCameraControlApi: CanonCameraControlApi) =
         CanonCameraControlService(canonCameraControlApi)
+
+    @Singleton
+    @Provides
+    fun provideSessionBasedSignaturePgp(
+    ) = SessionBasedSignaturePgp()
+
+    @Singleton
+    @Provides
+    fun provideSessionBasedSignatureService(
+        application: Application,
+        preferenceHelper: PreferenceHelper,
+        sessionBasedSignaturePgp: SessionBasedSignaturePgp
+    ) = SessionBasedSignatureService(application, preferenceHelper, sessionBasedSignaturePgp)
 
     @Singleton
     @Provides

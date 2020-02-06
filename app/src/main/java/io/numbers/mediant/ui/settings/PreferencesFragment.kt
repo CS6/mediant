@@ -12,6 +12,7 @@ import com.htc.htcwalletsdk.Export.RESULT
 import dagger.android.support.DaggerAppCompatActivity
 import io.numbers.mediant.R
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
+import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.ui.BaseActivity
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
@@ -21,6 +22,7 @@ import io.numbers.mediant.util.PreferenceHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 class PreferencesFragment : PreferenceFragmentCompat(),
@@ -34,6 +36,9 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
     @Inject
     lateinit var canonCameraControlService: CanonCameraControlService
+
+    @Inject
+    lateinit var sessionBasedSignatureService: SessionBasedSignatureService
 
     private val summaryMaxLength = 100
 
@@ -131,6 +136,9 @@ class PreferencesFragment : PreferenceFragmentCompat(),
             setOnPreferenceClickListener {
                 lifecycleScope.launch {
                     try {
+                        val pgp = sessionBasedSignatureService.getPgpInstance()
+                        val swPublicKey = pgp?.publicKey
+                        Timber.i("SW public key: $swPublicKey")
                         canonCameraControlService.connect()
                         showSnackbar(
                             requireView(),
