@@ -85,8 +85,9 @@ class AppModule {
     fun provideSessionBasedSignatureService(
         application: Application,
         preferenceHelper: PreferenceHelper,
-        sessionBasedSignaturePgp: SessionBasedSignaturePgp
-    ) = SessionBasedSignatureService(application, preferenceHelper, sessionBasedSignaturePgp)
+        sessionBasedSignaturePgp: SessionBasedSignaturePgp,
+        zionService: ZionService
+    ) = SessionBasedSignatureService(application, preferenceHelper, sessionBasedSignaturePgp, zionService)
 
     @Singleton
     @Provides

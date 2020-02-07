@@ -136,9 +136,6 @@ class PreferencesFragment : PreferenceFragmentCompat(),
             setOnPreferenceClickListener {
                 lifecycleScope.launch {
                     try {
-                        val pgp = sessionBasedSignatureService.getPgpInstance()
-                        val swPublicKey = pgp?.publicKey
-                        Timber.i("SW public key: $swPublicKey")
                         canonCameraControlService.connect()
                         showSnackbar(
                             requireView(),

@@ -147,6 +147,9 @@ class ProofModeService @Inject constructor(
         """.trimIndent()
     }
 
+    /**
+     * Generate digital signature to stringified proof by SW public key.
+     */
     private fun generateProofSignature(proof: String): String {
         val proofSignatureStream = ByteArrayOutputStream()
         PgpUtils.getInstance(application.applicationContext).createDetachedSignature(
@@ -157,6 +160,9 @@ class ProofModeService @Inject constructor(
         return String(proofSignatureStream.toByteArray())
     }
 
+    /**
+     * Generate digital signature to file content by SW public key.
+     */
     private fun generateMediaSignature(filePath: String): String {
         val mediaSignatureStream = ByteArrayOutputStream()
         PgpUtils.getInstance(application.applicationContext).createDetachedSignature(

@@ -24,10 +24,22 @@ class MediantService @Inject constructor(
     private val moshi: Moshi
 ) {
 
+    /**
+     * Upload image and meta JSON (aka ProofSignatureBundle)
+     * to Textile Thread v1.
+     */
     suspend fun uploadImage(file: File, currentOutputFolder: File) {
+        /*
+         * Environment.DIRECTORY_DOCUMENTS
+         * <storage>/Android/data/io.numbers/mediant/files/Documents/<timestamp>/
+         */
         val metaJson = generateMetaJson(file.absolutePath, Meta.MediaType.JPG)
-        writeMeta(metaJson, currentOutputFolder)
+        //writeMeta(metaJson, currentOutputFolder)
+        writeMeta(metaJson, File(file.parent))
         textileService.addFile(file.absolutePath, metaJson)
+        Timber.i("Image path: ${file.absolutePath}")
+        //Timber.i("MetaJSON path: $currentOutputFolder")
+        Timber.i("MetaJSON path: ${file.parent}/meta.json")
     }
 
     suspend fun uploadVideo(file: File, currentOutputFolder: File) {
@@ -44,7 +56,8 @@ class MediantService @Inject constructor(
 
     private suspend fun generateMetaJson(filePath: String, mediaType: Meta.MediaType): String {
         val proofSignatureBundle = if (preferenceHelper.signWithZion) {
-            generateProofWithZion(filePath)
+            //generateProofWithZion(filePath)
+            sessionBasedSignatureService.generateProofAndSignatures(filePath)
         } else proofModeService.generateProofAndSignatures(filePath)
         return MetaJsonAdapter(moshi).toJson(Meta(mediaType, proofSignatureBundle))
     }
