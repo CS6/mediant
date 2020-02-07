@@ -60,7 +60,21 @@ class MediantService @Inject constructor(
             sessionBasedSignatureService.startSession()
             sessionBasedSignatureService.generateProofAndSignatures(filePath)
         } else proofModeService.generateProofAndSignatures(filePath)
+
+        saveProofSignatureBundle(proofSignatureBundle , File(filePath).parent)
+
         return MetaJsonAdapter(moshi).toJson(Meta(mediaType, proofSignatureBundle))
+    }
+
+    private fun saveProofSignatureBundle(bundle: ProofSignatureBundle,
+                                         outputFolderPath: String) {
+        val outputDir: String = outputFolderPath
+        Timber.i("Save ProofSignatureBundle to $outputDir")
+        File("$outputDir/proof.txt").writeText(bundle.proof)
+        File("$outputDir/proofSignature.txt").writeText(bundle.proofSignature)
+        File("$outputDir/mediaSignature.txt").writeText(bundle.mediaSignature)
+        File("$outputDir/sessionKey.pub").writeText(sessionBasedSignatureService.publicKey)
+        File("$outputDir/sessionKeySigned.pub").writeText(sessionBasedSignatureService.signedPublicKey)
     }
 
     /**

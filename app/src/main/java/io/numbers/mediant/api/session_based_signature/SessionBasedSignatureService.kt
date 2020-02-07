@@ -42,7 +42,8 @@ class SessionBasedSignatureService @Inject constructor(
     private var pgpInstance = sessionBasedSignaturePgp.getInstance(
                                   application.applicationContext)
     private val defaultDuration: Long = 30000  // milliseconds
-    private var signedPublicKey: String = ""
+    var publicKey: String = ""
+    var signedPublicKey: String = ""
 
     /**
      * Start a session including these tasks:
@@ -59,6 +60,7 @@ class SessionBasedSignatureService @Inject constructor(
             startSessionTimer(duration)
             pgpInstance = sessionBasedSignaturePgp.getInstance(application.applicationContext)
 
+            publicKey = pgpInstance.publicKey
             signedPublicKey = signPublicKey()
         }
         Timber.i("Check SW public key is changed or not: ${pgpInstance.publicKey}")
