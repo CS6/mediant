@@ -57,11 +57,20 @@ class MediantService @Inject constructor(
     private suspend fun generateMetaJson(filePath: String, mediaType: Meta.MediaType): String {
         val proofSignatureBundle = if (preferenceHelper.signWithZion) {
             //generateProofWithZion(filePath)
+            sessionBasedSignatureService.startSession()
             sessionBasedSignatureService.generateProofAndSignatures(filePath)
         } else proofModeService.generateProofAndSignatures(filePath)
         return MetaJsonAdapter(moshi).toJson(Meta(mediaType, proofSignatureBundle))
     }
 
+    /**
+     * (DEPRECATED) Generate ProofSignatureBundle signed by Zion.
+     *
+     * When you take a photo, Zion will popup twice for signature
+     * (for image and proof).
+     *
+     * This is suitable for demo, but is a bad UX in real scenarios.
+     */
     private suspend fun generateProofWithZion(filePath: String): ProofSignatureBundle {
         val proof = proofModeService.generateProofAndSignatures(filePath).proof
         val mediaHash = HashUtils.getSHA256FromFileContent(File(filePath))

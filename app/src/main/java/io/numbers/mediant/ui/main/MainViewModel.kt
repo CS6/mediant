@@ -39,8 +39,6 @@ class MainViewModel @Inject constructor(
 
     fun uploadImage() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            // Create session-based SW keypair if needed
-            sessionBasedSignatureService.getPgpInstance()
             mediantService.uploadImage(mediaFile, currentOutputFolder)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {

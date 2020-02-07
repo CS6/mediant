@@ -45,11 +45,13 @@ class SessionBasedSignatureService @Inject constructor(
     private var signedPublicKey: String = ""
 
     /**
-     * If current session is valid, returns the existing PGP instance;
-     * otherwise, create a new valid session, and returns the newly created
-     * PGP instance.
+     * Start a session including these tasks:
+     *     - enable the valid flag
+     *     - set a timer which will disable the valid flag after expired
+     *     - create a PGP instance (for SW key pair)
+     *     - sign SW public key by master key (Zion)
      */
-    fun getPgpInstance(duration: Long = defaultDuration): SessionBasedSignaturePgp {
+    fun startSession(duration: Long = defaultDuration) {
         if (isValidSession) {
             Timber.d("Valid session, use existing PGP instance.")
         } else {
@@ -60,7 +62,6 @@ class SessionBasedSignatureService @Inject constructor(
             signedPublicKey = signPublicKey()
         }
         Timber.i("Check SW public key is changed or not: ${pgpInstance.publicKey}")
-        return pgpInstance
     }
 
     /*
