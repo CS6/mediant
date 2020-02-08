@@ -45,7 +45,7 @@
     <PreferenceCategory app:title="@string/info_snapshot">
         <SeekBarPreference
             android:max="10"
-            app:defaultValue="3"
+            app:defaultValue="7"
             app:key="@string/key_info_snapshot_duration"
             app:min="1"
             app:showSeekBarValue="true"

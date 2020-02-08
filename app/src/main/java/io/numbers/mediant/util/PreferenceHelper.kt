@@ -60,7 +60,7 @@ class PreferenceHelper @Inject constructor(application: Application) {
             value
         ).apply()
     var infoSnapshotDuration: Int
-        get() = sharedPreferences.getInt(preferenceKeyInfoSnapshotDuration, 3)
+        get() = sharedPreferences.getInt(preferenceKeyInfoSnapshotDuration, 7)
         set(value) = sharedPreferences.edit().putInt(
             preferenceKeyInfoSnapshotDuration,
             value
