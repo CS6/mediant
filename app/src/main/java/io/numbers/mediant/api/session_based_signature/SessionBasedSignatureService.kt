@@ -231,6 +231,9 @@ class SessionBasedSignatureService @Inject constructor(
              Session Public Key Info
              - publicKey: ${pgpInstance.publicKey}
              - publicKeySigned: $signedPublicKey
+
+             Identity Info
+             - masterPublicKey: ${zionService.getSendPublicKeyEth().key}
         """.trimIndent()
     }
 
@@ -279,6 +282,9 @@ class SessionBasedSignatureService @Inject constructor(
         val signedPublicKey = zionService.signMessage(swPublicKeyHex)
         Timber.i("SW public key: $swPublicKey")
         Timber.i("Signed SW public key: $signedPublicKey ")
+
+        Timber.i("Zion send public key: ${zionService.getSendPublicKeyEth().key}")
+        Timber.i("Zion receive public key: ${zionService.getReceivePublicKeyEth().key}")
         return signedPublicKey
     }
 }

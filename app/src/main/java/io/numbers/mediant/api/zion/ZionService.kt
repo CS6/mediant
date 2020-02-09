@@ -4,6 +4,7 @@ import android.app.Application
 import com.htc.htcwalletsdk.Export.HtcWalletSdkManager
 import com.htc.htcwalletsdk.Export.RESULT
 import com.htc.htcwalletsdk.Native.Type.ByteArrayHolder
+import com.htc.htcwalletsdk.Security.Key.PublicKeyHolder
 import io.numbers.mediant.BuildConfig.APPLICATION_ID
 import io.numbers.mediant.util.getHashFromString
 import org.json.JSONObject
@@ -76,5 +77,24 @@ class ZionService @Inject constructor(
             return HashUtils.asHex(signature.byteArray)
         }
         throw IllegalStateException("Wallet seed has not been created.")
+    }
+
+    /**
+     * In Ethereum, both the send and receive public keys are the same one.
+     */
+    fun getSendPublicKeyEth(): PublicKeyHolder {
+        uniqueId?.also {
+            // coin_type 60 == Ethereum
+            return zkma.getSendPublicKey(it, 60)
+        }
+        throw IllegalStateException("Failed to get the Ethereum send public key.")
+    }
+
+    fun getReceivePublicKeyEth(): PublicKeyHolder {
+        uniqueId?.also {
+            // coin_type 60 == Ethereum
+            return zkma.getReceivePublicKey(it, 60)
+        }
+        throw IllegalStateException("Failed to get the Ethereum receive public key.")
     }
 }
