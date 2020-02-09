@@ -8,6 +8,7 @@ import io.numbers.mediant.R
 import io.numbers.mediant.api.MediantService
 import io.numbers.mediant.api.canon_camera_control.ADDED_CONTENTS
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
+import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.EXTERNAL_INVITE_LINK_HOST
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
@@ -27,6 +28,7 @@ class BaseViewModel @Inject constructor(
     private val textileService: TextileService,
     private val preferenceHelper: PreferenceHelper,
     private val canonCameraControlService: CanonCameraControlService,
+    private val sessionBasedSignatureService: SessionBasedSignatureService,
     private val mediantService: MediantService
 ) : ViewModel() {
 
@@ -93,6 +95,9 @@ class BaseViewModel @Inject constructor(
         try {
             val mediaFile = mediantService.createMediaFile(directory, "media.jpg")
             mediaFile.fromInputStream(inputStream)
+            if (!sessionBasedSignatureService.checkSessionStatus()) {
+                showSnackbar.postValue(Event(SnackbarArgs(R.string.message_wait_session_creation)))
+            }
             mediantService.uploadImage(mediaFile, directory)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {

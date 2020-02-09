@@ -13,6 +13,7 @@ import io.numbers.mediant.R
 import io.numbers.mediant.ui.snackbar.DefaultShowableSnackbar
 import io.numbers.mediant.ui.snackbar.ShowableSnackbar
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
+import io.numbers.mediant.viewmodel.Event
 import io.numbers.mediant.viewmodel.EventObserver
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_base.*
