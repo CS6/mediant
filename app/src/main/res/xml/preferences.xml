@@ -44,6 +44,7 @@
 
     <PreferenceCategory app:title="@string/info_snapshot">
         <SeekBarPreference
+            app:icon="@drawable/ic_schedule_black_24dp"
             android:max="10"
             app:defaultValue="7"
             app:key="@string/key_info_snapshot_duration"
@@ -51,6 +52,18 @@
             app:showSeekBarValue="true"
             app:summary="@string/snapshot_duration_summary"
             app:title="@string/snapshot_duration" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/session_based_signature">
+        <SeekBarPreference
+            app:icon="@drawable/ic_schedule_black_24dp"
+            android:max="1440"
+            app:defaultValue="480"
+            app:key="@string/key_session_based_signature_duration"
+            app:min="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/session_duration_summary"
+            app:title="@string/session_duration" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/zion">

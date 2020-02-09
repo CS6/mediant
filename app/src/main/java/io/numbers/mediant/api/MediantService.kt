@@ -57,7 +57,7 @@ class MediantService @Inject constructor(
     private suspend fun generateMetaJson(filePath: String, mediaType: Meta.MediaType): String {
         val proofSignatureBundle = if (preferenceHelper.signWithZion) {
             //generateProofWithZion(filePath)
-            sessionBasedSignatureService.startSession()
+            sessionBasedSignatureService.startSession(preferenceHelper.sessionBasedSignatureDuration.toLong() * 60 * 1000)
             sessionBasedSignatureService.generateProofAndSignatures(filePath)
         } else proofModeService.generateProofAndSignatures(filePath)
 

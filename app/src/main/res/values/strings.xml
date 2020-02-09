@@ -102,4 +102,8 @@
     <string name="successfully_connect_to_canon_camera">Successfully Connect to Canon Camera</string>
     <string name="polling">Polling</string>
     <string name="open_ccapi_live_view">Open CCAPI Live View</string>
+
+    <string name="session_based_signature">Session-Based Signature</string>
+    <string name="session_duration">Session Duration</string>
+    <string name="session_duration_summary">How many minutes a session keypair will be valid.</string>
 </resources>
