@@ -45,6 +45,10 @@ class SessionBasedSignatureService @Inject constructor(
     var publicKey: String = ""
     var signedPublicKey: String = ""
 
+    fun checkSessionStatus(): Boolean {
+        return isValidSession
+    }
+
     /**
      * Start a session including these tasks:
      *     - enable the valid flag

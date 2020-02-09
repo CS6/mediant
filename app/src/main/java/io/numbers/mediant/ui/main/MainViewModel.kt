@@ -39,6 +39,9 @@ class MainViewModel @Inject constructor(
 
     fun uploadImage() = viewModelScope.launch(Dispatchers.IO) {
         try {
+            if (!sessionBasedSignatureService.checkSessionStatus()) {
+                showSnackbar.postValue(Event(SnackbarArgs(R.string.message_wait_session_creation)))
+            }
             mediantService.uploadImage(mediaFile, currentOutputFolder)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {
