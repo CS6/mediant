@@ -9,6 +9,8 @@ import io.numbers.mediant.api.canon_camera_control.BASE_URL
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlApi
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.api.proofmode.ProofModeService
+import io.numbers.mediant.api.sealr.SealrApi
+import io.numbers.mediant.api.sealr.SealrService
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignaturePgp
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.TextileService
@@ -57,6 +59,22 @@ class AppModule {
         HtcWalletSdkManager.getInstance(),
         application
     )
+
+    @Singleton
+    @Provides
+    fun provideSealrApi(): SealrApi {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(io.numbers.mediant.api.sealr.BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+        return retrofit.create(SealrApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSealrService(
+        sealrApi: SealrApi
+    ) = SealrService(sealrApi)
 
     @Singleton
     @Provides

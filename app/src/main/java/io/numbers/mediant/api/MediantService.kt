@@ -3,6 +3,7 @@ package io.numbers.mediant.api
 import com.squareup.moshi.Moshi
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.proofmode.ProofSignatureBundle
+import io.numbers.mediant.api.sealr.SealrService
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
@@ -10,6 +11,9 @@ import io.numbers.mediant.model.Meta
 import io.numbers.mediant.model.MetaJsonAdapter
 import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.util.getHashFromString
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.witness.proofmode.crypto.HashUtils
 import timber.log.Timber
 import java.io.File
@@ -20,6 +24,7 @@ class MediantService @Inject constructor(
     private val proofModeService: ProofModeService,
     private val sessionBasedSignatureService: SessionBasedSignatureService,
     private val zionService: ZionService,
+    private val sealrService: SealrService,
     private val preferenceHelper: PreferenceHelper,
     private val moshi: Moshi
 ) {
@@ -108,5 +113,11 @@ class MediantService @Inject constructor(
         val currentOutputFolder = root.resolve("${System.currentTimeMillis()}")
         if (!currentOutputFolder.exists()) currentOutputFolder.mkdir()
         return currentOutputFolder
+    }
+
+    suspend fun uploadImageToSealr(file: File) {
+        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+        sealrService.postMediaWithMultipart(body)
     }
 }
