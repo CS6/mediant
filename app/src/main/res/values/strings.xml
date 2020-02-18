@@ -72,6 +72,10 @@
     <string name="signature_provider">Signature Provider</string>
     <string name="block_hash">Block Hash</string>
 
+    <string name="validation">Validation</string>
+    <string name="validation_result">Validation Result</string>
+    <string name="sealr">Sealr</string>
+
     <string name="settings">Settings</string>
     <string name="textile">Textile</string>
     <string name="proofmode">ProofMode</string>

@@ -80,6 +80,13 @@
             app:destination="@id/onboardingFragment"
             app:popUpTo="@+id/mainFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mainFragment_to_validationFragment"
+            app:destination="@id/validationFragment"
+            app:enterAnim="@anim/fast_fade_in"
+            app:exitAnim="@anim/fast_fade_out"
+            app:popEnterAnim="@anim/fast_fade_in"
+            app:popExitAnim="@anim/fast_fade_out" />
     </fragment>
     <fragment
         android:id="@+id/preferencesFragment"
@@ -108,6 +115,13 @@
         <action
             android:id="@+id/action_threadFragment_to_threadInformationFragment"
             app:destination="@id/threadInformationFragment"
+            app:enterAnim="@anim/fast_fade_in"
+            app:exitAnim="@anim/fast_fade_out"
+            app:popEnterAnim="@anim/fast_fade_in"
+            app:popExitAnim="@anim/fast_fade_out" />
+        <action
+            android:id="@+id/action_threadFragment_to_validationFragment"
+            app:destination="@id/mediaDetailsFragment"
             app:enterAnim="@anim/fast_fade_in"
             app:exitAnim="@anim/fast_fade_out"
             app:popEnterAnim="@anim/fast_fade_in"
@@ -187,5 +201,26 @@
             app:popExitAnim="@anim/fast_fade_out"
             app:popUpTo="@+id/onboardingFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/validationFragment"
+        android:name="io.numbers.mediant.ui.validation.ValidationFragment"
+        android:label="@string/validation"
+        tools:layout="@layout/fragment_validation">
+        <argument
+            android:name="fileHash"
+            app:argType="string" />
+        <argument
+            android:name="fileMeta"
+            app:argType="string" />
+        <argument
+            android:name="userName"
+            app:argType="string" />
+        <argument
+            android:name="blockTimestamp"
+            app:argType="string" />
+        <argument
+            android:name="blockHash"
+            app:argType="string" />
     </fragment>
 </navigation>

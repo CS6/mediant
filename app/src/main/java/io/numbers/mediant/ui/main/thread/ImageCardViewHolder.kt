@@ -33,6 +33,7 @@ class ImageCardViewHolder(
     private val showProofButton: Button = itemView.findViewById(R.id.showProofButton)
     private val publishButton: Button = itemView.findViewById(R.id.publishButton)
     private val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
+    private val validateButton: Button = itemView.findViewById(R.id.validateButton)
 
     override fun bind(item: FeedItemData) {
         job?.cancel()
@@ -42,6 +43,7 @@ class ImageCardViewHolder(
         showProofButton.setOnClickListener { listener.onShowProof(item) }
         publishButton.setOnClickListener { listener.onPublish(item) }
         deleteButton.setOnClickListener { listener.onDelete(item) }
+        validateButton.setOnClickListener { listener.onValidate(item) }
 
         textileService.fetchRawContent(item.files) {
             val bitmap = rescaleBitmap(BitmapFactory.decodeByteArray(it, 0, it.size))
@@ -53,9 +55,11 @@ class ImageCardViewHolder(
         if (isPersonal) {
             publishButton.visibility = View.VISIBLE
             deleteButton.visibility = View.VISIBLE
+            validateButton.visibility = View.VISIBLE
         } else {
             publishButton.visibility = View.GONE
             deleteButton.visibility = View.GONE
+            validateButton.visibility = View.GONE
         }
     }
 

@@ -68,5 +68,15 @@
             app:icon="@drawable/ic_delete_black_24dp"
             app:layout_constraintStart_toEndOf="@id/publishButton"
             app:layout_constraintTop_toBottomOf="@id/userName" />
+
+        <Button
+            android:id="@+id/validateButton"
+            style="@style/IconOnlyCardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:icon="@drawable/ic_delete_black_24dp"
+            app:layout_constraintStart_toEndOf="@id/deleteButton"
+            app:layout_constraintTop_toBottomOf="@id/userName" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

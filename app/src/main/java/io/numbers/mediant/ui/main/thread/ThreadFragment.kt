@@ -24,6 +24,7 @@ import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.util.timestampToString
 import io.numbers.mediant.viewmodel.ViewModelProviderFactory
 import io.textile.textile.FeedItemData
+import timber.log.Timber
 import javax.inject.Inject
 
 class ThreadFragment : DaggerFragment(), FeedItemListener {
@@ -178,6 +179,27 @@ class ThreadFragment : DaggerFragment(), FeedItemListener {
         ConfirmationDialogFragment().apply { listener = dialogCallback }.show(
             childFragmentManager,
             ConfirmationDialogFragment::javaClass.name
+        )
+    }
+
+    override fun onValidate(feedItemData: FeedItemData) {
+        Timber.i("===== onValidate is called =====")
+        // TODO: use block API after available: https://github.com/textileio/android-textile/issues/15
+        findNavController().navigate(
+            if (viewModel.isPersonal) MainFragmentDirections.actionMainFragmentToValidationFragment(
+                feedItemData.files.getFiles(0).file.hash,
+                feedItemData.files.caption,
+                feedItemData.files.user.name,
+                timestampToString(feedItemData.files.date),
+                feedItemData.block
+            )
+            else ThreadFragmentDirections.actionThreadFragmentToValidationFragment(
+                feedItemData.files.getFiles(0).file.hash,
+                feedItemData.files.caption,
+                feedItemData.files.user.name,
+                timestampToString(feedItemData.files.date),
+                feedItemData.block
+            )
         )
     }
 

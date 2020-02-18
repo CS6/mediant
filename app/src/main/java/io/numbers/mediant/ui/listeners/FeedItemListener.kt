@@ -9,4 +9,6 @@ interface FeedItemListener {
     fun onPublish(feedItemData: FeedItemData)
 
     fun onDelete(feedItemData: FeedItemData)
+
+    fun onValidate(feedItemData: FeedItemData)
 }

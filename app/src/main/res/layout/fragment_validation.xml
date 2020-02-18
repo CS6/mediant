@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="io.numbers.mediant.ui.validation.ValidationViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/small_padding">
+
+            <TextView
+                android:id="@+id/validationServiceSealr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/sealr"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/validateUploadButton"
+                style="@style/IconOnlyCardButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_publish_black_24dp"
+                app:layout_constraintTop_toBottomOf="@+id/validationServiceSealr"
+                tools:ignore="MissingConstraints" />
+
+            <Button
+                android:id="@+id/validateResultButton"
+                style="@style/IconOnlyCardButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_library_books_black_24dp"
+                app:layout_constraintTop_toBottomOf="@+id/validateUploadButton"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/validateResultTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@string/validation_result"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                app:layout_constraintTop_toBottomOf="@+id/validateResultButton" />
+
+            <TextView
+                android:id="@+id/validateResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:text="@{viewModel.debug}"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                app:layout_constraintTop_toBottomOf="@+id/validateResultTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>

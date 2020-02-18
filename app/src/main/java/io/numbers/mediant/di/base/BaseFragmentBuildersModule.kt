@@ -16,6 +16,7 @@ import io.numbers.mediant.di.base.thread_information.ThreadInformationViewModels
 import io.numbers.mediant.di.base.thread_invite_dialog.ThreadInviteDialogViewModelsModule
 import io.numbers.mediant.di.base.thread_list.ThreadListViewModelsModule
 import io.numbers.mediant.di.base.thread_naming_dialog.ThreadNamingDialogViewModelsModule
+import io.numbers.mediant.di.base.validation.ValidationViewModelsModule
 import io.numbers.mediant.ui.initialization.InitializationFragment
 import io.numbers.mediant.ui.main.MainFragment
 import io.numbers.mediant.ui.main.thread.ThreadFragment
@@ -31,6 +32,7 @@ import io.numbers.mediant.ui.onboarding.zion_setting_page.OnboardingZionSettingP
 import io.numbers.mediant.ui.permission_rationale.PermissionRationaleFragment
 import io.numbers.mediant.ui.publishing.PublishingFragment
 import io.numbers.mediant.ui.settings.PreferencesFragment
+import io.numbers.mediant.ui.validation.ValidationFragment
 
 // Provides all fragments extending from DaggerFragment in BaseActivity scope as Dagger client.
 
@@ -86,6 +88,9 @@ abstract class BaseFragmentBuildersModule {
 
     @ContributesAndroidInjector(modules = [OnboardingEndPageViewModelsModule::class])
     abstract fun contributeOnboardingEndPageFragment(): OnboardingEndPageFragment
+
+    @ContributesAndroidInjector(modules = [ValidationViewModelsModule::class])
+    abstract fun contributeValidationFragment(): ValidationFragment
 
     // Add new Fragments as Dagger client here. Dagger will automatically generate
     // XXXFragmentSubcomponents.
