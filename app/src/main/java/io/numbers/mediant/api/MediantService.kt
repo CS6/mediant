@@ -9,6 +9,8 @@ import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.model.Meta
 import io.numbers.mediant.model.MetaJsonAdapter
+import io.numbers.mediant.model.SealrModel
+import io.numbers.mediant.model.SealrModelJsonAdapter
 import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.util.getHashFromString
 import okhttp3.MediaType
@@ -115,9 +117,9 @@ class MediantService @Inject constructor(
         return currentOutputFolder
     }
 
-    suspend fun uploadImageToSealr(file: File) {
+    suspend fun uploadImageToSealr(file: File): String {
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-        sealrService.postMediaWithMultipart(body)
+        return sealrService.postMediaWithMultipart(body)
     }
 }

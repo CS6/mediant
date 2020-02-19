@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.squareup.moshi.Moshi
 import dagger.android.support.DaggerFragment
@@ -62,8 +63,9 @@ class ValidationFragment: DaggerFragment() {
 
             // TODO: Use LiveData to set result text.
             Timber.i("Hello, upload button")
-            validateResult = view.findViewById(R.id.validateResult)
+            //validateResult = view.findViewById(R.id.validateResult)
             validateResult.text = "Upload is clicked"
+            //validateResult.text = viewModel.onUpload()
         }
 
         resultButton = view.findViewById(R.id.validateResultButton)
@@ -72,9 +74,17 @@ class ValidationFragment: DaggerFragment() {
 
             // TODO: Use LiveData to set result text.
             Timber.i("Hello, result button")
-            validateResult = view.findViewById(R.id.validateResult)
+            //validateResult = view.findViewById(R.id.validateResult)
             validateResult.text = "Result is clicked"
+            //validateResult.text = viewModel.onResult()
         }
+
+        validateResult = view.findViewById(R.id.validateResult)
+
+        val debugObserver = Observer<String> {
+                newResult -> validateResult.text = newResult
+        }
+        viewModel.debug.observe(this, debugObserver)
     }
 
     private fun initLiveData() = arguments?.also {
