@@ -39,6 +39,9 @@ class ThreadRecyclerViewAdapter(
             ItemViewType.IMAGE -> ImageCardViewHolder.from(
                 parent, textileService, listener, isPersonal
             )
+            ItemViewType.VIDEO -> VideoCardViewHolder.from(
+                parent, textileService, listener, isPersonal
+            )
             else -> EventMessageViewHolder.from(parent)
         }
     }
