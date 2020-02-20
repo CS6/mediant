@@ -31,7 +31,7 @@ class ValidationFragment: DaggerFragment() {
     lateinit var moshi: Moshi
 
     lateinit var uploadButton: Button
-    lateinit var resultButton: Button
+    //lateinit var resultButton: Button
     lateinit var validateResult: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +68,7 @@ class ValidationFragment: DaggerFragment() {
             //validateResult.text = viewModel.onUpload()
         }
 
+        /*
         resultButton = view.findViewById(R.id.validateResultButton)
         resultButton.setOnClickListener {
             viewModel.onResult()
@@ -78,6 +79,7 @@ class ValidationFragment: DaggerFragment() {
             validateResult.text = "Result is clicked"
             //validateResult.text = viewModel.onResult()
         }
+        */
 
         validateResult = view.findViewById(R.id.validateResult)
 

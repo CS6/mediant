@@ -47,8 +47,15 @@ class SealrService @Inject constructor(private val sealrApi: SealrApi) {
     suspend fun postMediaWithMultipart(file: MultipartBody.Part): String {
         Timber.i("Restful postMediaPartVersion is called")
         val token = "token ee947510026556118e5092f97982f0ac7a81772b"
-        val ret = sealrApi.postMediaWithMultipart(file, token)
-        Timber.i("Restful postMediaPartVersion returns $ret")
+        var ret: String = ""
+        try {
+            ret = sealrApi.postMediaWithMultipart(file, token)
+            Timber.i("Restful postMediaPartVersion returns $ret")
+        } catch (e: Exception) {
+            Timber.e("$e")
+            Timber.e("Failed to get Sealr API result. Check network connection.")
+            ret = ""
+        }
         return ret
     }
 

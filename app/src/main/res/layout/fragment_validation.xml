@@ -60,6 +60,7 @@
                 app:icon="@drawable/ic_publish_black_24dp"
                 tools:ignore="MissingConstraints" />
 
+            <!--
             <Button
                 android:id="@+id/validateResultButton"
                 style="@style/IconOnlyCardButton"
@@ -67,6 +68,7 @@
                 android:layout_height="match_parent"
                 app:icon="@drawable/ic_library_books_black_24dp"
                 tools:ignore="MissingConstraints" />
+                -->
         </LinearLayout>
 
         <TextView

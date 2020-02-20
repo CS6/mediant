@@ -44,7 +44,7 @@ class ValidationViewModel @Inject constructor(
     private val tmpFilePath = application.getExternalFilesDir(
                                  Environment.DIRECTORY_DOCUMENTS)?.absolutePath + "/tmp.jpg"
     //var debug = "Default"
-    var debug = MutableLiveData("Default")
+    var debug = MutableLiveData("Press the upload icon to verify your image.")
 
     init {
         imageDrawable.addSource(fileHash) {
@@ -79,15 +79,36 @@ class ValidationViewModel @Inject constructor(
     }
 
     fun onUpload() {
-        debug.postValue("onUpload is called")
+        debug.postValue("Verifying your image, please wait for 10 seconds.")
         Timber.i("$debug")
 
         viewModelScope.launch(Dispatchers.IO) {
             val res = mediantService.uploadImageToSealr(File(tmpFilePath))
-            val sealrModel = SealrModelJsonAdapter(moshi).fromJson(res)
-            debug.postValue(sealrModel!!.overall_verification)
-            Timber.i("JSON result: $sealrModel")
-            Timber.i("overall_verification: $debug")
+            if (res.isNotEmpty()) {
+                val sealrModel = SealrModelJsonAdapter(moshi).fromJson(res)
+                val fullResult = """
+                Overall Verification: ${sealrModel!!.overall_verification}
+
+                ${sealrModel!!.verifications[0].type}
+                - result: ${sealrModel!!.verifications[0].result}
+                - confidence: ${sealrModel!!.verifications[0].confidence}
+
+                ${sealrModel!!.verifications[1].type}
+                - result: ${sealrModel!!.verifications[1].result}
+                - confidence: ${sealrModel!!.verifications[1].confidence}
+
+                ${sealrModel!!.verifications[2].type}
+                - result: ${sealrModel!!.verifications[2].result}
+                - confidence: ${sealrModel!!.verifications[2].confidence}
+                """.trimIndent()
+                //debug.postValue(sealrModel!!.overall_verification)
+                debug.postValue(fullResult)
+                Timber.i("JSON result: $sealrModel")
+                Timber.i("overall_verification: $debug")
+            } else {
+                val fullResult = "Failed to run Sealr verification. Please check your network connection."
+                debug.postValue(fullResult)
+            }
         }
     }
 
