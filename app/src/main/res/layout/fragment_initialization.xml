@@ -24,7 +24,7 @@
             android:layout_height="40dp"
             app:layout_constraintBottom_toTopOf="@id/starlingCaptureLogo"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_usc_shoah_foundation"
+            app:srcCompat="@drawable/logo_hala_systems"
             tools:ignore="ContentDescription" />
 
         <ImageView
