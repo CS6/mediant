@@ -8,6 +8,7 @@ import dagger.Provides
 import io.numbers.mediant.api.canon_camera_control.BASE_URL
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlApi
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
+import io.numbers.mediant.api.halasystems.HalaSystemsService
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.sealr.SealrApi
 import io.numbers.mediant.api.sealr.SealrService
@@ -75,6 +76,11 @@ class AppModule {
     fun provideSealrService(
         sealrApi: SealrApi
     ) = SealrService(sealrApi)
+
+    @Singleton
+    @Provides
+    fun provideHalaSystemsService(
+    ) = HalaSystemsService()
 
     @Singleton
     @Provides

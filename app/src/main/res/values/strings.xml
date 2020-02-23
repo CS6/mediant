@@ -111,4 +111,6 @@
     <string name="session_duration">Session Duration</string>
     <string name="session_duration_summary">How many minutes a session keypair will be valid.</string>
     <string name="message_wait_session_creation">Please wait 10 secs for creating secure session.</string>
+
+    <string name="message_hala_uploaded">Successfully uploaded media via Hala Systems API.</string>
 </resources>

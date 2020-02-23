@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import io.numbers.mediant.api.MediantService
+import io.numbers.mediant.api.halasystems.HalaSystemsService
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.TextileService
@@ -27,7 +28,8 @@ class BaseModule {
         proofModeService: ProofModeService,
         zionService: ZionService,
         sealrService: SealrService,
+        halaSystemsService: HalaSystemsService,
         preferenceHelper: PreferenceHelper,
         moshi: Moshi
-    ) = MediantService(textileService, proofModeService, sessionBasedSignatureService, zionService, sealrService, preferenceHelper, moshi)
+    ) = MediantService(textileService, proofModeService, sessionBasedSignatureService, zionService, sealrService, halaSystemsService, preferenceHelper, moshi)
 }

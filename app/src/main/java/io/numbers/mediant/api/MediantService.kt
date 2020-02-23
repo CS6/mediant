@@ -1,6 +1,7 @@
 package io.numbers.mediant.api
 
 import com.squareup.moshi.Moshi
+import io.numbers.mediant.api.halasystems.HalaSystemsService
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.proofmode.ProofSignatureBundle
 import io.numbers.mediant.api.sealr.SealrService
@@ -27,6 +28,7 @@ class MediantService @Inject constructor(
     private val sessionBasedSignatureService: SessionBasedSignatureService,
     private val zionService: ZionService,
     private val sealrService: SealrService,
+    private val halaSystemsService: HalaSystemsService,
     private val preferenceHelper: PreferenceHelper,
     private val moshi: Moshi
 ) {
@@ -121,5 +123,11 @@ class MediantService @Inject constructor(
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
         return sealrService.postMediaWithMultipart(body)
+    }
+
+    suspend fun uploadToHala(file: File): String {
+        val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file)
+        val body = MultipartBody.Part.create(requestFile)
+        return halaSystemsService.upload(body)
     }
 }
