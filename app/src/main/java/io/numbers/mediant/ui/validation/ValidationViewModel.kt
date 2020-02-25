@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squareup.moshi.Moshi
 import io.numbers.mediant.api.MediantService
+import io.numbers.mediant.api.dual_capture.DualCaptureService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.model.Meta
 import io.numbers.mediant.model.SealrModelJsonAdapter
@@ -30,6 +31,7 @@ class ValidationViewModel @Inject constructor(
     private val application: Application,
     private val textileService: TextileService,
     private val mediantService: MediantService,
+    private val dualCaptureService: DualCaptureService,
     private val moshi: Moshi
 ) : ViewModel() {
 
@@ -76,6 +78,11 @@ class ValidationViewModel @Inject constructor(
             stream.writeBytes(it)
             Timber.i("Write tmp file to ${stream.absolutePath}")
         }
+    }
+
+    fun onDualCapture() {
+        Timber.i("onDualCapture is called")
+        dualCaptureService.takePicture()
     }
 
     fun onUpload() {

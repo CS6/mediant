@@ -37,7 +37,8 @@ enum class PermissionRequestType(val value: PermissionRequest) {
             0,
             arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA
             ),
             R.string.message_proofmode_permissions_rationale
         )
@@ -47,7 +48,8 @@ enum class PermissionRequestType(val value: PermissionRequest) {
             1,
             arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA
             ),
             R.string.message_proofmode_permissions_rationale
         )

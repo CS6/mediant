@@ -79,6 +79,21 @@ dependencies {
 
     implementation "com.google.android.material:material:1.2.0-alpha02"
 
+    // Dual capture feature
+    def camerax_version = "1.0.0-alpha05"
+    implementation "androidx.camera:camera-core:$camerax_version"
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+
+    /* Issue fix
+     *
+     * Duplicate class com.google.com.util.concurrent.ListenableFuture found in modules
+     * guava-18.0.jar (com.google.guava:guava:18.0) and
+     * listenablefuture-1.0.jar (com.google.guava:listenablefuture:1.0)
+     */
+    //def guava_version = "18.0"
+    def guava_version = "27.0.1-android"
+    implementation "com.google.guava:guava:$guava_version"
+
     implementation "com.google.dagger:dagger:2.24"
     implementation "com.google.dagger:dagger-android:2.24"
     implementation "com.google.dagger:dagger-android-support:2.24"

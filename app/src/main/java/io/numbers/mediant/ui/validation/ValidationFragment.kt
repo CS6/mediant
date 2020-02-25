@@ -59,7 +59,8 @@ class ValidationFragment: DaggerFragment() {
 
         uploadButton = view.findViewById(R.id.validateUploadButton)
         uploadButton.setOnClickListener {
-            viewModel.onUpload()
+            viewModel.onDualCapture()
+            //viewModel.onUpload()
 
             // TODO: Use LiveData to set result text.
             Timber.i("Hello, upload button")
