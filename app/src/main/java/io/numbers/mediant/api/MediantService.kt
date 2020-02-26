@@ -124,6 +124,7 @@ class MediantService @Inject constructor(
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
         return sealrService.postMediaWithMultipart(body)
+    }
 
     suspend fun uploadEchoByRestful() {
         restfulService.getEcho()

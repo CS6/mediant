@@ -45,7 +45,6 @@ class MainViewModel @Inject constructor(
             }
             mediantService.uploadImageByRestful(mediaFile)
             mediantService.uploadImage(mediaFile, currentOutputFolder)
-            mediantService.uploadImageToSealr(mediaFile)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {
             Timber.i("Exception $e")
