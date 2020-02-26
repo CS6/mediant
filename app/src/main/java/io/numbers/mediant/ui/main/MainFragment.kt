@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
+import android.widget.Switch
 import androidx.annotation.StringRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
@@ -98,6 +99,18 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         viewModel.liveViewCardState.observe(viewLifecycleOwner, Observer {
             liveViewCardBehavior.state = it
         })
+
+        dualCaptureSwitch.setOnCheckedChangeListener { buttonview, isChecked ->
+            if (isChecked) {
+                Timber.d("Dual capture switch is on")
+                dualCaptureImageView.visibility = View.VISIBLE
+                slateImageView.visibility = View.GONE
+            } else {
+                Timber.d("Dual capture switch is off")
+                dualCaptureImageView.visibility = View.GONE
+                slateImageView.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun initViewPager() {

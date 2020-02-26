@@ -33,20 +33,62 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/liveViewCardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:elevation="@dimen/default_elevation"
             app:behavior_hideable="true"
-            app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
+            app:behavior_peekHeight="auto"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:minHeight="@dimen/bottom_sheet_peek_height"
-                android:scaleType="centerCrop"
-                app:bitmap="@{viewModel.currentLiveView}"
-                tools:ignore="ContentDescription" />
+                android:orientation="vertical">
+
+                <Switch
+                    android:id="@+id/dualCaptureSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:enabled="false"
+                    tools:ignore="MissingConstraints" />
+
+                <ImageView
+                    android:id="@+id/dualCaptureImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FF0000"
+                    android:cropToPadding="false"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_camera_black_24dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/dualCaptureSwitch"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/slateImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00FF00"
+                    android:cropToPadding="false"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_camera_black_24dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/dualCaptureImageView"
+                    tools:ignore="ContentDescription" />
+
+                <!--app:bitmap="@{viewModel.currentLiveView}"-->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#0000FF"
+                    android:cropToPadding="false"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_camera_black_24dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/slateImageView"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
