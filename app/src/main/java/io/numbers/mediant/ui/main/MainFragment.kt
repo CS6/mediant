@@ -9,10 +9,14 @@ import android.provider.MediaStore
 import android.view.*
 import android.widget.Switch
 import androidx.annotation.StringRes
+import androidx.camera.core.CameraX
+import androidx.camera.core.Preview
+import androidx.camera.core.PreviewConfig
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -103,14 +107,31 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         dualCaptureSwitch.setOnCheckedChangeListener { buttonview, isChecked ->
             if (isChecked) {
                 Timber.d("Dual capture switch is on")
-                dualCaptureImageView.visibility = View.VISIBLE
+                //dualCaptureImageView.visibility = View.VISIBLE
+                dualCaptureTextureView.visibility = View.VISIBLE
                 slateImageView.visibility = View.GONE
             } else {
                 Timber.d("Dual capture switch is off")
-                dualCaptureImageView.visibility = View.GONE
+                //dualCaptureImageView.visibility = View.GONE
+                dualCaptureTextureView.visibility = View.GONE
                 slateImageView.visibility = View.VISIBLE
             }
         }
+
+        // Get camera preview
+        CameraX.unbindAll()
+
+        val lensFacing = CameraX.LensFacing.BACK
+        val previewConfig = PreviewConfig.Builder()
+            .setLensFacing(lensFacing)
+            .build()
+        val preview = Preview(previewConfig)
+
+        preview.setOnPreviewOutputUpdateListener { previewOutput ->
+            dualCaptureTextureView.surfaceTexture = previewOutput.surfaceTexture
+        }
+
+        CameraX.bindToLifecycle(this as LifecycleOwner, preview)
     }
 
     private fun initViewPager() {
