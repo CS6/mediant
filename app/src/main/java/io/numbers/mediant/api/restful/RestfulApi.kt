@@ -6,17 +6,15 @@ import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.http.*
 
-const val BASE_URL = "http://54.174.111.63/"
+const val BASE_URL = "http://54.167.224.121/"
 //const val BASE_URL = "https://postman-echo.com/"
 
 const val ADDED_CONTENTS = "addedcontents"
 
 interface RestfulApi {
-
     @GET("api/v1/media/")
     suspend fun getMedia(): String
 
-    //@Headers("Authorization: token 8451082d152e8239324d6c717e5510d744f4cccb")
     @Multipart
     @POST("api/v1/media/")
     suspend fun postMedia(
@@ -29,6 +27,7 @@ interface RestfulApi {
     suspend fun postMediaWithMultipart(
         @Part file: MultipartBody.Part,
         @Part("meta") meta: RequestBody,
+        @Part("target_provider") provider: String,
         @Header("Authorization") authHeader: String): String
 
     /*

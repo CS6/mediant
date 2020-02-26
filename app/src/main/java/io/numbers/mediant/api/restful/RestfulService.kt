@@ -27,6 +27,8 @@ class RestfulService @Inject constructor(private val restfulApi: RestfulApi) {
     }
     */
 
+    private val apiToken = ""
+
     suspend fun getMedia(): String {
         val ret = restfulApi.getMedia()
         Timber.i("Restful getMedia returns $ret")
@@ -35,16 +37,17 @@ class RestfulService @Inject constructor(private val restfulApi: RestfulApi) {
 
     suspend fun postMedia(file: RequestBody, meta: RequestBody): String {
         Timber.i("Restful postMedia is called")
-        val token = "token 8451082d152e8239324d6c717e5510d744f4cccb"
-        val ret = restfulApi.postMedia(file, meta, token)
+        val ret = restfulApi.postMedia(file, meta, apiToken)
         Timber.i("Restful postMedia returns $ret")
         return ret
     }
 
     suspend fun postMediaWithMultipart(file: MultipartBody.Part, meta: RequestBody): String {
         Timber.i("Restful postMediaPartVersion is called")
-        val token = "token 8451082d152e8239324d6c717e5510d744f4cccb"
-        val ret = restfulApi.postMediaWithMultipart(file, meta, token)
+        val ret = restfulApi.postMediaWithMultipart(file,
+                                                    meta,
+                                                    "Hala Systems",
+                                                    apiToken)
         Timber.i("Restful postMediaPartVersion returns $ret")
         return ret
     }
