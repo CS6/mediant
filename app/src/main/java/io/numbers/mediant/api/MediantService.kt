@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.proofmode.ProofSignatureBundle
 import io.numbers.mediant.api.sealr.SealrService
+import io.numbers.mediant.api.restful.RestfulService
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
@@ -16,6 +17,7 @@ import io.numbers.mediant.util.getHashFromString
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import org.witness.proofmode.crypto.HashUtils
 import timber.log.Timber
 import java.io.File
@@ -26,6 +28,7 @@ class MediantService @Inject constructor(
     private val proofModeService: ProofModeService,
     private val sessionBasedSignatureService: SessionBasedSignatureService,
     private val zionService: ZionService,
+    private val restfulService: RestfulService,
     private val sealrService: SealrService,
     private val preferenceHelper: PreferenceHelper,
     private val moshi: Moshi
@@ -121,5 +124,37 @@ class MediantService @Inject constructor(
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
         return sealrService.postMediaWithMultipart(body)
+
+    suspend fun uploadEchoByRestful() {
+        restfulService.getEcho()
+
+        val body = JSONObject().run {
+            put("foo1", "bar1")
+            put("foo2", "bar2")
+            toString()
+        }
+        restfulService.postEcho(body)
+    }
+
+    suspend fun uploadImageByRestful(file: File) {
+        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+        val metaJson = generateMetaJson(file.absolutePath, Meta.MediaType.JPG)
+        val meta = RequestBody.create(MediaType.parse("multipart/form-data"), metaJson.toString())
+
+        // MultipartBody.Part Version
+        //restfulService.postMultipartEcho(body, meta)
+        restfulService.postMediaWithMultipart(body, meta)
+
+        // RequestBody Version
+        //val body2 = RequestBody.create(MediaType.parse("image/*"), file)
+        //restfulService.postMedia(body2, meta)
+
+        //val body3 = RequestBody.create(MediaType.parse("multipart/octet-stream"), file.readBytes())
+
+        //restfulService.postMultipart2Echo(body2, meta)
+        //restfulService.postMedia(body2, meta)
+        //restfulService.postMedia(body3, meta)
     }
 }

@@ -8,7 +8,11 @@ import io.numbers.mediant.api.proofmode.ProofModeService
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
+<<<<<<< HEAD
 import io.numbers.mediant.api.sealr.SealrService
+=======
+import io.numbers.mediant.api.restful.RestfulService
+>>>>>>> feature-restful-api
 import io.numbers.mediant.ui.BaseActivity
 import io.numbers.mediant.util.PermissionManager
 import io.numbers.mediant.util.PreferenceHelper
@@ -26,8 +30,9 @@ class BaseModule {
         sessionBasedSignatureService: SessionBasedSignatureService,
         proofModeService: ProofModeService,
         zionService: ZionService,
+        restfulService: RestfulService,
         sealrService: SealrService,
         preferenceHelper: PreferenceHelper,
         moshi: Moshi
-    ) = MediantService(textileService, proofModeService, sessionBasedSignatureService, zionService, sealrService, preferenceHelper, moshi)
+    ) = MediantService(textileService, proofModeService, sessionBasedSignatureService, zionService, restfulService, sealrService, preferenceHelper, moshi)
 }
