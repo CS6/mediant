@@ -10,6 +10,7 @@ import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureServi
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
 import io.numbers.mediant.api.sealr.SealrService
+import io.numbers.mediant.api.restful.RestfulService
 import io.numbers.mediant.ui.BaseActivity
 import io.numbers.mediant.util.PermissionManager
 import io.numbers.mediant.util.PreferenceHelper
@@ -24,12 +25,21 @@ class BaseModule {
     @Provides
     fun provideMediantInstance(
         textileService: TextileService,
-        sessionBasedSignatureService: SessionBasedSignatureService,
         proofModeService: ProofModeService,
+        sessionBasedSignatureService: SessionBasedSignatureService,
         zionService: ZionService,
+        restfulService: RestfulService,
         sealrService: SealrService,
         halaSystemsService: HalaSystemsService,
         preferenceHelper: PreferenceHelper,
         moshi: Moshi
-    ) = MediantService(textileService, proofModeService, sessionBasedSignatureService, zionService, sealrService, halaSystemsService, preferenceHelper, moshi)
+    ) = MediantService(textileService,
+                       proofModeService,
+                       sessionBasedSignatureService,
+                       zionService,
+                       restfulService,
+                       sealrService,
+                       halaSystemsService,
+                       preferenceHelper,
+                       moshi)
 }

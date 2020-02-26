@@ -16,6 +16,9 @@ import io.numbers.mediant.api.session_based_signature.SessionBasedSignaturePgp
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.api.textile.TextileService
 import io.numbers.mediant.api.zion.ZionService
+import io.numbers.mediant.api.restful.BASE_URL
+import io.numbers.mediant.api.restful.RestfulApi
+import io.numbers.mediant.api.restful.RestfulService
 import io.numbers.mediant.util.PreferenceHelper
 import io.textile.textile.Textile
 import retrofit2.Retrofit
@@ -85,7 +88,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideRetrofitInstance(): Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(io.numbers.mediant.api.canon_camera_control.BASE_URL)
         .addConverterFactory(ScalarsConverterFactory.create())
         .build()
 
@@ -112,6 +115,22 @@ class AppModule {
         sessionBasedSignaturePgp: SessionBasedSignaturePgp,
         zionService: ZionService
     ) = SessionBasedSignatureService(application, preferenceHelper, sessionBasedSignaturePgp, zionService)
+
+    @Singleton
+    @Provides
+    fun provideRestfulApi(): RestfulApi {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(io.numbers.mediant.api.restful.BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+        return retrofit.create(RestfulApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRestfulService(
+        restfulApi: RestfulApi
+    ) = RestfulService(restfulApi)
 
     @Singleton
     @Provides

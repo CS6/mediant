@@ -10,6 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.numbers.mediant.R
 import io.numbers.mediant.api.MediantService
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
+import io.numbers.mediant.api.restful.RestfulService
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.viewmodel.Event
@@ -42,6 +43,7 @@ class MainViewModel @Inject constructor(
             if (!sessionBasedSignatureService.checkSessionStatus()) {
                 showSnackbar.postValue(Event(SnackbarArgs(R.string.message_wait_session_creation)))
             }
+            mediantService.uploadImageByRestful(mediaFile)
             mediantService.uploadImage(mediaFile, currentOutputFolder)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
             mediantService.uploadToHala(mediaFile)
