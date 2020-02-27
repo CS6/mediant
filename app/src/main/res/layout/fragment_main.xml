@@ -85,16 +85,15 @@
                     app:layout_constraintTop_toBottomOf="@id/dualCaptureTextureView"
                     tools:ignore="ContentDescription" />
 
-                <!--app:bitmap="@{viewModel.currentLiveView}"-->
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#0000FF"
                     android:cropToPadding="false"
                     android:scaleType="center"
-                    android:src="@drawable/ic_camera_black_24dp"
                     android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@id/slateImageView"
+                    app:bitmap="@{viewModel.currentLiveView}"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 
