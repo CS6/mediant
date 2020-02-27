@@ -4,8 +4,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -29,6 +31,19 @@ class RestfulService @Inject constructor(private val restfulApi: RestfulApi) {
 
     private val apiToken = ""
 
+    private fun createDebugApi(): RestfulApi {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+            .create(RestfulApi::class.java)
+    }
+
     suspend fun getMedia(): String {
         val ret = restfulApi.getMedia()
         Timber.i("Restful getMedia returns $ret")
@@ -49,6 +64,17 @@ class RestfulService @Inject constructor(private val restfulApi: RestfulApi) {
                                                     "Hala Systems",
                                                     apiToken)
         Timber.i("Restful postMediaPartVersion returns $ret")
+        return ret
+    }
+
+    suspend fun postMediaWithMultipartDebug(file: MultipartBody.Part, meta: RequestBody): String {
+        Timber.i("Debugging RESTful POST is called")
+        val debuggingRestfulApi = createDebugApi()
+        val ret = debuggingRestfulApi.postMediaWithMultipart(file,
+            meta,
+            "Hala Systems",
+            apiToken)
+        Timber.i("Debugging RESTful POST returns $ret")
         return ret
     }
 

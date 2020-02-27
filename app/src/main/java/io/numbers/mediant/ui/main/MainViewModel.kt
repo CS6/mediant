@@ -43,9 +43,12 @@ class MainViewModel @Inject constructor(
             if (!sessionBasedSignatureService.checkSessionStatus()) {
                 showSnackbar.postValue(Event(SnackbarArgs(R.string.message_wait_session_creation)))
             }
-            mediantService.uploadImageByRestful(mediaFile)
+
             mediantService.uploadImage(mediaFile, currentOutputFolder)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
+
+            mediantService.uploadImageByRestful(mediaFile)
+            showSnackbar.postValue(Event(SnackbarArgs(R.string.message_hala_uploaded)))
         } catch (e: Exception) {
             Timber.i("Exception $e")
             showErrorSnackbar.postValue(Event(e))

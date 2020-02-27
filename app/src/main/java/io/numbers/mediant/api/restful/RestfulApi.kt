@@ -6,7 +6,7 @@ import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.http.*
 
-const val BASE_URL = "http://54.167.224.121/"
+const val BASE_URL = "http://52.90.13.186/"
 //const val BASE_URL = "https://postman-echo.com/"
 
 const val ADDED_CONTENTS = "addedcontents"
