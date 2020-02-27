@@ -3,6 +3,7 @@ package io.numbers.mediant.ui.main
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.CountDownTimer
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -87,7 +88,9 @@ class MainViewModel @Inject constructor(
     fun stopLiveView() {
         liveViewJob?.cancel()
     }
-
+    fun CameraTakePicture():ImageCapture {
+        return dualCaptureService.takePicture()
+    }
     fun getCameraPreview(): Preview {
         return dualCaptureService.getPreview()
     }

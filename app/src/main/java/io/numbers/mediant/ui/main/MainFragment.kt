@@ -10,6 +10,7 @@ import android.view.*
 import android.widget.Switch
 import androidx.annotation.StringRes
 import androidx.camera.core.CameraX
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.core.PreviewConfig
 import androidx.cardview.widget.CardView
@@ -134,12 +135,16 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
          */
 
         val preview = viewModel.getCameraPreview()
+        val capture = viewModel.CameraTakePicture()
+
 
         preview.setOnPreviewOutputUpdateListener { previewOutput ->
             dualCaptureTextureView.surfaceTexture = previewOutput.surfaceTexture
         }
+//        capture = .... //todo A1
 
-        CameraX.bindToLifecycle(this as LifecycleOwner, preview)
+
+        CameraX.bindToLifecycle(this as LifecycleOwner, preview ,capture)
     }
 
     private fun initViewPager() {

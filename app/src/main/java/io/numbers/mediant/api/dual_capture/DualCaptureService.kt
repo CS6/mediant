@@ -5,7 +5,9 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.CountDownTimer
 import android.os.Environment
+import android.util.Log
 import androidx.camera.core.*
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -41,8 +43,13 @@ class DualCaptureService @Inject constructor(
     // data directory is "/data"
     //private val capturedImageDir = Environment.getDataDirectory()
     private val capturedImageDir = application.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-    private val capturedImage = File(capturedImageDir, "test.jpg")
+    private val capturedImage = File(capturedImageDir, "test1.jpg")
 
+    private val sd = Environment.getExternalStorageDirectory()
+
+    private val filename = "test1.jpg"
+    private val dest = File(capturedImageDir, filename)
+    private var imageCapture: ImageCapture? = null
     private fun createCaptureConfig(): ImageCaptureConfig {
         /* This expression will be broken in >= alpha09
          * https://stackoverflow.com/questions/59938111/
@@ -50,9 +57,24 @@ class DualCaptureService @Inject constructor(
         return ImageCaptureConfig.Builder().build()
     }
 
-    fun takePicture() {
+    fun takePicture() : ImageCapture {
+        bindCamera()
         Timber.d("Will save captured image to ${capturedImageDir?.absolutePath}")
-        cap.takePicture(capturedImage, object: ImageCapture.OnImageSavedListener {
+//        cap.takePicture(capturedImage, object: ImageCapture.OnImageSavedListener {
+//            override fun onError(
+//                imageCaptureError: ImageCapture.ImageCaptureError,
+//                message: String,
+//                cause: Throwable?
+//            ) {
+//                Timber.e("$imageCaptureError, $message")
+//            }
+//
+//            override fun onImageSaved(file: File) {
+//                Timber.i("Successfully take a picture and save ${file.name} to ${file.absolutePath}")
+//            }
+//        })
+
+        imageCapture?.takePicture(dest, object : ImageCapture.OnImageSavedListener {
             override fun onError(
                 imageCaptureError: ImageCapture.ImageCaptureError,
                 message: String,
@@ -60,11 +82,29 @@ class DualCaptureService @Inject constructor(
             ) {
                 Timber.e("$imageCaptureError, $message")
             }
-
             override fun onImageSaved(file: File) {
-                Timber.i("Successfully take a picture and save ${file.name} to ${file.absolutePath}")
+
+                Log.v("Image", "拍照成功 Successfully saved image")
+                Log.d("Image", "拍照 Successfully saved image")
+
             }
         })
+
+    }
+    private fun bindCamera(){
+        CameraX.unbindAll()
+
+        // Image capture config which controls the Flash and Lens
+        val imageCaptureConfig = ImageCaptureConfig.Builder()
+//            .setTargetRotation(windowManager.defaultDisplay.rotation)
+//            .setLensFacing(lensFacing)
+            .setFlashMode(FlashMode.ON)
+            .build()
+
+        imageCapture = ImageCapture(imageCaptureConfig)
+
+        // Bind the camera to the lifecycle
+//        CameraX.bindToLifecycle(this as LifecycleOwner, imageCapture)
     }
 
     fun getPreview(): Preview {
@@ -74,6 +114,7 @@ class DualCaptureService @Inject constructor(
         val previewConfig = PreviewConfig.Builder()
             .setLensFacing(lensFacing)
             .build()
+//        CameraX.bindToLifecycle(this as LifecycleOwner, cap)
 
         return Preview(previewConfig)
     }
