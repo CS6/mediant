@@ -3,6 +3,7 @@ package io.numbers.mediant.ui.main
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.CountDownTimer
+import androidx.camera.core.Preview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.numbers.mediant.R
 import io.numbers.mediant.api.MediantService
 import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
+import io.numbers.mediant.api.dual_capture.DualCaptureService
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
 import io.numbers.mediant.viewmodel.Event
@@ -24,7 +26,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val mediantService: MediantService,
     private val sessionBasedSignatureService: SessionBasedSignatureService,
-    private val canonCameraControlService: CanonCameraControlService
+    private val canonCameraControlService: CanonCameraControlService,
+    private val dualCaptureService: DualCaptureService
 ) : ViewModel() {
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
@@ -80,5 +83,9 @@ class MainViewModel @Inject constructor(
 
     fun stopLiveView() {
         liveViewJob?.cancel()
+    }
+
+    fun getCameraPreview(): Preview {
+        return dualCaptureService.getPreview()
     }
 }

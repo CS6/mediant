@@ -119,6 +119,7 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
         }
 
         // Get camera preview
+        /*
         CameraX.unbindAll()
 
         val lensFacing = CameraX.LensFacing.BACK
@@ -126,6 +127,9 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
             .setLensFacing(lensFacing)
             .build()
         val preview = Preview(previewConfig)
+         */
+
+        val preview = viewModel.getCameraPreview()
 
         preview.setOnPreviewOutputUpdateListener { previewOutput ->
             dualCaptureTextureView.surfaceTexture = previewOutput.surfaceTexture

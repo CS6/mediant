@@ -5,8 +5,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.CountDownTimer
 import android.os.Environment
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureConfig
+import androidx.camera.core.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -66,5 +65,16 @@ class DualCaptureService @Inject constructor(
                 Timber.i("Successfully take a picture and save ${file.name} to ${file.absolutePath}")
             }
         })
+    }
+
+    fun getPreview(): Preview {
+        CameraX.unbindAll()
+
+        val lensFacing = CameraX.LensFacing.BACK
+        val previewConfig = PreviewConfig.Builder()
+            .setLensFacing(lensFacing)
+            .build()
+
+        return Preview(previewConfig)
     }
 }
