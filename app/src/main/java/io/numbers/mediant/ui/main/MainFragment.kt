@@ -110,11 +110,15 @@ class MainFragment : DaggerFragment(), ShowableSnackbar by DefaultShowableSnackb
                 //dualCaptureImageView.visibility = View.VISIBLE
                 dualCaptureTextureView.visibility = View.VISIBLE
                 slateImageView.visibility = View.GONE
+
+                preferenceHelper.enableDualCapture = true
             } else {
                 Timber.d("Dual capture switch is off")
                 //dualCaptureImageView.visibility = View.GONE
                 dualCaptureTextureView.visibility = View.GONE
                 slateImageView.visibility = View.VISIBLE
+
+                preferenceHelper.enableDualCapture = false
             }
         }
 

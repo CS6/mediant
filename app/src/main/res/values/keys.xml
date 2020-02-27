@@ -15,4 +15,5 @@
     <string name="key_sign_with_zion">signWithZion</string>
     <string name="key_connect_to_canon_camera">connectToCanonCamera</string>
     <string name="key_enable_polling_canon_camera_status">enablePollingCanonCameraStatus</string>
+    <string name="key_enable_dual_capture">enableDualCapture</string>
 </resources>

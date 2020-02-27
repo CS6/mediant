@@ -12,6 +12,7 @@ class PreferenceHelper @Inject constructor(application: Application) {
     val sharedPreferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
 
+    /* Preference Keys */
     val preferenceKeyUserName =
         application.applicationContext.resources.getString(R.string.key_user_name)
     val preferenceKeyWalletRecoveryPhrase =
@@ -32,7 +33,10 @@ class PreferenceHelper @Inject constructor(application: Application) {
         application.applicationContext.resources.getString(R.string.key_connect_to_canon_camera)
     val preferenceKeyEnablePollingCanonCameraStatus =
         application.applicationContext.resources.getString(R.string.key_enable_polling_canon_camera_status)
+    val preferenceKeyEnableDualCapture=
+        application.applicationContext.resources.getString(R.string.key_enable_dual_capture)
 
+    /* Preference Wrappers */
     var userName: String?
         get() = sharedPreferences.getString(preferenceKeyUserName, "")
         set(value) = sharedPreferences.edit().putString(
@@ -80,6 +84,11 @@ class PreferenceHelper @Inject constructor(application: Application) {
         get() = sharedPreferences.getBoolean(preferenceKeyEnablePollingCanonCameraStatus, false)
         set(value) = sharedPreferences.edit().putBoolean(
             preferenceKeyEnablePollingCanonCameraStatus, value
+        ).apply()
+    var enableDualCapture: Boolean
+        get() = sharedPreferences.getBoolean(preferenceKeyEnableDualCapture, false)
+        set(value) = sharedPreferences.edit().putBoolean(
+            preferenceKeyEnableDualCapture, value
         ).apply()
 
     init {

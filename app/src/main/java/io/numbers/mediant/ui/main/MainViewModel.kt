@@ -14,6 +14,7 @@ import io.numbers.mediant.api.canon_camera_control.CanonCameraControlService
 import io.numbers.mediant.api.dual_capture.DualCaptureService
 import io.numbers.mediant.api.session_based_signature.SessionBasedSignatureService
 import io.numbers.mediant.ui.snackbar.SnackbarArgs
+import io.numbers.mediant.util.PreferenceHelper
 import io.numbers.mediant.viewmodel.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,7 +28,8 @@ class MainViewModel @Inject constructor(
     private val mediantService: MediantService,
     private val sessionBasedSignatureService: SessionBasedSignatureService,
     private val canonCameraControlService: CanonCameraControlService,
-    private val dualCaptureService: DualCaptureService
+    private val dualCaptureService: DualCaptureService,
+    private val preferenceHelper: PreferenceHelper
 ) : ViewModel() {
 
     val showSnackbar = MutableLiveData<Event<SnackbarArgs>>()
@@ -45,6 +47,7 @@ class MainViewModel @Inject constructor(
             if (!sessionBasedSignatureService.checkSessionStatus()) {
                 showSnackbar.postValue(Event(SnackbarArgs(R.string.message_wait_session_creation)))
             }
+            Timber.d("Dual capture status: ${preferenceHelper.enableDualCapture}")
             mediantService.uploadImage(mediaFile, currentOutputFolder)
             showSnackbar.postValue(Event(SnackbarArgs(R.string.message_media_uploaded)))
         } catch (e: Exception) {
