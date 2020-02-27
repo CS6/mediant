@@ -73,6 +73,7 @@
                     android:layout_gravity="center_horizontal"
                     android:visibility="gone" />
 
+                <!--
                 <ImageView
                     android:id="@+id/slateImageView"
                     android:layout_width="match_parent"
@@ -84,6 +85,16 @@
                     android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@id/dualCaptureTextureView"
                     tools:ignore="ContentDescription" />
+                    -->
+
+                <TextView
+                    android:id="@+id/slateTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00FF00"
+                    android:text="@{viewModel.currentTime}"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/dualCaptureTextureView" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -92,7 +103,7 @@
                     android:cropToPadding="false"
                     android:scaleType="center"
                     android:visibility="visible"
-                    app:layout_constraintTop_toBottomOf="@id/slateImageView"
+                    app:layout_constraintTop_toBottomOf="@id/slateTextView"
                     app:bitmap="@{viewModel.currentLiveView}"
                     tools:ignore="ContentDescription" />
             </LinearLayout>

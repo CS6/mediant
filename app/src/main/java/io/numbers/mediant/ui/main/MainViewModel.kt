@@ -22,7 +22,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+import java.util.*
 import javax.inject.Inject
+import kotlin.concurrent.fixedRateTimer
 
 class MainViewModel @Inject constructor(
     private val mediantService: MediantService,
@@ -41,6 +43,13 @@ class MainViewModel @Inject constructor(
     val liveViewCardState = MutableLiveData(BottomSheetBehavior.STATE_HIDDEN)
     val currentLiveView = MutableLiveData<Bitmap>()
     private var liveViewJob: Job? = null
+
+    var currentTime = MutableLiveData<String>()
+
+    private val slateTimer = fixedRateTimer("slateTimer", false, 0, 1000) {
+        currentTime.postValue(Date().time.toString())
+    }
+
 
     fun uploadImage() = viewModelScope.launch(Dispatchers.IO) {
         try {
