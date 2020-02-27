@@ -57,7 +57,7 @@ class DualCaptureService @Inject constructor(
         return ImageCaptureConfig.Builder().build()
     }
 
-    fun takePicture() : ImageCapture {
+    fun takePicture() : ImageCapture? {
         bindCamera()
         Timber.d("Will save captured image to ${capturedImageDir?.absolutePath}")
 //        cap.takePicture(capturedImage, object: ImageCapture.OnImageSavedListener {
@@ -73,8 +73,9 @@ class DualCaptureService @Inject constructor(
 //                Timber.i("Successfully take a picture and save ${file.name} to ${file.absolutePath}")
 //            }
 //        })
+        Log.v("test", "拍照01")
 
-        imageCapture?.takePicture(dest, object : ImageCapture.OnImageSavedListener {
+         imageCapture?.takePicture(dest, object : ImageCapture.OnImageSavedListener {
             override fun onError(
                 imageCaptureError: ImageCapture.ImageCaptureError,
                 message: String,
@@ -89,8 +90,12 @@ class DualCaptureService @Inject constructor(
 
             }
         })
+        Log.v("test", "拍照02")
+
+        return imageCapture
 
     }
+
     private fun bindCamera(){
         CameraX.unbindAll()
 

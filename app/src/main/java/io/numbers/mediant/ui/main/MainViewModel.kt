@@ -88,7 +88,7 @@ class MainViewModel @Inject constructor(
     fun stopLiveView() {
         liveViewJob?.cancel()
     }
-    fun CameraTakePicture():ImageCapture {
+    fun CameraTakePicture(): ImageCapture? {
         return dualCaptureService.takePicture()
     }
     fun getCameraPreview(): Preview {
